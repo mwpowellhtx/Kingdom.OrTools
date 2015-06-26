@@ -139,6 +139,7 @@ namespace Kingdom.Constraints.Samples
         [Test]
         public void Verify_fourth_problem()
         {
+            // Published: Cape Gazette, Fri, Feb 13 - Mon, Feb 16, 2015, p. 101
             var theValues = new[]
             {
                 0, 0, 0, 0, 0, 5, 1, 9, 0,
@@ -155,6 +156,30 @@ namespace Kingdom.Constraints.Samples
             };
 
             VerifyProblem(theValues);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Test]
+        public void Verify_fifth_problem()
+        {
+            // Published: Cape Gazette, Fri, Jun 26 - Mon, Jun 29, 2015, p. 107
+            VerifyProblem(new[]
+            {
+                //====================================
+                0, 2, 1, /*|*/ 0, 0, 0, /*|*/ 0, 0, 0,
+                0, 0, 0, /*|*/ 0, 2, 3, /*|*/ 8, 0, 4,
+                0, 0, 0, /*|*/ 6, 0, 0, /*|*/ 0, 0, 0,
+                //====================================
+                1, 0, 0, /*|*/ 0, 8, 7, /*|*/ 0, 0, 0,
+                0, 9, 5, /*|*/ 2, 0, 0, /*|*/ 0, 0, 0,
+                8, 0, 0, /*|*/ 0, 0, 0, /*|*/ 9, 6, 0,
+                //====================================
+                0, 0, 9, /*|*/ 0, 0, 0, /*|*/ 0, 4, 3,
+                0, 0, 0, /*|*/ 5, 6, 0, /*|*/ 0, 0, 8,
+                6, 0, 4, /*|*/ 0, 7, 0, /*|*/ 2, 0, 0,
+            });
         }
     }
 }
