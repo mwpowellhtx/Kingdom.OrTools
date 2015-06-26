@@ -2,8 +2,19 @@
 
 namespace Kingdom.Constraints
 {
-    //Alias the callback function for internal use.
-    using ValueChooserFunc = LongResultCallback2.SwigDelegateLongResultCallback2_0;
+    ////Alias the callback function for internal use.
+    //using ValueChooserFunc = LongResultCallback2.SwigDelegateLongResultCallback2_0;
+
+    /// <summary>
+    /// Provided an <paramref name="index"/> evaluates an appropriate qualitative result.
+    /// The lowest numbers win.
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    /// <remarks>This became necessary because aliasing the OrTools callback is insufficient. We must
+    /// have a first class symbol in order to minimize the risk to integrating applications.</remarks>
+    public delegate long ValueChooserDelegate(long index, long value);
 
     /// <summary>
     /// ValueChooser is a kind of callback.
@@ -16,13 +27,13 @@ namespace Kingdom.Constraints
         /// <summary>
         /// Chooser backing field.
         /// </summary>
-        private readonly ValueChooserFunc _chooser;
+        private readonly ValueChooserDelegate _chooser;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="chooser"></param>
-        public ValueChooser(ValueChooserFunc chooser)
+        public ValueChooser(ValueChooserDelegate chooser)
         {
             //TODO: TBD: do something with swigCMemOwn (?) default is what?
             _chooser = chooser;
