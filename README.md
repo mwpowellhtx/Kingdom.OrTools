@@ -29,7 +29,7 @@ using (var tpps = new TravelPlansProblemSolver())
 
 That's it. Pretty straightforward.
 
-After that, you are free to add inject whatever data, services, controllers as you see fit, or connect with whatever events or other hooks you would like in order to connect your problem solver with your intended results.
+After that, you are free to inject whatever data, services or controllers as you see fit; or connect with whatever events or other hooks you would like in order to report progress and outcomes from problem solver with your intended audience.
 
 ##
 
