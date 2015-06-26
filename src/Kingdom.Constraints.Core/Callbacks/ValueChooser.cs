@@ -1,0 +1,42 @@
+﻿using Google.OrTools.ConstraintSolver;
+
+namespace Kingdom.Constraints
+{
+    //Alias the callback function for internal use.
+    using ValueChooserFunc = LongResultCallback2.SwigDelegateLongResultCallback2_0;
+
+    /// <summary>
+    /// ValueChooser is a kind of callback.
+    /// </summary>
+    /// <see cref="!:http://or-tools.googlecode.com/svn/trunk/documentation/reference_manual/or-tools/src/constraint_solver/classoperations__research_1_1Solver.html#487b521ee809f0f4ee397b9f6ea06f59"/>
+    /// <see cref="!:http://or-tools.googlecode.com/svn/trunk/documentation/user_manual/manual/search_primitives/basic_working_phases.html#callbacks-to-the-rescue"/>
+    /// <see cref="!:http://or-tools.googlecode.com/svn/trunk/documentation/user_manual/manual/search_primitives/customized_search_primitives.html#customized-search-primitives"/>
+    public class ValueChooser : LongResultCallback2
+    {
+        /// <summary>
+        /// Chooser backing field.
+        /// </summary>
+        private readonly ValueChooserFunc _chooser;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="chooser"></param>
+        public ValueChooser(ValueChooserFunc chooser)
+        {
+            //TODO: TBD: do something with swigCMemOwn (?) default is what?
+            _chooser = chooser;
+        }
+
+        /// <summary>
+        /// Evaluates the <paramref name="value"/> given the <paramref name="index"/>.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public override long Run(long index, long value)
+        {
+            return _chooser(index, value);
+        }
+    }
+}
