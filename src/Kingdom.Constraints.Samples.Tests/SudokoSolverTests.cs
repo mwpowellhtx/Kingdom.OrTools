@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Kingdom.Constraints.Samples.Sudoku;
 using NUnit.Framework;
 
@@ -10,6 +11,22 @@ namespace Kingdom.Constraints.Samples
     /// <see cref="!:http://cpg.stparchive.com/Year2015/"/>
     public class SudokoSolverTests : TestFixtureBase
     {
+        /// <summary>
+        /// Verifies the problem represented by <paramref name="theValuesText"/>.
+        /// </summary>
+        /// <param name="theValuesText"></param>
+        private static void VerifyProblem(string theValuesText)
+        {
+            Assert.That(theValuesText, Is.Not.Null);
+
+            Assert.That(theValuesText, Has.Length.EqualTo(9*9));
+
+            var theValues = theValuesText.ToCharArray()
+                .Select(x => int.Parse(x.ToString())).ToArray();
+
+            VerifyProblem(theValues);
+        }
+
         /// <summary>
         /// Verifies the problem repesented by <paramref name="theValues"/>.
         /// </summary>
@@ -89,6 +106,55 @@ namespace Kingdom.Constraints.Samples
                 0, 8, 7, /*|*/ 0, 0, 0, /*|*/ 0, 0, 0,
                 5, 0, 6, /*|*/ 1, 0, 0, /*|*/ 0, 0, 0,
             });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <see cref="!:http://www.sudoku.com/"/>
+        [Test]
+        public void Verify_third_problem()
+        {
+            // Little bit different, more concise representation of the problem.
+            var lines = new[]
+            {
+                "905060340",
+                "028000591",
+                "000009600",
+                "097630104",
+                "000974000",
+                "406028950",
+                "009500000",
+                "562000480",
+                "083090205",
+            };
+
+            VerifyProblem(string.Join(@"", lines));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <see cref="!:http://www.websudoku.com/"/>
+        [Test]
+        public void Verify_fourth_problem()
+        {
+            var theValues = new[]
+            {
+                0, 0, 0, 0, 0, 5, 1, 9, 0,
+                0, 0, 9, 2, 6, 0, 0, 0, 7,
+                5, 6, 0, 0, 4, 9, 0, 8, 0,
+
+                6, 1, 0, 0, 0, 8, 0, 0, 4,
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                4, 0, 0, 9, 0, 0, 0, 6, 3,
+
+                0, 2, 0, 8, 7, 0, 0, 4, 9,
+                9, 0, 0, 0, 5, 2, 7, 0, 0,
+                0, 7, 1, 6, 0, 0, 0, 0, 0,
+            };
+
+            VerifyProblem(theValues);
         }
     }
 }
