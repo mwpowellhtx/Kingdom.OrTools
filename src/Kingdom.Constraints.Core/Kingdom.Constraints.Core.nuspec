@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Kingdom.Constraints.Core</id>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <authors>Michael W. Powell</authors>
     <dependencies>
       <dependency id="Google.OrTools" version="1.0" />

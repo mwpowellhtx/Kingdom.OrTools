@@ -49,5 +49,15 @@ namespace Kingdom.Constraints
         {
             return _chooser(index, value);
         }
+
+        /// <summary>
+        /// Implicitly converts the chooser to the callback.
+        /// </summary>
+        /// <param name="chooser"></param>
+        /// <returns></returns>
+        public static implicit operator SwigDelegateLongResultCallback2_0(ValueChooser chooser)
+        {
+            return chooser.Run;
+        }
     }
 }
