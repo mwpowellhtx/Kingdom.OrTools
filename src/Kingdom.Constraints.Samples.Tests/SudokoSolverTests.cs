@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Xml.Linq;
 using Kingdom.Constraints.Samples.Sudoku;
 using NUnit.Framework;
 
@@ -36,6 +40,8 @@ namespace Kingdom.Constraints.Samples
             ISudokuPuzzle theSolution = null;
 
             var theProblem = theValues.ToSudokuPuzzle();
+
+            ((ISudokuPuzzle) theProblem).PrettyPrint(Console.Out);
 
             //TODO: introduce time outs to the solver ...
             // Should solve and not time out...
@@ -180,6 +186,88 @@ namespace Kingdom.Constraints.Samples
                 0, 0, 0, /*|*/ 5, 6, 0, /*|*/ 0, 0, 8,
                 6, 0, 4, /*|*/ 0, 7, 0, /*|*/ 2, 0, 0,
             });
+        }
+
+        /// <summary>
+        /// Supports loading the Sudoku puzzles from embedded resource.
+        /// </summary>
+        internal class SudokuTestCaseItem
+        {
+            public string Puzzle { get; set; }
+            public string Description { get; set; }
+        }
+
+        /// <summary>
+        /// Returns the Sudoku puzzles from resource for test purposes.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        private static IEnumerable<SudokuTestCaseItem> GetSudokuTestCaseItems(Type type)
+        {
+            var assembly = type.Assembly;
+
+            const string sudokusXml = @"Sudokus.xml";
+
+            using (var rs = assembly.GetManifestResourceStream(type, sudokusXml))
+            {
+                Assert.That(rs, Is.Not.Null);
+
+                using (var reader = new StreamReader(rs, Encoding.UTF8))
+                {
+                    var loaded = XElement.Load(reader);
+
+                    //TODO: TBD: could validate gainst a schema...
+
+                    foreach (var x in from s in loaded.Descendants(@"Sudoku")
+                        select new SudokuTestCaseItem
+                        {
+                            Puzzle = s.Attribute(@"Puzzle").Value,
+                            Description = s.Attribute(@"Description").Value
+                        })
+                        yield return x;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the EmbeddedResourceTestCases as a <see cref="TestCaseSourceAttribute"/>.
+        /// </summary>
+        public IEnumerable<TestCaseData> EmbeddedResourceTestCases
+        {
+            get
+            {
+                return GetSudokuTestCaseItems(GetType())
+                    .Select(x => new TestCaseData(x.Puzzle, x.Description));
+            }
+        }
+
+        /// <summary>
+        /// Verifies that the embedded resource may be loaded.
+        /// </summary>
+        [Test]
+        public void Verify_the_embedded_resource()
+        {
+            SudokuTestCaseItem[] items = null;
+
+            TestDelegate test = () => items = GetSudokuTestCaseItems(GetType()).ToArray();
+
+            Assert.That(test, Throws.Nothing);
+            Assert.That(items, Has.Length.GreaterThan(0));
+        }
+
+        /// <summary>
+        /// Verifies that an embedded resource problem solves correctly.
+        /// </summary>
+        /// <param name="theValuesText"></param>
+        /// <param name="theDescription"></param>
+        [Test]
+        [TestCaseSource("EmbeddedResourceTestCases")]
+        public void Verify_embedded_resource_problem(string theValuesText, string theDescription)
+        {
+            if (!string.IsNullOrEmpty(theDescription))
+                Console.WriteLine(theDescription);
+
+            VerifyProblem(theValuesText);
         }
     }
 }
