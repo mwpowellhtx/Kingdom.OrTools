@@ -5,3 +5,4 @@ packages/
 *.nupkg
 *.user
 *.suo
+*.Caches/
