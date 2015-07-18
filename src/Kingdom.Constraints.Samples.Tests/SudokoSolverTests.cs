@@ -255,13 +255,21 @@ namespace Kingdom.Constraints.Samples
             Assert.That(items, Has.Length.GreaterThan(0));
         }
 
+        private static class TestCases
+        {
+            /// <summary>
+            /// @"EmbeddedResourceTestCases"
+            /// </summary>
+            internal const string EmbeddedResourceTestCases = @"EmbeddedResourceTestCases";
+        }
+
         /// <summary>
         /// Verifies that an embedded resource problem solves correctly.
         /// </summary>
         /// <param name="theValuesText"></param>
         /// <param name="theDescription"></param>
         [Test]
-        [TestCaseSource("EmbeddedResourceTestCases")]
+        [TestCaseSource(TestCases.EmbeddedResourceTestCases)]
         public void Verify_embedded_resource_problem(string theValuesText, string theDescription)
         {
             if (!string.IsNullOrEmpty(theDescription))
