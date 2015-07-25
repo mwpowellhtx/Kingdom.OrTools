@@ -237,7 +237,7 @@ namespace Kingdom.Constraints.Samples
             get
             {
                 return GetSudokuTestCaseItems(GetType())
-                    .Select(x => new TestCaseData(x.Puzzle, x.Description));
+                    .Select(x => new TestCaseData(x.Description, x.Puzzle));
             }
         }
 
@@ -270,7 +270,7 @@ namespace Kingdom.Constraints.Samples
         /// <param name="theDescription"></param>
         [Test]
         [TestCaseSource(TestCases.EmbeddedResourceTestCases)]
-        public void Verify_embedded_resource_problem(string theValuesText, string theDescription)
+        public void Verify_embedded_resource_problem(string theDescription, string theValuesText)
         {
             if (!string.IsNullOrEmpty(theDescription))
                 Console.WriteLine(theDescription);
