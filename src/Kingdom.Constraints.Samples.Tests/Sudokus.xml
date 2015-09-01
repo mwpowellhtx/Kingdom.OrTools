@@ -28,4 +28,6 @@
             Description="Published: Cape Gazette, Fri, Aug 21 - Mon, Aug 24, 2015, p. 103" />
     <Sudoku Puzzle="000562000605090820000000009002300000030020010810000007790050000003200004000004050"
             Description="Published: Cape Gazette, Fri, Aug 28 - Mon, Aug 31, 2015, p. 100" />
+    <Sudoku Puzzle="000000003005008600002706900000000501046000000000681700090010040000000000027005009"
+            Description="Published: Cape Gazette, Tue, Sep 1 - Thu, Sep 3, 2015, p. 15" />
 </Sudokus>
