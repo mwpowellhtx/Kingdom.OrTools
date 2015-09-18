@@ -2,9 +2,6 @@
 
 namespace Kingdom.Constraints
 {
-    ////Alias the callback function for internal use.
-    //using ValueChooserFunc = LongResultCallback2.SwigDelegateLongResultCallback2_0;
-
     /// <summary>
     /// Provided an <paramref name="index"/> evaluates an appropriate qualitative result.
     /// The lowest numbers win.
@@ -19,10 +16,11 @@ namespace Kingdom.Constraints
     /// <summary>
     /// ValueChooser is a kind of callback.
     /// </summary>
-    /// <see cref="!:http://or-tools.googlecode.com/svn/trunk/documentation/reference_manual/or-tools/src/constraint_solver/classoperations__research_1_1Solver.html#487b521ee809f0f4ee397b9f6ea06f59"/>
-    /// <see cref="!:http://or-tools.googlecode.com/svn/trunk/documentation/user_manual/manual/search_primitives/basic_working_phases.html#callbacks-to-the-rescue"/>
-    /// <see cref="!:http://or-tools.googlecode.com/svn/trunk/documentation/user_manual/manual/search_primitives/customized_search_primitives.html#customized-search-primitives"/>
-    public class ValueChooser : LongResultCallback2
+    /// <see cref="!:http://or-tools.googlecode.com/svn/trunk/documentation/reference_manual/or-tools/src/constraint_solver/classoperations__research_1_1Solver.html#487b521ee809f0f4ee397b9f6ea06f59" />
+    /// <see cref="!:http://or-tools.googlecode.com/svn/trunk/documentation/user_manual/manual/search_primitives/basic_working_phases.html#callbacks-to-the-rescue" />
+    /// <see cref="!:http://or-tools.googlecode.com/svn/trunk/documentation/user_manual/manual/search_primitives/customized_search_primitives.html#customized-search-primitives" />
+    /// <see cref="!:http://or-tools.blogspot.com/2015/08/getting-rid-of-callbacks.html" />
+    public class ValueChooser : LongLongToLong
     {
         /// <summary>
         /// Chooser backing field.
@@ -55,7 +53,7 @@ namespace Kingdom.Constraints
         /// </summary>
         /// <param name="chooser"></param>
         /// <returns></returns>
-        public static implicit operator SwigDelegateLongResultCallback2_0(ValueChooser chooser)
+        public static implicit operator SwigDelegateLongLongToLong_0(ValueChooser chooser)
         {
             return chooser.Run;
         }

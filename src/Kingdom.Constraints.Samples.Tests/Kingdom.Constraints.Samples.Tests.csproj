@@ -34,8 +34,8 @@
     <DocumentationFile>bin\Release\Kingdom.Constraints.Samples.Tests.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Google.OrTools, Version=1.0.3854.2335, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Google.OrTools.1.0.3854\lib\net40\Google.OrTools.dll</HintPath>
+    <Reference Include="Google.OrTools, Version=2.0.3322.3902, Culture=neutral, processorArchitecture=AMD64">
+      <HintPath>..\packages\Google.OrTools.2.0.3322\lib\net40\Google.OrTools.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
