@@ -1,7 +1,7 @@
-﻿using Google.OrTools.ConstraintSolver;
-
-namespace Kingdom.Constraints
+﻿namespace Kingdom.Constraints
 {
+    using Google.OrTools.ConstraintSolver;
+
     /// <summary>
     /// or-tools-based Constraint Programming problem solver.
     /// </summary>
@@ -33,7 +33,13 @@ namespace Kingdom.Constraints
         /// <summary>
         /// Initializes the problem solver.
         /// </summary>
-        protected abstract void Initialize();
+        /// <param name="solver"></param>
+        protected virtual void Initialize(Solver solver)
+        {
+            var seed = GetSolverSeed();
+
+            solver.ReSeed(seed);
+        }
 
         /// <summary>
         /// Prepares solver variables.
@@ -89,11 +95,7 @@ namespace Kingdom.Constraints
         {
             using (var solver = new Solver(_modelName))
             {
-                Initialize();
-
-                var seed = GetSolverSeed();
-
-                solver.ReSeed(seed);
+                Initialize(solver);
 
                 PrepareVariables(solver);
                 PrepareConstraints(solver);

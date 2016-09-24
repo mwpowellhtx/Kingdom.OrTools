@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Google.OrTools.ConstraintSolver;
 
 namespace Kingdom.Constraints.Samples.Sudoku
 {
+    using Google.OrTools.ConstraintSolver;
+
     /// <summary>
     /// 
     /// </summary>
@@ -40,8 +41,10 @@ namespace Kingdom.Constraints.Samples.Sudoku
             _puzzle = aPuzzle;
         }
 
+        private int[,] _matrix;
+
         /// <summary>
-        /// Returns a solver seed.
+        /// Returns a <see cref="Solver"/> seed.
         /// </summary>
         /// <returns></returns>
         protected override int GetSolverSeed()
@@ -49,13 +52,14 @@ namespace Kingdom.Constraints.Samples.Sudoku
             return new Random().Next();
         }
 
-        private int[,] _matrix;
-
         /// <summary>
-        /// Initializes the solver.
+        /// Initializes the <param name="solver"></param>.
         /// </summary>
-        protected override void Initialize()
+        /// <param name="solver"></param>
+        protected override void Initialize(Solver solver)
         {
+            base.Initialize(solver);
+
             _matrix = _puzzle.Values;
         }
 
