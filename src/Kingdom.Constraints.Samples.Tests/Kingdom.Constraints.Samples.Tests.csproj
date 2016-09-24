@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicTests.cs" />
     <Compile Include="SudokoSolverTests.cs" />
     <Compile Include="TestFixtureBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
