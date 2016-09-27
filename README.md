@@ -55,12 +55,13 @@ using (var frps = new FeasibleRegionProblemSolver())
 
 Besides being able to ``VerifySolution`` ``LinearResultStatus``, ``SolutionEventArgs`` is populated with a couple of key elements.
 
-#Property#Type#Description#
-|```SolutionEventArgs.VariableCount```|``System.Int32``|Gets the ``Solver.NumVariables`` modeled|
-|```SolutionEventArgs.ConstraintCount```|``System.Int32``|Gets the ``Solver.NumConstraints`` modeled|
-|```SolutionEventArgs.ResultStatus```|``System.Int32``|Gets the ``Solver.Solve`` result|
-|```SolutionEventArgs.Solution```|``System.Double``|Gets the ``Solver.Solve`` result|
-|```SolutionEventArgs.SolutionValues```|``dynamic`` (*ExpandoObject*) |Gets the [``ExpandoObject``](http://msdn.microsoft.com/en-us/library/system.dynamic.expandoobject.aspx) ``SolutionValues`` result|
+Property|Type|Description
+--------|----|-----------
+```SolutionEventArgs.VariableCount```|``System.Int32``|Gets the ``Solver.NumVariables`` modeled
+```SolutionEventArgs.ConstraintCount```|``System.Int32``|Gets the ``Solver.NumConstraints`` modeled
+```SolutionEventArgs.ResultStatus```|``System.Int32``|Gets the ``Solver.Solve`` result
+```SolutionEventArgs.Solution```|``System.Double``|Gets the ``Solver.Solve`` result
+```SolutionEventArgs.SolutionValues```|``dynamic`` (*ExpandoObject*) |Gets the [``ExpandoObject``](http://msdn.microsoft.com/en-us/library/system.dynamic.expandoobject.aspx) ``SolutionValues`` result
 
 There is also a *without solution* version of the problem solver examples, but I am not sure why anyone would want one without a calculated solution, per se, even one populated with a default value.
 
