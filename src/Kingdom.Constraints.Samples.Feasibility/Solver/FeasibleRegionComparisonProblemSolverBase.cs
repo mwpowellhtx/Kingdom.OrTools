@@ -16,7 +16,7 @@
         protected override void PrepareConstraints(Solver solver)
         {
             // x + 7y <= 17.5
-            var c1 = solver.MakeConstraint(NegativeInfinity, 17.5);
+            var c1 = solver.MakeConstraint(NegativeInfinity, 17.5d);
             ClrCreatedObjects.Add(SetProblemComponent(c1, (p, c) => p.c1 = c));
             c1.SetCoefficient(Problem.x, 1d);
             c1.SetCoefficient(Problem.y, 7d);

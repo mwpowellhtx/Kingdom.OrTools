@@ -149,14 +149,20 @@ namespace Kingdom.Constraints
         protected static dynamic GetSolutionValues(dynamic problem)
         {
             dynamic values = new ExpandoObject();
-            var valuesByName = (IDictionary<string, object>) values;
+
+            // We need to see the problem as a Dictionary instead of Dynamic for this to work.
             var problemByName = (IDictionary<string, object>) problem;
-            foreach (var key in problemByName.Keys)
-            {
-                var value = problemByName[key] as Variable;
-                if (value == null) continue;
-                valuesByName[key] = value.SolutionValue();
-            }
+
+            // Build out the problem values by aggregation instead.
+            problemByName.Keys.Where(k => problemByName[k] is Variable)
+                .Select(k => (Variable) problemByName[k])
+                .Aggregate((IDictionary<string, object>) values, (g, v) =>
+                {
+                    // We need to see the values as a Dictionary instead of Dynamic for this to work.
+                    g[v.Name()] = v.SolutionValue();
+                    return g;
+                });
+
             return values;
         }
 
@@ -369,14 +375,14 @@ namespace Kingdom.Constraints
     internal static class SolverExtensionMethods
     {
         /// <summary>
-        /// Returns the <see cref="Solver"/> <paramref name="problamType"/> for use.
+        /// Returns the <see cref="Solver"/> <paramref name="problemType"/> for use.
         /// </summary>
-        /// <param name="problamType"></param>
+        /// <param name="problemType"></param>
         /// <returns></returns>
-        internal static int ForSolver(this OptimizationProblemType problamType)
+        internal static int ForSolver(this OptimizationProblemType problemType)
         {
             // ReSharper disable once SwitchStatementMissingSomeCases
-            switch (problamType)
+            switch (problemType)
             {
                 case OptimizationProblemType.GlopLinearProgramming:
                     return Solver.GLOP_LINEAR_PROGRAMMING;
@@ -393,8 +399,8 @@ namespace Kingdom.Constraints
                 // TODO: TBD: is in at least one mirror of the software source, but probably not in the current build
 
                 default:
-                    var message = string.Format("{0} is not currently implemented", problamType);
-                    throw new ArgumentException(message, "problamType");
+                    var message = string.Format("{0} is not currently implemented", problemType);
+                    throw new ArgumentException(message, "problemType");
             }
         }
 
