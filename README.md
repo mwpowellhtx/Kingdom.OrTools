@@ -31,6 +31,58 @@ That's it. Pretty straightforward.
 
 After that, you are free to inject whatever data, services or controllers as you see fit; or connect with whatever events or other hooks you would like in order to report progress and outcomes from problem solver with your intended audience.
 
+## Linear Solver
+
+The latest version adds support for the Google OrTools LinearSolver. The adapter fits along the same lines as for the ConstraintSolver, as a disposable usage.
+
+```C#
+using (var frps = new FeasibleRegionProblemSolver())
+{
+    frps.Solved += (sender, e) =>
+    {
+        // Do something with the (SolutionEventArgs e)
+    };
+
+    Debug.Assert(frps.TryResolve());
+}
+```
+
+At the moment, there is support for three programming options. I am not set up to custom build Google OrTools for any other the other models at this time. If you have a special requirement for that, contact me offline and let's discuss how we can best integrate that dependency.
+
+The solver options include:
+
+```C#
+public enum OptimizationProblemType
+{
+    // Solver.GLOP_LINEAR_PROGRAMMING
+    GlopLinearProgramming,
+    // Solver.CLP_LINEAR_PROGRAMMING
+    ClpLinearProgramming,
+    // Solver.CBC_MIXED_INTEGER_PROGRAMMING
+    CbcMixedIntegerProgramming
+}
+```
+
+And results may be tested against the following results:
+
+```C#
+public enum LinearResultStatus
+{
+    // Solver.OPTIMAL
+    Optimal,
+    // Solver.FEASIBLE
+    Feasible,
+    // Solver.INFEASIBLE
+    Infeasible,
+    // Solver.ABNORMAL
+    Abnormal,
+    // Solver.NOT_SOLVED
+    NotSolved,
+    // Solver.UNBOUNDED
+    Unbounded
+}
+```
+
 ##
 
 I've modeled the famous [Sudoku](http://en.wikipedia.org/wiki/Sudoku) problem and provided a couple of unit tests that demonstrate the problem solver in action. Besides being blindingly fast on my 8-core desktop machine, the puzzles start from a known problem statement, and which results are reported to ``Console.Out`` upon completion. I haven't timed it yet, but I might like to see just how quickly it does solve, perhaps averaging over some volume of solved problems.
