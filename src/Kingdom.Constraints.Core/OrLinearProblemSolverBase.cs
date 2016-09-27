@@ -193,16 +193,15 @@ namespace Kingdom.Constraints
             /// <summary>
             /// Internal Constructor
             /// </summary>
-            /// <param name="variableCount"></param>
-            /// <param name="constraintCount"></param>
+            /// <param name="solver"></param>
             /// <param name="resultStatus"></param>
             /// <param name="solution"></param>
             /// <param name="solutionValues"></param>
-            internal SolutionEventArgs(int variableCount, int constraintCount, LinearResultStatus resultStatus,
+            internal SolutionEventArgs(Solver solver, LinearResultStatus resultStatus,
                 TSolution solution, dynamic solutionValues)
             {
-                VariableCount = variableCount;
-                ConstraintCount = constraintCount;
+                VariableCount = solver.NumVariables();
+                ConstraintCount = solver.NumConstraints();
                 ResultStatus = resultStatus;
                 Solution = solution;
                 SolutionValues = solutionValues;
@@ -234,10 +233,8 @@ namespace Kingdom.Constraints
         protected void ReceiveSolution(Solver solver, LinearResultStatus resultStatus,
             TSolution solution, dynamic problem)
         {
-            var e = new SolutionEventArgs(solver.NumVariables(), solver.NumConstraints(),
-                resultStatus, solution, GetSolutionValues(problem));
-
-            RaiseSolved(e);
+            RaiseSolved(new SolutionEventArgs(solver, resultStatus, solution,
+                GetSolutionValues(problem)));
         }
 
         /// <summary>
