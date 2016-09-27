@@ -2,10 +2,10 @@
 <package>
   <metadata>
     <id>Kingdom.Constraints.Core</id>
-    <version>2.1.0</version>
+    <version>3.0.0</version>
     <authors>Michael W. Powell</authors>
     <dependencies>
-      <dependency id="Google.OrTools" version="[2.0,3.0)" />
+      <dependency id="Google.OrTools" version="[4.4,5.0)" />
     </dependencies>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Provides a convenient, easy to use wrapper for Constraint Satisfaction Programming based on the Google OR-tools.</description>
