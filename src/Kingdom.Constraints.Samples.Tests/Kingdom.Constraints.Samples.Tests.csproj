@@ -32,10 +32,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Kingdom.Constraints.Samples.Tests.xml</DocumentationFile>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Google.OrTools, Version=2.0.3322.3902, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Google.OrTools.2.0.3322\lib\net40\Google.OrTools.dll</HintPath>
+    <Reference Include="Google.OrTools, Version=4.4.6107.17129, Culture=neutral, PublicKeyToken=7a052e3db761d3be, processorArchitecture=AMD64">
+      <HintPath>..\packages\Google.OrTools.4.4.3842\lib\net40\Google.OrTools.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.0.0\lib\net45\Google.Protobuf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -52,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicTests.cs" />
+    <Compile Include="LinearProblemSolverTests.cs" />
     <Compile Include="SudokoSolverTests.cs" />
     <Compile Include="TestFixtureBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -63,6 +69,10 @@
     <ProjectReference Include="..\Kingdom.Constraints.Core\Kingdom.Constraints.Core.csproj">
       <Project>{C45F0A18-0E2F-4E82-B507-C7F0DAC1CEA9}</Project>
       <Name>Kingdom.Constraints.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Kingdom.Constraints.Samples.Feasibility\Kingdom.Constraints.Samples.Feasibility.csproj">
+      <Project>{DDA0727B-8837-4CE2-A02C-D60F583AB60A}</Project>
+      <Name>Kingdom.Constraints.Samples.Feasibility</Name>
     </ProjectReference>
     <ProjectReference Include="..\Kingdom.Constraints.Samples.Sudoku\Kingdom.Constraints.Samples.Sudoku.csproj">
       <Project>{89739502-B187-4D1B-BAD8-88380BCCD260}</Project>

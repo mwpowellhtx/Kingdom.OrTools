@@ -8,6 +8,11 @@ namespace Kingdom.Constraints
     public abstract class ProblemSolverBase : IProblemSolver
     {
         /// <summary>
+        /// Gets the ModelName.
+        /// </summary>
+        protected string ModelName { get; private set; }
+
+        /// <summary>
         /// ClrCreatedObjects backing field.
         /// </summary>
         private readonly IList<object> _clrCreatedObjects;
@@ -21,10 +26,12 @@ namespace Kingdom.Constraints
         }
 
         /// <summary>
-        /// Protected Default Constructor
+        /// Protected Constructor
         /// </summary>
-        protected ProblemSolverBase()
+        /// <param name="modelName"></param>
+        protected ProblemSolverBase(string modelName)
         {
+            ModelName = modelName;
             _clrCreatedObjects = new List<object>();
         }
 

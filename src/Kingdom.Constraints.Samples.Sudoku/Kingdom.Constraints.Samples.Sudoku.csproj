@@ -34,8 +34,12 @@
     <DocumentationFile>bin\Release\Kingdom.Constraints.Samples.Sudoku.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Google.OrTools, Version=2.0.3322.3902, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Google.OrTools.2.0.3322\lib\net40\Google.OrTools.dll</HintPath>
+    <Reference Include="Google.OrTools, Version=4.4.6107.17129, Culture=neutral, PublicKeyToken=7a052e3db761d3be, processorArchitecture=AMD64">
+      <HintPath>..\packages\Google.OrTools.4.4.3842\lib\net40\Google.OrTools.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.0.0\lib\net45\Google.Protobuf.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

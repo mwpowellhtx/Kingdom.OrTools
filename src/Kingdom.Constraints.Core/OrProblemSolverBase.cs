@@ -11,17 +11,12 @@
         where TProblemSolver : OrProblemSolverBase<TProblemSolver>
     {
         /// <summary>
-        /// ModelName backing field.
-        /// </summary>
-        private readonly string _modelName;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="modelName"></param>
         protected OrProblemSolverBase(string modelName)
+            : base(modelName)
         {
-            _modelName = modelName;
         }
 
         /// <summary>
@@ -93,7 +88,7 @@
         /// <returns></returns>
         public override bool TryResolve()
         {
-            using (var solver = new Solver(_modelName))
+            using (var solver = new Solver(ModelName))
             {
                 Initialize(solver);
 
