@@ -18,9 +18,9 @@ namespace Kingdom.Constraints.Samples
         {
             Func<double, double> round = Math.Round;
 
-            using (var fps = new FeasibleRegionProblemSolver())
+            using (var frPs = new FeasibleRegionProblemSolver())
             {
-                fps.Solved += (sender, e) =>
+                frPs.Solved += (sender, e) =>
                 {
                     const LinearResultStatus optimal = LinearResultStatus.Optimal;
 
@@ -36,7 +36,7 @@ namespace Kingdom.Constraints.Samples
                     Assert.That(round(e.SolutionValues.y), Is.EqualTo(4d));
                 };
 
-                Assert.That(fps.TryResolve(), Is.True);
+                Assert.That(frPs.TryResolve(), Is.True);
             }
         }
 
@@ -48,9 +48,10 @@ namespace Kingdom.Constraints.Samples
         {
             Func<double, double> round = Math.Round;
 
-            using (var fps = new FeasibleRegionProblemSolver())
+            // Make sure that we actually ARE testing WITHOUT the Solution value.
+            using (var frPsWs = new FeasibleRegionProblemSolverWithoutSolution())
             {
-                fps.Solved += (sender, e) =>
+                frPsWs.Solved += (sender, e) =>
                 {
                     const LinearResultStatus optimal = LinearResultStatus.Optimal;
 
@@ -65,7 +66,7 @@ namespace Kingdom.Constraints.Samples
                     Assert.That(round(e.SolutionValues.y), Is.EqualTo(4d));
                 };
 
-                Assert.That(fps.TryResolve(), Is.True);
+                Assert.That(frPsWs.TryResolve(), Is.True);
             }
         }
 
@@ -77,9 +78,9 @@ namespace Kingdom.Constraints.Samples
         {
             Func<double, double> round = Math.Round;
 
-            using (var fps = new CbcMipFeasibleRegionComparisonProblemSolver())
+            using (var cbcMipPs = new CbcMipFeasibleRegionComparisonProblemSolver())
             {
-                fps.Solved += (sender, e) =>
+                cbcMipPs.Solved += (sender, e) =>
                 {
                     const LinearResultStatus optimal = LinearResultStatus.Optimal;
 
@@ -91,7 +92,7 @@ namespace Kingdom.Constraints.Samples
                     Assert.That(round(e.Solution), Is.EqualTo(23d));
                 };
 
-                Assert.That(fps.TryResolve(), Is.True);
+                Assert.That(cbcMipPs.TryResolve(), Is.True);
             }
         }
 
@@ -104,9 +105,9 @@ namespace Kingdom.Constraints.Samples
         {
             Func<double, double> round = Math.Round;
 
-            using (var fps = new GlopLpFeasibleRegionComparisonProblemSolver())
+            using (var glopLoPs = new GlopLpFeasibleRegionComparisonProblemSolver())
             {
-                fps.Solved += (sender, e) =>
+                glopLoPs.Solved += (sender, e) =>
                 {
                     const LinearResultStatus optimal = LinearResultStatus.Optimal;
 
@@ -120,7 +121,7 @@ namespace Kingdom.Constraints.Samples
                     Assert.That(round(e.Solution), Is.EqualTo(25d));
                 };
 
-                Assert.That(fps.TryResolve(), Is.True);
+                Assert.That(glopLoPs.TryResolve(), Is.True);
             }
         }
     }

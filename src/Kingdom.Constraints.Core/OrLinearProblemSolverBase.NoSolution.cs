@@ -32,20 +32,5 @@ namespace Kingdom.Constraints
         /// <param name="problem"></param>
         protected abstract void ReceiveSolution(Solver solver, LinearResultStatus resultStatus,
             dynamic problem);
-
-        /// <summary>
-        /// Receives the <paramref name="resultStatus"/> and <paramref name="problem"/>.
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <param name="resultStatus"></param>
-        /// <param name="solution"></param>
-        /// <param name="problem"></param>
-        protected sealed override void ReceiveSolution(Solver solver, LinearResultStatus resultStatus,
-            bool solution, dynamic problem)
-        {
-            // Report the "Solution" via the Problem.
-            problem.Solution = solution;
-            ReceiveSolution(solver, resultStatus, problem);
-        }
     }
 }

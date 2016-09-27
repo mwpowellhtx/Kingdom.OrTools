@@ -161,14 +161,84 @@ namespace Kingdom.Constraints
         }
 
         /// <summary>
+        /// SolutionEventArgs event arguments.
+        /// </summary>
+        public class SolutionEventArgs : EventArgs
+        {
+            /// <summary>
+            /// Gets the <see cref="Solver.NumVariables"/> modeled.
+            /// </summary>
+            public int VariableCount { get; private set; }
+
+            /// <summary>
+            /// Gets the <see cref="Solver.NumConstraints"/> modeled.
+            /// </summary>
+            public int ConstraintCount { get; private set; }
+
+            /// <summary>
+            /// Gets the <see cref="Solver.Solve()"/> result.
+            /// </summary>
+            public LinearResultStatus ResultStatus { get; private set; }
+
+            /// <summary>
+            /// Gets the Solution calculated from the model.
+            /// </summary>
+            public TSolution Solution { get; private set; }
+
+            /// <summary>
+            /// Gets the <see cref="ExpandoObject"/> SolutionValues.
+            /// </summary>
+            public dynamic SolutionValues { get; private set; }
+
+            /// <summary>
+            /// Internal Constructor
+            /// </summary>
+            /// <param name="variableCount"></param>
+            /// <param name="constraintCount"></param>
+            /// <param name="resultStatus"></param>
+            /// <param name="solution"></param>
+            /// <param name="solutionValues"></param>
+            internal SolutionEventArgs(int variableCount, int constraintCount, LinearResultStatus resultStatus,
+                TSolution solution, dynamic solutionValues)
+            {
+                VariableCount = variableCount;
+                ConstraintCount = constraintCount;
+                ResultStatus = resultStatus;
+                Solution = solution;
+                SolutionValues = solutionValues;
+            }
+        }
+
+        /// <summary>
+        /// Solved event handler.
+        /// </summary>
+        public event EventHandler<SolutionEventArgs> Solved;
+
+        /// <summary>
+        /// Raised the Solved <paramref name="e"/> event arguments.
+        /// </summary>
+        /// <param name="e"></param>
+        private void RaiseSolved(SolutionEventArgs e)
+        {
+            if (Solved == null) return;
+            Solved(this, e);
+        }
+
+        /// <summary>
         /// Receives the <paramref name="solution"/> and <paramref name="resultStatus"/>.
         /// </summary>
         /// <param name="solver"></param>
         /// <param name="resultStatus"></param>
         /// <param name="solution"></param>
         /// <param name="problem"></param>
-        protected abstract void ReceiveSolution(Solver solver, LinearResultStatus resultStatus,
-            TSolution solution, dynamic problem);
+        protected void ReceiveSolution(Solver solver, LinearResultStatus resultStatus,
+            TSolution solution, dynamic problem)
+        {
+            var e = new SolutionEventArgs(solver.NumVariables(), solver.NumConstraints(),
+                resultStatus, solution, GetSolutionValues(problem));
+
+            RaiseSolved(e);
+        }
 
         /// <summary>
         /// Try to Resolve the <see cref="Solver"/> given

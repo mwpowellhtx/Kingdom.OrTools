@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Kingdom.Constraints.Samples.Feasibility
+﻿namespace Kingdom.Constraints.Samples.Feasibility
 {
     using Google.OrTools.LinearSolver;
 
@@ -68,47 +66,6 @@ namespace Kingdom.Constraints.Samples.Feasibility
             obj.SetMaximization();
             ClrCreatedObjects.Add(obj);
             SetProblemComponent(obj, (p, o) => p.obj = o);
-        }
-
-        public class SolutionEventArgs : EventArgs
-        {
-            public int VariableCount { get; private set; }
-
-            public int ConstraintCount { get; private set; }
-
-            public LinearResultStatus ResultStatus { get; private set; }
-
-            // TODO: TBD: not sure it makes sense to always include a solution...
-            public double Solution { get; private set; }
-
-            public dynamic SolutionValues { get; private set; }
-
-            internal SolutionEventArgs(int variableCount, int constraintCount, LinearResultStatus resultStatus,
-                double solution, dynamic solutionValues)
-            {
-                VariableCount = variableCount;
-                ConstraintCount = constraintCount;
-                ResultStatus = resultStatus;
-                Solution = solution;
-                SolutionValues = solutionValues;
-            }
-        }
-
-        public event EventHandler<SolutionEventArgs> Solved;
-
-        private void RaiseSolved(SolutionEventArgs e)
-        {
-            if (Solved == null) return;
-            Solved(this, e);
-        }
-
-        protected override void ReceiveSolution(Solver solver, LinearResultStatus resultStatus,
-            double solution, dynamic problem)
-        {
-            var e = new SolutionEventArgs(solver.NumVariables(), solver.NumConstraints(),
-                resultStatus, solution, GetSolutionValues(problem));
-
-            RaiseSolved(e);
         }
     }
 }
