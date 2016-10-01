@@ -122,6 +122,15 @@ namespace Kingdom.Constraints
         protected abstract bool TryReceiveAssignment(Assignment assignment);
 
         /// <summary>
+        /// Gets the <see cref="OptimizeVar"/> instances from the
+        /// <see cref="ProblemSolverBase.ClrCreatedObjects "/>.
+        /// </summary>
+        protected IEnumerable<OptimizeVar> Optimizations
+        {
+            get { return ClrCreatedObjects.ToArray().OfType<OptimizeVar>(); }
+        }
+
+        /// <summary>
         /// Tries to Resolve the problem.
         /// </summary>
         /// <returns></returns>
@@ -149,13 +158,24 @@ namespace Kingdom.Constraints
 
                 var collection = new ReadOnlyAssignmentCollection(collector);
 
+                var optimizations = Optimizations.ToArray();
+
                 solver.NewSearch(builder, monitors);
 
                 while (solver.NextSolution())
                 {
+                    // Discard the Solution when it was Not Optimized.
+                    if (optimizations.Any() && optimizations.Any(op => !op.AcceptSolution()))
+                    {
+                        continue;
+                    }
+
                     var assignment = collection[collection.Count - 1];
 
-                    if (TryReceiveAssignment(assignment)) break;
+                    if (TryReceiveAssignment(assignment))
+                    {
+                        break;
+                    }
                 }
 
                 solver.EndSearch();
