@@ -7,7 +7,7 @@ namespace Kingdom.Constraints.Samples.Sudoku
     using Google.OrTools.ConstraintSolver;
 
     /// <summary>
-    /// 
+    /// Sudoku problem solver.
     /// </summary>
     /// <see cref="!:http://github.com/google/or-tools/blob/master/examples/python/sudoku.py"/>
     public class SudokuProblemSolver : OrProblemSolverBase<SudokuProblemSolver>
@@ -41,8 +41,6 @@ namespace Kingdom.Constraints.Samples.Sudoku
             _puzzle = aPuzzle;
         }
 
-        private int[,] _matrix;
-
         /// <summary>
         /// Returns a <see cref="Solver"/> seed.
         /// </summary>
@@ -50,17 +48,6 @@ namespace Kingdom.Constraints.Samples.Sudoku
         protected override int GetSolverSeed()
         {
             return new Random().Next();
-        }
-
-        /// <summary>
-        /// Initializes the <param name="solver"></param>.
-        /// </summary>
-        /// <param name="solver"></param>
-        protected override void Initialize(Solver solver)
-        {
-            base.Initialize(solver);
-
-            _matrix = _puzzle.Values;
         }
 
         /// <summary>
@@ -78,14 +65,10 @@ namespace Kingdom.Constraints.Samples.Sudoku
         }
 
         /// <summary>
-        /// 
+        /// Cells backing field.
         /// </summary>
         private readonly IntVar[,] _cells = new IntVar[9, 9];
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="solver"></param>
         protected override void PrepareVariables(Solver solver)
         {
             foreach (var cell in (SudokuPuzzle) _puzzle)
@@ -157,61 +140,26 @@ namespace Kingdom.Constraints.Samples.Sudoku
         }
 
         /// <summary>
-        /// Vectored backing field.
+        /// Gets the Variables associated with the Model.
         /// </summary>
-        private IntVarVector _vectored;
-
-        /// <summary>
-        /// Vector the variables in row major manner.
-        /// </summary>
-        private IntVarVector Vectored
+        protected override IEnumerable<IntVar> Variables
         {
             get
             {
-                if (_vectored == null)
-                {
-                    var variables = new List<IntVar>();
-
-                    for (var row = 0; row < 9; row++)
-                        for (var column = 0; column < 9; column++)
-                            variables.Add(_cells[row, column]);
-
-                    _vectored = new IntVarVector(variables);
-                }
-                return _vectored;
+                for (var row = 0; row < 9; row++)
+                    for (var column = 0; column < 9; column++)
+                        yield return _cells[row, column];
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <param name="collector"></param>
-        protected override void PrepareSolutionCollector(Solver solver, SolutionCollector collector)
+        protected override bool TryMakeDecisionBuilder(Solver solver, out DecisionBuilder db,
+            params IntVar[] variables)
         {
-            collector.Add(Vectored);
-        }
+            db = solver.MakePhase(variables, Solver.INT_VAR_SIMPLE, Solver.INT_VALUE_SIMPLE);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <param name="builder"></param>
-        /// <returns></returns>
-        protected override bool TryMakeDecisionBuilder(Solver solver, out DecisionBuilder builder)
-        {
-            // Want the fewest degrees of freedom first.
-            var variableChooser = new VariableChooser(x => 0);
+            ClrCreatedObjects.Add(db);
 
-            // Rule out (and/or keep in the running) only those choices that are still remaining.
-            var valueChooser = new ValueChooser((x, i) => 0);
-
-            //TODO: may need/want custom choosers to help the issue along...
-            builder = solver.MakePhase(Vectored, Solver.INT_VAR_SIMPLE, Solver.INT_VALUE_SIMPLE);
-
-            ClrCreatedObjects.Add(builder);
-
-            return builder != null;
+            return db != null;
         }
 
         /// <summary>

@@ -1,4 +1,7 @@
-﻿namespace Kingdom.Constraints
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Kingdom.Constraints
 {
     using Google.OrTools.ConstraintSolver;
 
@@ -49,31 +52,67 @@
         protected abstract void PrepareConstraints(Solver solver);
 
         /// <summary>
-        /// Prepares the solver solution collector.
+        /// Gets the Variables associated with the Model.
         /// </summary>
-        /// <param name="solver"></param>
-        /// <param name="collector"></param>
-        protected abstract void PrepareSolutionCollector(Solver solver, SolutionCollector collector);
-
-        /// <summary>
-        /// Prepares any solver monitors that should watch.
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <param name="monitors"></param>
-        protected virtual void PrepareMonitors(Solver solver, SearchMonitorVector monitors)
+        protected virtual IEnumerable<IntVar> Variables
         {
-            ////TODO: ? time limits ? or arrest the constraints themselves?
-            //var searchLimit = solver.MakeLimit(3000, 100, 100, 100);
-            //monitors.Insert(0, searchLimit);
+            get { yield break; }
         }
 
         /// <summary>
-        /// Tries to make a decision buidler.
+        /// Returns a set of created <see cref="SearchMonitor"/>.
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="variables"></param>
+        /// <returns></returns>
+        protected virtual IEnumerable<SearchMonitor> CreateSearchMonitors(Solver solver, params IntVar[] variables)
+        {
+            var monitor = solver.MakeAllSolutionCollector();
+            foreach (var variable in variables) monitor.Add(variable);
+            yield return monitor;
+        }
+
+        /// <summary>
+        /// Returns a created <see cref="SearchMonitorVector"/> given the
+        /// <paramref name="solver"/> and <paramref name="variables"/>.
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="vector"></param>
+        /// <param name="collector"></param>
+        /// <param name="variables"></param>
+        /// <returns></returns>
+        protected virtual bool TryCreateSearchMonitorVector(Solver solver, out SearchMonitorVector vector,
+            out SolutionCollector collector, params IntVar[] variables)
+        {
+            collector = null;
+
+            vector = new SearchMonitorVector();
+
+            foreach (var monitor in CreateSearchMonitors(solver, variables))
+            {
+                vector.Add(monitor);
+
+                // One of the monitors should (SHOULD) be a SolutionCollector.
+                if (!(monitor is SolutionCollector)) continue;
+
+                collector = (SolutionCollector) monitor;
+            }
+
+            ClrCreatedObjects.Add(vector);
+
+            return collector != null;
+        }
+
+        /// <summary>
+        /// Tries to make a <see cref="DecisionBuilder"/> <paramref name="builder"/> given the
+        /// <paramref name="variables"/>.
         /// </summary>
         /// <param name="solver"></param>
         /// <param name="builder"></param>
+        /// <param name="variables"></param>
         /// <returns></returns>
-        protected abstract bool TryMakeDecisionBuilder(Solver solver, out DecisionBuilder builder);
+        protected abstract bool TryMakeDecisionBuilder(Solver solver, out DecisionBuilder builder,
+            params IntVar[] variables);
 
         /// <summary>
         /// Should return true or false, whether or not the <paramref name="assignment"/> was received.
@@ -95,23 +134,22 @@
                 PrepareVariables(solver);
                 PrepareConstraints(solver);
 
-                //TODO: TBD: whether this isn't the better choice? solver.MakeAllSolutionCollector()
-                //TODO: but then, what to consider "owner" of monitor(s)?
-                //TODO: TBD: Solver may be the owner of the vector itself, which we add a "Made" SolutionCollector: but this is not obvious
-                var solutionCollector = solver.MakeAllSolutionCollector();
-                var monitors = new SearchMonitorVector {solutionCollector};
+                var variables = Variables.ToArray();
 
-                PrepareMonitors(solver, monitors);
-                PrepareSolutionCollector(solver, solutionCollector);
+                SearchMonitorVector monitors;
+                SolutionCollector collector;
 
-                DecisionBuilder db;
-
-                if (!TryMakeDecisionBuilder(solver, out db))
+                if (!TryCreateSearchMonitorVector(solver, out monitors, out collector, variables))
                     return false;
 
-                var collection = new ReadOnlyAssignmentCollection(solutionCollector);
+                DecisionBuilder builder;
 
-                solver.NewSearch(db, monitors);
+                if (!TryMakeDecisionBuilder(solver, out builder, variables))
+                    return false;
+
+                var collection = new ReadOnlyAssignmentCollection(collector);
+
+                solver.NewSearch(builder, monitors);
 
                 while (solver.NextSolution())
                 {
