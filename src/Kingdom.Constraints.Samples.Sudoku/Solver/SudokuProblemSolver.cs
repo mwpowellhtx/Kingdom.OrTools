@@ -182,7 +182,7 @@ namespace Kingdom.Constraints.Samples.Sudoku
         /// </summary>
         /// <param name="assignment"></param>
         /// <returns></returns>
-        protected override bool TryReceiveAssignment(Assignment assignment)
+        protected override bool TryReceiveEndAssignment(Assignment assignment)
         {
             var candidate = new SudokuPuzzle();
             ISudokuPuzzle local = candidate;
@@ -195,13 +195,16 @@ namespace Kingdom.Constraints.Samples.Sudoku
                 }
             }
 
-            if (local.IsSolved)
+            var solved = local.IsSolved;
+
+            // ReSharper disable once InvertIf
+            if (solved)
             {
                 Solution = local;
                 RaiseSolved(EventArgs.Empty);
             }
 
-            return local.IsSolved;
+            return solved;
         }
     }
 }

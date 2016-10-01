@@ -69,6 +69,7 @@ namespace Kingdom.Constraints
         {
             var monitor = solver.MakeAllSolutionCollector();
             foreach (var variable in variables) monitor.Add(variable);
+            ClrCreatedObjects.Add(monitor);
             yield return monitor;
         }
 
@@ -115,11 +116,21 @@ namespace Kingdom.Constraints
             params IntVar[] variables);
 
         /// <summary>
-        /// Should return true or false, whether or not the <paramref name="assignment"/> was received.
+        /// Returns whether could Receive the Next <paramref name="assignment"/>.
+        /// </summary>
+        /// <param name="assignment"></param>
+        /// <returns>Whether a Next Solution ought to be obtained for consideration.</returns>
+        protected virtual bool TryReceiveNextAssignment(Assignment assignment)
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// Returns whether the End <paramref name="assignment"/> could be received.
         /// </summary>
         /// <param name="assignment"></param>
         /// <returns></returns>
-        protected abstract bool TryReceiveAssignment(Assignment assignment);
+        protected abstract bool TryReceiveEndAssignment(Assignment assignment);
 
         /// <summary>
         /// Gets the <see cref="OptimizeVar"/> instances from the
@@ -158,25 +169,30 @@ namespace Kingdom.Constraints
 
                 var collection = new ReadOnlyAssignmentCollection(collector);
 
-                var optimizations = Optimizations.ToArray();
+                //var optimizations = Optimizations.ToArray();
 
                 solver.NewSearch(builder, monitors);
 
                 while (solver.NextSolution())
                 {
-                    // Discard the Solution when it was Not Optimized.
-                    if (optimizations.Any() && optimizations.Any(op => !op.AcceptSolution()))
-                    {
-                        continue;
-                    }
+                    //// TODO: TBD: "Optimizations" do not appear to be necessary here?
+                    //// Discard the Solution when it was Not Optimized.
+                    //if (optimizations.Any() && optimizations.Any(op => !op.AcceptSolution()))
+                    //{
+                    //    continue;
+                    //}
 
-                    var assignment = collection[collection.Count - 1];
-
-                    if (TryReceiveAssignment(assignment))
+                    /* Be careful of some LINQ extension methods such as Last or LastOrDefault.
+                     * Apparently we may receive an Assignment here, but potentially not the last valid one. */
+                    if (collection.Any() && TryReceiveNextAssignment(collection[collection.Count - 1]))
                     {
                         break;
                     }
                 }
+
+                // Receive the End Assignment here.
+                var received = collection.Any()
+                               && TryReceiveEndAssignment(collection[collection.Count - 1]);
 
                 solver.EndSearch();
             }

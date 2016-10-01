@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Google.OrTools.ConstraintSolver;
 
 namespace Kingdom.Constraints
 {
+    using Google.OrTools.ConstraintSolver;
+
     internal class SolutionCollectorAssignmentEnumerator : IEnumerator<Assignment>
     {
         private int _currentIndex;

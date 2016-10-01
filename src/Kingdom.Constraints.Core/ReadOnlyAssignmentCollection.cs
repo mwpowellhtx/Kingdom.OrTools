@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Google.OrTools.ConstraintSolver;
 
 namespace Kingdom.Constraints
 {
+    using Google.OrTools.ConstraintSolver;
+
     internal class ReadOnlyAssignmentCollection : IReadOnlyList<Assignment>
     {
         /// <summary>
