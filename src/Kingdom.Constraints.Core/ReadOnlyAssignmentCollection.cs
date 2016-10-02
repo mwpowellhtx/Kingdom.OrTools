@@ -23,6 +23,14 @@ namespace Kingdom.Constraints
         }
 
         /// <summary>
+        /// Gets whether the Collection Has a <see cref="SolutionCollector"/>.
+        /// </summary>
+        public virtual bool HasCollector
+        {
+            get { return _collector != null; }
+        }
+
+        /// <summary>
         /// Read-Only Indexer
         /// </summary>
         /// <param name="index"></param>

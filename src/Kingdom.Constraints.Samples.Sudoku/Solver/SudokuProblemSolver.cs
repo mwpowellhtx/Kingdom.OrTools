@@ -152,14 +152,11 @@ namespace Kingdom.Constraints.Samples.Sudoku
             }
         }
 
-        protected override bool TryMakeDecisionBuilder(Solver solver, out DecisionBuilder db,
-            params IntVar[] variables)
+        protected override DecisionBuilder CreateDecisionBuilder(Solver solver, params IntVar[] variables)
         {
-            db = solver.MakePhase(variables, Solver.INT_VAR_SIMPLE, Solver.INT_VALUE_SIMPLE);
-
-            ClrCreatedObjects.Add(db);
-
-            return db != null;
+            var builder = solver.MakePhase(variables, Solver.INT_VAR_SIMPLE, Solver.INT_VALUE_SIMPLE);
+            ClrCreatedObjects.Add(builder);
+            return builder;
         }
 
         /// <summary>

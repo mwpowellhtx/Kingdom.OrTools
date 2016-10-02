@@ -74,46 +74,12 @@ namespace Kingdom.Constraints
         }
 
         /// <summary>
-        /// Returns a created <see cref="SearchMonitorVector"/> given the
-        /// <paramref name="solver"/> and <paramref name="variables"/>.
+        /// Tries to make a <see cref="DecisionBuilder"/> given the  <paramref name="variables"/>.
         /// </summary>
         /// <param name="solver"></param>
-        /// <param name="vector"></param>
-        /// <param name="collector"></param>
         /// <param name="variables"></param>
         /// <returns></returns>
-        protected virtual bool TryCreateSearchMonitorVector(Solver solver, out SearchMonitorVector vector,
-            out SolutionCollector collector, params IntVar[] variables)
-        {
-            collector = null;
-
-            vector = new SearchMonitorVector();
-
-            foreach (var monitor in CreateSearchMonitors(solver, variables))
-            {
-                vector.Add(monitor);
-
-                // One of the monitors should (SHOULD) be a SolutionCollector.
-                if (!(monitor is SolutionCollector)) continue;
-
-                collector = (SolutionCollector) monitor;
-            }
-
-            ClrCreatedObjects.Add(vector);
-
-            return collector != null;
-        }
-
-        /// <summary>
-        /// Tries to make a <see cref="DecisionBuilder"/> <paramref name="builder"/> given the
-        /// <paramref name="variables"/>.
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <param name="builder"></param>
-        /// <param name="variables"></param>
-        /// <returns></returns>
-        protected abstract bool TryMakeDecisionBuilder(Solver solver, out DecisionBuilder builder,
-            params IntVar[] variables);
+        protected abstract DecisionBuilder CreateDecisionBuilder(Solver solver, params IntVar[] variables);
 
         /// <summary>
         /// Returns whether could Receive the Next <paramref name="assignment"/>.
@@ -126,11 +92,31 @@ namespace Kingdom.Constraints
         }
 
         /// <summary>
+        /// Returns whether could Receive the Next Solution.
+        /// </summary>
+        /// <param name="variables"></param>
+        /// <returns></returns>
+        protected virtual bool TryReceiveNext(params IntVar[] variables)
+        {
+            return false;
+        }
+
+        /// <summary>
         /// Returns whether the End <paramref name="assignment"/> could be received.
         /// </summary>
         /// <param name="assignment"></param>
         /// <returns></returns>
         protected abstract bool TryReceiveEndAssignment(Assignment assignment);
+
+        /// <summary>
+        /// Returns whether could Receive the End Solution.
+        /// </summary>
+        /// <param name="variables"></param>
+        /// <returns></returns>
+        protected virtual bool TryReceiveEnd(params IntVar[] variables)
+        {
+            return false;
+        }
 
         /// <summary>
         /// Gets the <see cref="OptimizeVar"/> instances from the
@@ -156,22 +142,14 @@ namespace Kingdom.Constraints
 
                 var variables = Variables.ToArray();
 
-                SearchMonitorVector monitors;
-                SolutionCollector collector;
+                var monitors = CreateSearchMonitors(solver, variables).ToArray();
 
-                if (!TryCreateSearchMonitorVector(solver, out monitors, out collector, variables))
-                    return false;
-
-                DecisionBuilder builder;
-
-                if (!TryMakeDecisionBuilder(solver, out builder, variables))
-                    return false;
-
-                var collection = new ReadOnlyAssignmentCollection(collector);
-
-                //var optimizations = Optimizations.ToArray();
+                var builder = CreateDecisionBuilder(solver, variables);
 
                 solver.NewSearch(builder, monitors);
+
+                var collection = new ReadOnlyAssignmentCollection(
+                    monitors.OfType<SolutionCollector>().SingleOrDefault());
 
                 while (solver.NextSolution())
                 {
@@ -184,15 +162,28 @@ namespace Kingdom.Constraints
 
                     /* Be careful of some LINQ extension methods such as Last or LastOrDefault.
                      * Apparently we may receive an Assignment here, but potentially not the last valid one. */
-                    if (collection.Any() && TryReceiveNextAssignment(collection[collection.Count - 1]))
+                    if (collection.HasCollector)
+                    {
+                        if (collection.Any()
+                            && TryReceiveNextAssignment(collection[collection.Count - 1]))
+                        {
+                            break;
+                        }
+
+                        continue;
+                    }
+
+                    if (TryReceiveNext(variables))
                     {
                         break;
                     }
                 }
 
                 // Receive the End Assignment here.
-                var received = collection.Any()
-                               && TryReceiveEndAssignment(collection[collection.Count - 1]);
+                var received = (collection.HasCollector
+                                && collection.Any()
+                                && TryReceiveEndAssignment(collection[collection.Count - 1]))
+                               || TryReceiveEnd(variables);
 
                 solver.EndSearch();
             }
