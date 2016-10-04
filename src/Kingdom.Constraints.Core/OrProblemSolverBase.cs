@@ -92,6 +92,16 @@ namespace Kingdom.Constraints
         }
 
         /// <summary>
+        /// Returns whether the End <paramref name="assignment"/> could be received.
+        /// </summary>
+        /// <param name="assignment"></param>
+        /// <returns></returns>
+        protected virtual bool TryReceiveEndAssignment(Assignment assignment)
+        {
+            return false;
+        }
+
+        /// <summary>
         /// Returns whether could Receive the Next Solution.
         /// </summary>
         /// <param name="variables"></param>
@@ -100,13 +110,6 @@ namespace Kingdom.Constraints
         {
             return false;
         }
-
-        /// <summary>
-        /// Returns whether the End <paramref name="assignment"/> could be received.
-        /// </summary>
-        /// <param name="assignment"></param>
-        /// <returns></returns>
-        protected abstract bool TryReceiveEndAssignment(Assignment assignment);
 
         /// <summary>
         /// Returns whether could Receive the End Solution.
