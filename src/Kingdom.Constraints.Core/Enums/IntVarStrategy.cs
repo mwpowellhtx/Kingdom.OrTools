@@ -13,15 +13,19 @@ namespace Kingdom.Constraints
     public enum IntVarStrategy
     {
         /// <summary>
-        /// The default behavior is CHOOSE_FIRST_UNBOUND.
+        /// The default behavior is <see cref="ChooseFirstUnbound"/>.
         /// </summary>
         /// <see cref="Solver.INT_VAR_DEFAULT"/>
+        /// <see cref="Solver.CHOOSE_FIRST_UNBOUND"/>
+        /// <see cref="ChooseFirstUnbound"/>
         IntVarDefault,
 
         /// <summary>
-        /// The simple selection is CHOOSE_FIRST_UNBOUND.
+        /// The simple selection is <see cref="ChooseFirstUnbound"/>.
         /// </summary>
         /// <see cref="Solver.INT_VAR_SIMPLE"/>
+        /// <see cref="Solver.CHOOSE_FIRST_UNBOUND"/>
+        /// <see cref="ChooseFirstUnbound"/>
         IntVarSimple,
 
         /// <summary>
