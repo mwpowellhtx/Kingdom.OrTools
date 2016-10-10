@@ -1,4 +1,6 @@
-﻿namespace Kingdom.Constraints
+﻿using System;
+
+namespace Kingdom.Constraints
 {
     using Google.OrTools.ConstraintSolver;
 
@@ -43,7 +45,7 @@
         /// selection, versus O(1) in the static version.
         /// </summary>
         /// <see cref="Solver.CHOOSE_DYNAMIC_GLOBAL_BEST"/>
-        ChooseDynamicGlobalBest,
+        ChooseDynamicGlobalBest
     };
 
     /// <summary>
@@ -60,7 +62,17 @@
         /// <returns></returns>
         public static int ToInt(this EvaluatorStrategy value)
         {
-            return (int) value;
+            // ReSharper disable once SwitchStatementMissingSomeCases
+            switch (value)
+            {
+                case EvaluatorStrategy.ChooseDynamicGlobalBest:
+                    return Solver.CHOOSE_DYNAMIC_GLOBAL_BEST;
+                case EvaluatorStrategy.ChooseStaticGlobalBest:
+                    return Solver.CHOOSE_STATIC_GLOBAL_BEST;
+            }
+
+            var message = string.Format("{0} not currently supported by or-tools", value);
+            throw new ArgumentException(message, "value");
         }
     }
 }

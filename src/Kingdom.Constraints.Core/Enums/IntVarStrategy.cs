@@ -114,7 +114,7 @@ namespace Kingdom.Constraints
         /// and the second values of the domain.
         /// </summary>
         /// <see cref="Solver.CHOOSE_MAX_REGRET_ON_MIN"/>
-        ChooseMaxRegretOrMin,
+        ChooseMaxRegretOnMin,
 
         /// <summary>
         /// Selects the next unbound variable on a path, the path being defined by the variables:
@@ -133,7 +133,7 @@ namespace Kingdom.Constraints
         /// 
         /// </summary>
         [Obsolete("TODO (user)")]
-        ChooseLowestMax,
+        ChooseLowestMax
     }
 
     /// <summary>
@@ -153,14 +153,38 @@ namespace Kingdom.Constraints
             // ReSharper disable once SwitchStatementMissingSomeCases
             switch (value)
             {
-#pragma warning disable 618
-                case IntVarStrategy.ChooseHighestMin:
-                case IntVarStrategy.ChooseLowestMax:
-#pragma warning restore 618
-                    throw new ArgumentException(string.Format("{0} not currently supported by or-tools", value), "value");
+                case IntVarStrategy.IntVarDefault:
+                    return Solver.INT_VAR_DEFAULT;
+                case IntVarStrategy.IntVarSimple:
+                    return Solver.INT_VAR_SIMPLE;
+                case IntVarStrategy.ChooseFirstUnbound:
+                    return Solver.CHOOSE_FIRST_UNBOUND;
+                case IntVarStrategy.ChooseRandom:
+                    return Solver.CHOOSE_RANDOM;
+                case IntVarStrategy.ChooseMinSizeLowestMin:
+                    return Solver.CHOOSE_MIN_SIZE_LOWEST_MIN;
+                case IntVarStrategy.ChooseMinSizeHighestMin:
+                    return Solver.CHOOSE_MIN_SIZE_HIGHEST_MIN;
+                case IntVarStrategy.ChooseMinSizeLowestMax:
+                    return Solver.CHOOSE_MIN_SIZE_LOWEST_MAX;
+                case IntVarStrategy.ChooseMinSizeHighestMax:
+                    return Solver.CHOOSE_MIN_SIZE_HIGHEST_MAX;
+                case IntVarStrategy.ChooseLowestMin:
+                    return Solver.CHOOSE_LOWEST_MIN;
+                case IntVarStrategy.ChooseHighestMax:
+                    return Solver.CHOOSE_HIGHEST_MAX;
+                case IntVarStrategy.ChooseMinSize:
+                    return Solver.CHOOSE_MIN_SIZE;
+                case IntVarStrategy.ChooseMaxSize:
+                    return Solver.CHOOSE_MAX_SIZE;
+                case IntVarStrategy.ChooseMaxRegretOnMin:
+                    return Solver.CHOOSE_MAX_REGRET_ON_MIN;
+                case IntVarStrategy.ChoosePath:
+                    return Solver.CHOOSE_PATH;
             }
 
-            return (int) value;
+            var message = string.Format("{0} not currently supported by or-tools", value);
+            throw new ArgumentException(message, "value");
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Kingdom.Constraints
+﻿using System;
+
+namespace Kingdom.Constraints
 {
     using Google.OrTools.ConstraintSolver;
 
@@ -72,7 +74,29 @@
         /// <returns></returns>
         public static int ToInt(this IntValueStrategy value)
         {
-            return (int) value;
+            // ReSharper disable once SwitchStatementMissingSomeCases
+            switch (value)
+            {
+                case IntValueStrategy.IntValueDefault:
+                    return Solver.INT_VALUE_DEFAULT;
+                case IntValueStrategy.IntValueSimple:
+                    return Solver.INT_VALUE_SIMPLE;
+                case IntValueStrategy.AssignMinValue:
+                    return Solver.ASSIGN_MIN_VALUE;
+                case IntValueStrategy.AssignMaxValue:
+                    return Solver.ASSIGN_MAX_VALUE;
+                case IntValueStrategy.AssignRandomValue:
+                    return Solver.ASSIGN_RANDOM_VALUE;
+                case IntValueStrategy.AssignCenterValue:
+                    return Solver.ASSIGN_CENTER_VALUE;
+                case IntValueStrategy.SplitLowerHalf:
+                    return Solver.SPLIT_LOWER_HALF;
+                case IntValueStrategy.SplitUpperHalf:
+                    return Solver.SPLIT_UPPER_HALF;
+            }
+
+            var message = string.Format("{0} not currently supported by or-tools", value);
+            throw new ArgumentException(message, "value");
         }
     }
 }
