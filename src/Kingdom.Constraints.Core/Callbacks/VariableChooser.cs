@@ -13,7 +13,11 @@ namespace Kingdom.Constraints
     public delegate long VariableChooserDelegate(long index);
 
     /// <summary>
-    /// VariableChooser is a kind of Callback.
+    /// In C++ parlance, IndexEvaluator2 is defined as &lt;em&gt;typedef
+    /// std::function&lt;int64(int64, int64)&gt;&lt;em&gt;, however, this is lost during the SWIG
+    /// process, and appears only as <see cref="LongToLong"/>, which is not especially
+    /// descriptive. <see cref="VariableChooser"/> provides an easier to comprehend entry point
+    /// when deciding how to approach the issue from C-Sharp.
     /// </summary>
     /// <see cref="!:http://or-tools.googlecode.com/svn/trunk/documentation/reference_manual/or-tools/src/constraint_solver/classoperations__research_1_1Solver.html#fcf373cf1c769a34b1b89a5ba56fb473" />
     /// <see cref="!:http://or-tools.googlecode.com/svn/trunk/documentation/user_manual/manual/search_primitives/basic_working_phases.html#callbacks-to-the-rescue" />

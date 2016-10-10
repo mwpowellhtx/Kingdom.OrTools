@@ -51,6 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ConstraintSolverExtensionMethods.cs" />
+    <Compile Include="CpModel.cs" />
+    <Compile Include="Enums\EvaluatorStrategy.cs" />
+    <Compile Include="Enums\IntValueStrategy.cs" />
+    <Compile Include="Enums\IntVarStrategy.cs" />
     <Compile Include="Extensions\IntVarIteratorExtensionMethods.cs" />
     <Compile Include="Interfaces\IProblemSolver.cs" />
     <Compile Include="IntVarIteratorEnumerator.cs" />

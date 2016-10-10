@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Kingdom.Constraints
@@ -131,6 +132,40 @@ namespace Kingdom.Constraints
         }
 
         /// <summary>
+        /// Exports the <paramref name="solver"/>.
+        /// </summary>
+        /// <param name="solver"></param>
+        [Obsolete("NOT SAFE TO CALL DO NOT USE YET")]
+        protected virtual void Export(Solver solver)
+        {
+            // TODO: TBD: we expect there to be Search Monitors and a Decision Builder to have been configured.
+            var db = ClrCreatedObjects.OfType<DecisionBuilder>().SingleOrDefault();
+
+            var monitors = ClrCreatedObjects.OfType<SearchMonitor>().ToArray();
+
+            // TODO: TBD: what else do we need to do with the "proto"?
+            var proto = new OrCpModel();
+
+            solver.ExportModel(monitors, proto, db);
+        }
+
+        /// <summary>
+        /// Imports the <paramref name="solver"/>.
+        /// </summary>
+        /// <param name="solver"></param>
+        [Obsolete("NOT SAFE TO CALL DO NOT USE YET")]
+        protected virtual void Import(Solver solver)
+        {
+            // TODO: TBD: we just have Search Monitors here? what happens to the Decision Builder?
+            var monitors = ClrCreatedObjects.OfType<SearchMonitor>().ToArray();
+
+            // TODO: TBD: what else do we need to do with the "proto"?
+            var proto = new OrCpModel();
+
+            solver.LoadModel(proto, monitors);
+        }
+
+        /// <summary>
         /// Tries to Resolve the problem.
         /// </summary>
         /// <returns></returns>
@@ -149,6 +184,8 @@ namespace Kingdom.Constraints
 
                 var builder = CreateDecisionBuilder(solver, variables);
 
+                // TODO: TBD: coordinate when exactly we should be exposing to "load" a model, if at all
+
                 solver.NewSearch(builder, monitors);
 
                 var collection = new ReadOnlyAssignmentCollection(
@@ -162,6 +199,9 @@ namespace Kingdom.Constraints
                     //{
                     //    continue;
                     //}
+
+                    // TODO: TBD: coordinate when exactly we should be exposing when to export a model
+                    // TODO: TBD: much less how and to/from where
 
                     /* Be careful of some LINQ extension methods such as Last or LastOrDefault.
                      * Apparently we may receive an Assignment here, but potentially not the last valid one. */
