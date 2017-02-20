@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.Constraints.Core", "Kingdom.Constraints.Core\Kingdom.Constraints.Core.csproj", "{C45F0A18-0E2F-4E82-B507-C7F0DAC1CEA9}"
 EndProject
@@ -17,6 +17,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{60CFBA
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.Constraints.Samples.Feasibility", "Kingdom.Constraints.Samples.Feasibility\Kingdom.Constraints.Samples.Feasibility.csproj", "{DDA0727B-8837-4CE2-A02C-D60F583AB60A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{327DE516-77D1-42D4-8DCE-484E40AD3885}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{141E2837-1247-4E33-B5A0-64D0ECCBFDBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,5 +47,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C45F0A18-0E2F-4E82-B507-C7F0DAC1CEA9} = {327DE516-77D1-42D4-8DCE-484E40AD3885}
+		{89739502-B187-4D1B-BAD8-88380BCCD260} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
+		{C1AFBF85-734E-4F91-8908-9D5921EA8B22} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
+		{DDA0727B-8837-4CE2-A02C-D60F583AB60A} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
 	EndGlobalSection
 EndGlobal
