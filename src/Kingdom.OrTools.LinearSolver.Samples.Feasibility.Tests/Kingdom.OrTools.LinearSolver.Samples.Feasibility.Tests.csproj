@@ -54,6 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\tools\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="TestFixtureBase.cs" />
     <Compile Include="LinearProblemSolverTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

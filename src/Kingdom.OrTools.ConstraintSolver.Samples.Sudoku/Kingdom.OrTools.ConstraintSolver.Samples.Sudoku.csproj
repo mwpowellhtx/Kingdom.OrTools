@@ -55,6 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\tools\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Model\Address.cs" />
     <Compile Include="Interfaces\ISudokuPuzzle.cs" />
     <Compile Include="Model\Puzzle.SudokuPuzzle.cs" />
