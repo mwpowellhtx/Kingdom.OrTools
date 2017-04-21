@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package>
+    <metadata>
+        <id>$id$</id>
+        <version>1.0.0</version>
+        <authors>Michael W. Powell</authors>
+        <owners>$author$</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Provides the core problem solver abstraction for use with Google OR-tools Constraint Solver and Linear Solver wrappers.</description>
+    </metadata>
+    <files>
+        <file src="bin\$configuration$\$id$.dll" target="lib\net40" />
+        <file src="bin\$configuration$\$id$.xml" target="lib\net40" />
+    </files>
+</package>
