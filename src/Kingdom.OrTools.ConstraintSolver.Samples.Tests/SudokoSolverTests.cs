@@ -51,7 +51,8 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
             {
                 s.Solved += (sender, e) =>
                 {
-                    var problemSolver = ((SudokuProblemSolver)sender);
+                    Assert.That(sender, Is.InstanceOf<SudokuProblemSolver>());
+                    var problemSolver = (SudokuProblemSolver) sender;
                     Assert.That(problemSolver.Solution, Is.Not.Null);
                     theSolution = problemSolver.Solution;
                 };

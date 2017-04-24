@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
@@ -12,7 +11,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
     /// Sudoku problem solver.
     /// </summary>
     /// <see cref="!:http://github.com/google/or-tools/blob/master/examples/python/sudoku.py"/>
-    public class SudokuProblemSolver : OrProblemSolverBase<SudokuProblemSolver>
+    public class SudokuProblemSolver : OrProblemSolverBase
     {
         /// <summary>
         /// Gets the Puzzle.
@@ -32,15 +31,6 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
             : base(@"Sudoku Solver")
         {
             Puzzle = puzzle;
-        }
-
-        /// <summary>
-        /// Returns a <see cref="Solver"/> seed.
-        /// </summary>
-        /// <returns></returns>
-        protected override int GetSolverSeed()
-        {
-            return new Random().Next();
         }
 
         /// <summary>
@@ -64,7 +54,9 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// <param name="solver"></param>
         protected override void PrepareVariables(Solver solver)
         {
-            foreach (var cell in (SudokuPuzzle) Puzzle)
+            // TODO: TBD: assumes that the variables are made in the correct order...
+            foreach (var cell in ((SudokuPuzzle) Puzzle)
+                .OrderBy(c => c.Key.Row).ThenBy(c => c.Key.Column))
             {
                 var key = cell.Key;
                 var row = key.Row;
@@ -131,42 +123,11 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         }
 
         /// <summary>
-        /// Gets the Variables associated with the Model.
-        /// </summary>
-        protected override IEnumerable<IntVar> Variables
-        {
-            get
-            {
-                for (var row = 0; row < 9; row++)
-                {
-                    for (var col = 0; col < 9; col++)
-                    {
-                        yield return _cells[row, col];
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Solved event.
-        /// </summary>
-        public event EventHandler<EventArgs> Solved;
-
-        /// <summary>
-        /// Raises the <see cref="Solved"/> event.
-        /// </summary>
-        /// <param name="e"></param>
-        private void OnSolved(EventArgs e)
-        {
-            Solved?.Invoke(this, e);
-        }
-
-        /// <summary>
         /// <see cref="ISearchAgent"/> ProcessVariables event handler.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Agent_OnProcessVariables(object sender, ProcessVariablesEventArgs e)
+        protected override void OnProcessVariables(object sender, ProcessVariablesEventArgs e)
         {
             var candidate = new SudokuPuzzle();
             ISudokuPuzzle local = candidate;
@@ -189,22 +150,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
             // False is the default, so only mark whether ShouldBreak when we have one.
             e.ShouldBreak = true;
 
-            OnSolved(EventArgs.Empty);
-        }
-
-        protected override ISearchAgent NewSearch(ISearchAgent agent)
-        {
-            /* IMO, we should not be invoking a NewSearch multiple times. Just the one time
-             * and let the search resolve over the Solutions. */
-
-            // TODO: TBD: be careful of residual event handlers, memory leaks therein, etc...
-            agent.ProcessVariables -= Agent_OnProcessVariables;
-            agent.ProcessVariables += Agent_OnProcessVariables;
-
-            return agent.NewSearch(
-                a => a.Solver.MakePhase(a.Variables, IntVarSimple, IntValueSimple)
-                    .TrackClrObject(this)
-            );
+            base.OnProcessVariables(sender, e);
         }
     }
 }

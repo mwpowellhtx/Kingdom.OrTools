@@ -5,6 +5,8 @@ using System.Linq;
 namespace Kingdom.OrTools.ConstraintSolver
 {
     using Google.OrTools.ConstraintSolver;
+    using static IntVarStrategy;
+    using static IntValueStrategy;
 
     // TODO: TBD: consider a fluent configuration-based approach...
 
@@ -12,9 +14,7 @@ namespace Kingdom.OrTools.ConstraintSolver
     /// or-tools-based Constraint Programming problem solver.
     /// </summary>
     /// <see cref="!:http://code.google.com/p/or-tools/"/>
-    public abstract class OrProblemSolverBase<TProblemSolver>
-        : ProblemSolverBase, IOrProblemSolver<TProblemSolver>
-        where TProblemSolver : OrProblemSolverBase<TProblemSolver>
+    public abstract class OrProblemSolverBase : ProblemSolverBase, IOrProblemSolver
     {
         /// <summary>
         /// Constructor
@@ -29,7 +29,10 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// Returns a seed for the <see cref="Solver"/> to <see cref="Solver.ReSeed"/>.
         /// </summary>
         /// <returns></returns>
-        protected abstract int GetSolverSeed();
+        protected virtual int GetSolverSeed()
+        {
+            return new Random().Next();
+        }
 
         /// <summary>
         /// Initializes the problem solver.
@@ -44,7 +47,7 @@ namespace Kingdom.OrTools.ConstraintSolver
 
         /* TODO: TBD: otherwise "free-standing" calls like PrepareVariables PrepareConstraints or
          * even ReSeed might be better exposed via an exposed fluent configuration... */
-         
+
         /// <summary>
         /// Prepares solver variables.
         /// </summary>
@@ -58,12 +61,11 @@ namespace Kingdom.OrTools.ConstraintSolver
         protected abstract void PrepareConstraints(Solver solver);
 
         /// <summary>
-        /// Gets the Variables associated with the Model.
+        /// Gets the Variables associated with the Model. It is expected that these have been
+        /// tracked in the correct model order in the
+        /// <see cref="ProblemSolverBase.ClrCreatedObjects"/> collection.
         /// </summary>
-        protected virtual IEnumerable<IntVar> Variables
-        {
-            get { yield break; }
-        }
+        protected IEnumerable<IntVar> Variables => ClrCreatedObjects.OfType<IntVar>().ToArray();
 
         // TODO: TBD: PrepareSearchMonitors is perhaps closer to a fluent style...
 
@@ -107,12 +109,45 @@ namespace Kingdom.OrTools.ConstraintSolver
         }
 
         /// <summary>
+        /// Solved event.
+        /// </summary>
+        public event EventHandler<EventArgs> Solved;
+
+        /// <summary>
+        /// Raises the <see cref="Solved"/> event.
+        /// </summary>
+        /// <param name="e"></param>
+        private void OnSolved(EventArgs e)
+        {
+            Solved?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// <see cref="ISearchAgent"/> ProcessVariables event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void OnProcessVariables(object sender, ProcessVariablesEventArgs e)
+        {
+            OnSolved(EventArgs.Empty);
+        }
+
+        /// <summary>
         /// Begins a New Search corresponding with the <see cref="Solver"/> and
         /// <paramref name="agent"/>.
         /// </summary>
         /// <param name="agent"></param>
         /// <returns></returns>
-        protected abstract ISearchAgent NewSearch(ISearchAgent agent);
+        protected virtual ISearchAgent NewSearch(ISearchAgent agent)
+        {
+            agent.ProcessVariables -= OnProcessVariables;
+            agent.ProcessVariables += OnProcessVariables;
+
+            return agent.NewSearch(
+                a => a.Solver.MakePhase(a.Variables, IntVarSimple, IntValueSimple)
+                    .TrackClrObject(this)
+            );
+        }
 
         /// <summary>
         /// Gets the <see cref="OptimizeVar"/> instances from the
