@@ -34,7 +34,7 @@ The default implementation passes a the value from ``System.Random.Next()`` to `
 
 Preparing *variables* and *constraints* is a little plainer in that we will expect an enumeration of returned *variables* and *constraints*.
 
-For starters, we will expose specific problem variables for use throughout preparation. We will track the specific Variables themselves for convenience during the example:
+For starters, we will expose specific problem variables for use throughout preparation. We will track the specific *variables* themselves for convenience during the example:
 
 ```C#
 private IntVar X { get; set; }
