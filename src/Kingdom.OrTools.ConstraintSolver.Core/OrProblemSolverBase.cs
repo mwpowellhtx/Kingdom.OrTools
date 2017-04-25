@@ -52,20 +52,17 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// Prepares solver variables.
         /// </summary>
         /// <param name="solver"></param>
-        protected abstract void PrepareVariables(Solver solver);
+        /// <returns></returns>
+        protected abstract IEnumerable<IntVar> PrepareVariables(Solver solver);
 
         /// <summary>
-        /// Prepares the solver constraints.
+        /// Prepares the solver constraints. No need to add the Constraints to the
+        /// <paramref name="solver"/>. Just prepare and return them. The parent class will handle
+        /// the responsibility of adding them to the <paramref name="solver"/>.
         /// </summary>
         /// <param name="solver"></param>
-        protected abstract void PrepareConstraints(Solver solver);
-
-        /// <summary>
-        /// Gets the Variables associated with the Model. It is expected that these have been
-        /// tracked in the correct model order in the
-        /// <see cref="ProblemSolverBase.ClrCreatedObjects"/> collection.
-        /// </summary>
-        protected IEnumerable<IntVar> Variables => ClrCreatedObjects.OfType<IntVar>().ToArray();
+        /// <returns></returns>
+        protected abstract IEnumerable<Constraint> PrepareConstraints(Solver solver);
 
         // TODO: TBD: PrepareSearchMonitors is perhaps closer to a fluent style...
 
@@ -163,10 +160,20 @@ namespace Kingdom.OrTools.ConstraintSolver
         {
             using (var solver = new Solver(ModelName))
             {
+                // Capture the Solver instance for local usage.
+                var s = solver;
+
                 ReSeed(solver);
 
-                PrepareVariables(solver);
-                PrepareConstraints(solver);
+                /* Capture the Variables and Constraints. At the same time, Track them as CLR objects,
+                 * and Add the Constraints to the Solver. */
+
+                var variables = PrepareVariables(s).Select(x => x.TrackClrObject(this)).ToArray();
+
+                foreach (var c in PrepareConstraints(s).ToArray())
+                {
+                    s.Add(c.TrackClrObject(this));
+                }
 
                 var e = EventArgs.Empty;
 
@@ -178,7 +185,7 @@ namespace Kingdom.OrTools.ConstraintSolver
                  * derived class, since we cannot really know what sort of Phase DecisionBuilder
                  * will be required until that moment. */
 
-                using (var sa = PrepareSearch(solver, Variables.ToArray()))
+                using (var sa = PrepareSearch(s, variables))
                 {
                     OnResolving(e);
 

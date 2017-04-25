@@ -32,32 +32,31 @@ The default implementation passes a the value from ``System.Random.Next()`` to `
 
 #### Prepare the *variables* and *constraints*
 
-For starters, we will expose specific problem variables for use throughout preparation.
+Preparing *variables* and *constraints* is a little plainer in that we will expect an enumeration of returned *variables* and *constraints*.
+
+For starters, we will expose specific problem variables for use throughout preparation. We will track the specific Variables themselves for convenience during the example:
 
 ```C#
-// We will track the specific Variables themselves for convenience during the example.
-private IntVar X => Variables.SingleOrDefault(v => v.Name() == "x");
-private IntVar Y => Variables.SingleOrDefault(v => v.Name() == "y");
+private IntVar X { get; set; }
+private IntVar Y { get; set; }
 ```
 
-Now, override ``protected abstract void PrepareVariables(Solver solver)`` in order to prepare the *variables* involved in the solver model:
+Now, override ``protected abstract IEnumerable<IntVar> PrepareVariables(Solver solver)`` in order to prepare the *variables* involved in the solver model:
 
 ```C#
-protected override void PrepareVariables(Solver solver)
+protected override IEnumerable<IntVar> PrepareVariables(Solver solver)
 {
-    // Variables are prepared and subsequently tracked.
-    X = solver.MakeIntVar(0, 10, "x").TrackClrObject(this);
-    Y = solver.MakeIntVar(0, 10, "y").TrackClrObject(this);
+    yield return X = solver.MakeIntVar(0, 10, "x");
+    yield return Y = solver.MakeIntVar(0, 10, "y");
 }
 ```
 
-Also override ``protected abstract void PrepareConstraints(Solver solver)`` in order to prepare the *constraints* involved in the solver model:
+Also override ``protected abstract IEnumerable<Constraint> PrepareConstraints(Solver solver)`` in order to prepare the *constraints* involved in the solver model:
 
 ```C#
 protected override void PrepareVariables(Solver solver)
 {
-    // Constraint is prepared and subsequently tracked.
-    (X + Y == 5).TrackClrObject(this);
+    yield return X + Y == 5;
 }
 ```
 
@@ -102,6 +101,8 @@ During the search process, the CLR can lose track of objects, which results in u
 I have provided a value-added solution, ``IClrObjectHost``, which is implemented by the ``ProblemSolverBase``. When you prepare *variables*, *constraints*, *decision builder*, and so on, make sure to invoke the ``TrackClrObject`` extension method, which collects trackable objects for use during the search.
 
 It is these tracked objects from which *Variables* and *Optimizations* and so forth may be reported for preparation steps.
+
+Now, with the background being established, your task when you adopt this approach is to focus on your variables and constraints and, under specialized conditions, your search monitors, optimizations, and decision builder. The base class will handle tracking the CLR objects for you when they are received by the base class.
 
 ### Pulling it all together
 

@@ -14,6 +14,7 @@
 
         protected override void PrepareVariables(Solver solver)
         {
+            // TODO: TBD: ths framework for this solver may change along similar lines as for Constraint Problem Solver.
             // x and y are non-negative integer variables
             var xVar = solver.MakeNumVar(NegativeInfinity, PositiveInfinity, "x");
             SetProblemComponent(xVar, (p, x) => p.x = x).TrackClrObject(this);

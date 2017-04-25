@@ -41,7 +41,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// <param name="column"></param>
         /// <returns></returns>
         public IntVar MakeCell(Solver solver, int row, int column)
-            => solver.MakeIntVar(0, 9, $@"SudokuPuzzle[{row}, {column}]").TrackClrObject(this);
+            => solver.MakeIntVar(0, 9, $@"SudokuPuzzle[{row}, {column}]");
 
         /// <summary>
         /// Cells backing field.
@@ -52,17 +52,16 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// 
         /// </summary>
         /// <param name="solver"></param>
-        protected override void PrepareVariables(Solver solver)
+        /// <returns></returns>
+        protected override IEnumerable<IntVar> PrepareVariables(Solver solver)
         {
-            // TODO: TBD: assumes that the variables are made in the correct order...
-            foreach (var cell in ((SudokuPuzzle) Puzzle)
-                .OrderBy(c => c.Key.Row).ThenBy(c => c.Key.Column))
-            {
-                var key = cell.Key;
-                var row = key.Row;
-                var col = key.Column;
-                _cells[row, col] = MakeCell(solver, row, col);
-            }
+            return from cell in ((SudokuPuzzle) Puzzle)
+                .OrderBy(c => c.Key.Row).ThenBy(c => c.Key.Column)
+                select cell.Key
+                into key
+                let i = key.Row
+                let j = key.Column
+                select _cells[i, j] = MakeCell(solver, i, j);
         }
 
         /// <summary>
@@ -72,15 +71,15 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// <param name="variable"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        private bool TryInitialMakeConstraint(Solver solver, IntExpr variable, int value)
+        private IEnumerable<Constraint> MakeInitialConstraints(Solver solver, IntExpr variable, int value)
         {
-            solver.Add(solver.MakeBetweenCt(variable, 1, 9).TrackClrObject(this));
+            // TODO: TBD: this one may change for partially solved puzzles.
+            yield return solver.MakeBetweenCt(variable, 1, 9);
 
-            if (!value.TrySolvedValue()) return false;
-
-            solver.Add((variable == value).TrackClrObject(this));
-
-            return true;
+            if (value.TrySolvedValue())
+            {
+                yield return variable == value;
+            }
         }
 
         /// <summary>
@@ -89,37 +88,44 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// <param name="solver"></param>
         /// <param name="groups"></param>
         /// <returns></returns>
-        private bool TryMakeAllDifferentConstraints(Solver solver, IEnumerable<IDictionary<Address, int>> groups)
+        private IEnumerable<Constraint> MakeAllDifferentConstraints(Solver solver,
+            IEnumerable<IDictionary<Address, int>> groups)
         {
             var groupedCells = groups.Select(g => g.Select(
                 h => _cells[h.Key.Row, h.Key.Column]).ToList()).ToArray();
 
-            foreach (var shouldBeDifferent in groupedCells
+            foreach (var cdiff in groupedCells
                 .Select(g => solver.MakeAllDifferent(new IntVarVector(g))))
             {
-                solver.Add(shouldBeDifferent);
-                ClrCreatedObjects.Add(shouldBeDifferent);
+                yield return cdiff;
             }
-
-            return true;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="solver"></param>
-        protected override void PrepareConstraints(Solver solver)
+        /// <returns></returns>
+        protected override IEnumerable<Constraint> PrepareConstraints(Solver solver)
         {
             foreach (var cell in (SudokuPuzzle) Puzzle)
             {
                 var key = cell.Key;
                 var row = key.Row;
                 var col = key.Column;
-                TryInitialMakeConstraint(solver, _cells[row, col], Puzzle[row, col]);
+
+                foreach (var c in MakeInitialConstraints(solver, _cells[row, col], Puzzle[row, col]))
+                {
+                    yield return c;
+                }
             }
 
-            TryMakeAllDifferentConstraints(solver,
-                Puzzle.Rows.Concat(Puzzle.Columns).Concat(Puzzle.Blocks));
+            var p = Puzzle;
+
+            foreach (var c in MakeAllDifferentConstraints(solver, p.Rows.Concat(p.Columns).Concat(p.Blocks)))
+            {
+                yield return c;
+            }
         }
 
         /// <summary>
