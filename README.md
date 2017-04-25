@@ -6,7 +6,7 @@ The vision here is to *configure* the problem solver, which amounts to making so
 
 At present I have re-factored the *search* capability and am considering how best to conduct the *configuration* aspects. Virtually overridden methods are employed at present, however, in my opinion this is not directed enough. But for now the repo is at least stable such as it is.
 
-## Constraint Solver Problem Solver Usage
+## Constraint Problem Solver Usage
 
 I have published [Kingdom.OrTools.ConstraintSolver.Core](http://www.nuget.org/packages/Kingdom.OrTools.ConstraintSolver.Core/) and [Kingdom.OrTools.Core](https://www.nuget.org/packages/Kingdom.OrTools.Core/) for public consumption. Comments, issues, and otherwise constructive contributions are welcome.
 
@@ -54,7 +54,7 @@ protected override IEnumerable<IntVar> PrepareVariables(Solver solver)
 Also override ``protected abstract IEnumerable<Constraint> PrepareConstraints(Solver solver)`` in order to prepare the *constraints* involved in the solver model:
 
 ```C#
-protected override void PrepareVariables(Solver solver)
+protected override IEnumerable<Constraint> PrepareVariables(Solver solver)
 {
     yield return X + Y == 5;
 }
