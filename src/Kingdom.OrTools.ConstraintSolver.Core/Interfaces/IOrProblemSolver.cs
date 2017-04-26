@@ -3,7 +3,7 @@
     /// <summary>
     /// Provides a problem solving interface for adaptation.
     /// </summary>
-    public interface IOrProblemSolver : IProblemSolver
+    public interface IOrProblemSolver : IProblemSolver, IOrClrObjectHost
     {
     }
 }

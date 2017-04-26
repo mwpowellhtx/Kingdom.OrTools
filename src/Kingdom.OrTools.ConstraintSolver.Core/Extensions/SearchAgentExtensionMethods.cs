@@ -2,27 +2,16 @@ using System;
 
 namespace Kingdom.OrTools.ConstraintSolver
 {
-    using Google.OrTools.ConstraintSolver;
-
     /// <summary>
     /// <see cref="ISearchAgent"/> extension methods.
     /// </summary>
     public static class SearchAgentExtensionMethods
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <param name="variables"></param>
-        /// <returns></returns>
-        internal static ISearchAgent PrepareSearch(this Solver solver, params IntVar[] variables)
-        {
-            return new SearchAgent(solver, variables);
-        }
+        // "Creating" a new SearchAgent here was not buying us much that we shouldn't just create it when it was called.
 
         // TODO: TBD: a bit on the fence about the prospect of a "for-each-solution"; could make for an interesting API, but is it necessary?
 
-            /// <summary>
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="agent"></param>

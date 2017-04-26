@@ -64,7 +64,25 @@ For future reference, due to the nature of the call, there's nothing stopping th
 
 #### Prepare the *search monitors*
 
-The default *search monitor* is the all-solutions ``Google.OrTools.ConstraintSolver.SolutionCollector``, which is a kind of *search monitor*. Override ``protected virtual ISearchAgent PrepareSearchMonitors(ISearchAgent agent, params IntVar[] variables)`` in order to prepare this or additional search monitors. Invoke the base class virtual method in order to include the default *search monitor*
+The default *search monitor* is the all-solutions ``Google.OrTools.ConstraintSolver.SolutionCollector``, which is a kind of *search monitor*. Override ``protected virtual ISearchAgent PrepareSearchMonitors(ISearchAgent agent, params IntVar[] variables)`` in order to prepare this or additional search monitors. Invoke the base class virtual method in order to include the default *search monitor*:
+
+```C#
+protected virtual ISearchAgent PrepareSearchMonitors(ISearchAgent agent, params IntVar[] variables)
+{
+    if (!agent.HasSolutionCollector<Google.OrTools.ConstraintSolver.SolutionCollector>())
+    {
+        // Start with a single all-solution-collector.
+        agent.Monitor(a =>
+        {
+            var m = a.Solver.MakeAllSolutionCollector();
+            foreach (var v in variables) m.Add(v);
+            return m;
+        });
+    }
+
+    return agent;
+}
+```
 
 We introduced an ``ISearchAgent`` which encapsulates key search boundary ingredients, including specifying search monitors, and conducting the search over the ``Google.OrTools.ConstraintSolver.Solver.NewSearch(...)`` to ``Google.OrTools.ConstraintSolver.Solver.EndSearch()`` boundary.
 
@@ -74,13 +92,37 @@ For future reference, even this effort is a bit more undisciplined than I would 
 
 #### Prepare the *search*
 
-The default behavior is to prepare the ``ISearchAgent``, which includes the prepared *variables*. Override ``protected virtual ISearchAgent PrepareSearch(Solver solver, params IntVar[] variables)`` in order to take additional preparation steps, however, it is expected that the base method be called with appropriate timing to your problem solver.
+The default behavior is to prepare the ``ISearchAgent``, which includes the prepared *variables*. Override ``protected virtual ISearchAgent PrepareSearch(Solver solver, params IntVar[] variables)`` in order to take additional preparation steps, however, it is expected that the base method be called with appropriate timing to your problem solver:
+
+```C#
+protected virtual ISearchAgent PrepareSearch(params IntVar[] variables)
+{
+    var a = new SearchAgent(this, variables);
+    PrepareSearchMonitors(a, variables);
+    return a;
+}
+```
+
+Any overrides of this method should at least invoke the base, bare minimum.
 
 #### Conduct a *new search*
 
 The default behavior prepares a ``Google.OrTools.ConstraintSolver.DecisionBuilder`` with ``Kingdom.OrTools.IntVarStrategy.IntVarSimple`` and ``Kingdom.OrTools.IntValueStrategi.IntValueSimple`` strategies, which map to ``Google.OrTools.ConstraintSolver.Solver.INT_VAR_SIMPLE`` and ``Google.OrTools.ConstraintSolver.Solver.INT_VALUE_SIMPLE``, respectively.
 
-Override ``protected virtual ISearchAgent NewSearch(ISearchAgent agent)`` in order to specify a different *decision builder*. This is heavily leveraged against the provided ``ISearchAgent``, which includes the associated ``ISearchAgent.Solver``, ``ISearchAgent.Variables``, and so on.
+Override ``protected virtual ISearchAgent NewSearch(ISearchAgent agent)`` in order to specify a different *decision builder*. This is heavily leveraged against the provided ``ISearchAgent``, which includes the associated ``ISearchAgent.Solver``, ``ISearchAgent.Variables``, and so on:
+
+```C#
+using static IntVarStrategy;
+using static IntValueStrategy;
+
+protected virtual ISearchAgent NewSearch(ISearchAgent agent)
+{
+    agent.ProcessVariables -= OnProcessVariables;
+    agent.ProcessVariables += OnProcessVariables;
+
+    return agent.NewSearch((ISearchAgent a) => a.Solver.MakePhase(a.Variables, IntVarSimple, IntValueSimple));
+}
+```
 
 Also critical is that the base method connects the ``protected virtual void OnProcessVariables(object sender, ProcessVariablesEventArgs e)`` event handler to the ``ISearchAgent.ProcessVariables`` event. Additionally, the default ``OnProcessVariables`` event handler invokes the ``OrProblemSolverBase.Solved`` event.
 

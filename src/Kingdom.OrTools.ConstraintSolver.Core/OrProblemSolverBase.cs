@@ -26,7 +26,9 @@ namespace Kingdom.OrTools.ConstraintSolver
         }
 
         /// <summary>
-        /// Returns a seed for the <see cref="Solver"/> to <see cref="Solver.ReSeed"/>.
+        /// Returns a seed for the <see cref="Solver"/> to
+        /// <see cref="Google.OrTools.ConstraintSolver.Solver.ReSeed"/>.
+        /// The default behavior defer to the <see cref="Random.Next()"/> method.
         /// </summary>
         /// <returns></returns>
         protected virtual int GetSolverSeed()
@@ -83,7 +85,9 @@ namespace Kingdom.OrTools.ConstraintSolver
                 agent.Monitor(a =>
                 {
                     var m = a.Solver.MakeAllSolutionCollector();
-                    foreach (var v in variables) m.Add(v);
+                    var vect = new IntVarVector().TrackClrObject(this);
+                    foreach (var v in variables) vect.Add(v);
+                    m.Add(vect);
                     return m;
                 });
             }
@@ -92,15 +96,14 @@ namespace Kingdom.OrTools.ConstraintSolver
         }
 
         /// <summary>
-        /// Prepares the <see cref="ISearchAgent"/> corresponding with the
-        /// <paramref name="solver"/>.
+        /// Prepares the <see cref="ISearchAgent"/> corresponding with the solver as a
+        /// <see cref="IOrClrObjectHost"/>.
         /// </summary>
-        /// <param name="solver"></param>
         /// <param name="variables"></param>
         /// <returns></returns>
-        protected virtual ISearchAgent PrepareSearch(Solver solver, params IntVar[] variables)
+        protected virtual ISearchAgent PrepareSearch(params IntVar[] variables)
         {
-            var a = solver.PrepareSearch(variables);
+            var a = new SearchAgent(this, variables);
             PrepareSearchMonitors(a, variables);
             return a;
         }
@@ -140,10 +143,7 @@ namespace Kingdom.OrTools.ConstraintSolver
             agent.ProcessVariables -= OnProcessVariables;
             agent.ProcessVariables += OnProcessVariables;
 
-            return agent.NewSearch(
-                a => a.Solver.MakePhase(a.Variables, IntVarSimple, IntValueSimple)
-                    .TrackClrObject(this)
-            );
+            return agent.NewSearch(a => a.Solver.MakePhase(a.Variables, IntVarSimple, IntValueSimple));
         }
 
         /// <summary>
@@ -153,46 +153,58 @@ namespace Kingdom.OrTools.ConstraintSolver
         protected IEnumerable<OptimizeVar> Optimizations => ClrCreatedObjects.OfType<OptimizeVar>().ToArray();
 
         /// <summary>
+        /// Gets the Solver.
+        /// </summary>
+        public Solver Solver { get; private set; }
+
+        /// <summary>
         /// Tries to Resolve the problem.
         /// </summary>
         /// <returns></returns>
         public override bool TryResolve()
         {
-            using (var solver = new Solver(ModelName))
+            try
             {
-                // Capture the Solver instance for local usage.
-                var s = solver;
-
-                ReSeed(solver);
-
-                /* Capture the Variables and Constraints. At the same time, Track them as CLR objects,
-                 * and Add the Constraints to the Solver. */
-
-                var variables = PrepareVariables(s).Select(x => x.TrackClrObject(this)).ToArray();
-
-                foreach (var c in PrepareConstraints(s).ToArray())
+                using (Solver = new Solver(ModelName))
                 {
-                    s.Add(c.TrackClrObject(this));
+                    // Capture the Solver instance for local usage.
+                    var s = Solver;
+
+                    ReSeed(s);
+
+                    /* Capture the Variables and Constraints. At the same time, Track them as CLR objects,
+                     * and Add the Constraints to the Solver. */
+
+                    var variables = PrepareVariables(s).Select(x => x.TrackClrObject(this)).ToArray();
+
+                    foreach (var c in PrepareConstraints(s).ToArray())
+                    {
+                        s.Add(c.TrackClrObject(this));
+                    }
+
+                    var e = EventArgs.Empty;
+
+                    /* It is important that search preparation include allocation of monitor(s) and
+                     * DecisionBuilders. However, these cannot truly be known until the moment when
+                     * the search is about ready to get under way. */
+
+                    /* Additionally, it is also very important to leave resolution of NewSearch to the
+                     * derived class, since we cannot really know what sort of Phase DecisionBuilder
+                     * will be required until that moment. */
+
+                    using (var sa = PrepareSearch(variables))
+                    {
+                        OnResolving(e);
+
+                        NewSearch(sa);
+                    }
+
+                    OnResolved(e);
                 }
-
-                var e = EventArgs.Empty;
-
-                /* It is important that search preparation include allocation of monitor(s) and
-                 * DecisionBuilders. However, these cannot truly be known until the moment when
-                 * the search is about ready to get under way. */
-
-                /* Additionally, it is also very important to leave resolution of NewSearch to the
-                 * derived class, since we cannot really know what sort of Phase DecisionBuilder
-                 * will be required until that moment. */
-
-                using (var sa = PrepareSearch(s, variables))
-                {
-                    OnResolving(e);
-
-                    NewSearch(sa);
-                }
-
-                OnResolved(e);
+            }
+            finally
+            {
+                Solver = null;
             }
             return true;
         }

@@ -12,9 +12,14 @@ namespace Kingdom.OrTools.ConstraintSolver
     internal class SearchAgent : ISearchAgent
     {
         /// <summary>
+        /// Gets the Host.
+        /// </summary>
+        private IOrClrObjectHost Host { get; }
+
+        /// <summary>
         /// Gets the Solver.
         /// </summary>
-        public Solver Solver { get; }
+        public Solver Solver => Host?.Solver;
 
         /// <summary>
         /// Predicated event.
@@ -74,11 +79,12 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="solver"></param>
+        /// <param name="host"></param>
         /// <param name="variables"></param>
-        public SearchAgent(Solver solver, params IntVar[] variables)
+        public SearchAgent(IOrClrObjectHost host, params IntVar[] variables)
         {
-            Solver = solver;
+            Host = host;
+
             Variables = variables;
 
             // Prepare to receive some Monitors.
@@ -97,7 +103,7 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// <returns></returns>
         public ISearchAgent Monitor(Func<ISearchAgent, SearchMonitor> createMonitor)
         {
-            var m = createMonitor(this);
+            var m = createMonitor(this).TrackClrObject(Host);
 
             var sc = m as SolutionCollector;
 
@@ -132,9 +138,13 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// <returns></returns>
         public ISearchAgent NewSearch(Func<ISearchAgent, DecisionBuilder> factory)
         {
-            var db = DecisionBuilder = factory(this);
+            // ReSharper disable once InvertIf
+            if (Solver != null)
+            {
+                var db = DecisionBuilder = factory(this).TrackClrObject(Host);
 
-            Solver.NewSearch(db, Monitors.ToArray());
+                Solver.NewSearch(db, Monitors.ToArray());
+            }
 
             return this;
         }
@@ -158,7 +168,8 @@ namespace Kingdom.OrTools.ConstraintSolver
             // Evaluate Variables as an Array once.
             var variables = Variables.ToArray();
 
-            while (solver.NextSolution())
+            // The Solver should be set but let's double check that just in case.
+            while (solver?.NextSolution() == true)
             {
                 // TODO: TBD: the only thing I don't like about this is the overhead involved maintaining events/handlers/args, etc
                 if (OnPredicated().ShouldBreak) break;
