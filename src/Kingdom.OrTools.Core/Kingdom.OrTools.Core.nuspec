@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>$id$</id>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
         <authors>Michael W. Powell</authors>
         <owners>$author$</owners>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -10,7 +10,6 @@
         <tags>Google Operations Research Tools wrapper disposable CLR object host problem solver</tags>
     </metadata>
     <files>
-        <file src="bin\$configuration$\$id$.dll" target="lib\net40" />
-        <file src="bin\$configuration$\$id$.xml" target="lib\net40" />
+        <file src="bin\$configuration$\$id$.pdb" target="lib\net45" />
     </files>
 </package>
