@@ -24,15 +24,17 @@ popd
 goto end
 
 :packprojects
-%nuget_exe% pack %1\%1.csproj -Prop Configuration=%config%
+%nuget_exe% pack %1\%1.csproj -Properties Configuration=%config%
 exit /b
 
 :movepackages
 @echo Moving the packages to %packages_dir% ...
-if not exist %package_files% mkdir %packages_dir%
+if not exist %packages_dir% mkdir %packages_dir%
 move %package_files% %packages_dir%
 exit /b
 
 :end
 
 endlocal
+
+pause

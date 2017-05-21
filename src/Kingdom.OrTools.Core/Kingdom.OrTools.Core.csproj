@@ -11,6 +11,8 @@
     <AssemblyName>Kingdom.OrTools.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,6 +57,7 @@
   <ItemGroup>
     <None Include="Kingdom.OrTools.Core.nuspec">
       <SubType>Designer</SubType>
+      <TransformOnBuild>true</TransformOnBuild>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
