@@ -35,8 +35,8 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Google.OrTools, Version=5.1.4075.23203, Culture=neutral, PublicKeyToken=e5e5a4177ad79658, processorArchitecture=AMD64">
-      <HintPath>..\packages\Google.OrTools.5.1.4077\lib\net40\Google.OrTools.dll</HintPath>
+    <Reference Include="Google.OrTools, Version=6.0.4217.18304, Culture=neutral, PublicKeyToken=e5e5a4177ad79658, processorArchitecture=AMD64">
+      <HintPath>..\packages\Google.OrTools.6.0.4217\lib\net40\Google.OrTools.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.2.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">

@@ -14,14 +14,6 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         /// <summary>
         /// 
         /// </summary>
-        [Obsolete(@"This has been better exposed in a yet to be released version...")]
-        public class CpModel : SWIGTYPE_p_operations_research__CpModel
-        {
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         [Test]
         [Ignore]
         public void Testing()
