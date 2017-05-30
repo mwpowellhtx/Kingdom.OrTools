@@ -15,7 +15,7 @@ namespace Kingdom.OrTools.LinearSolver
     /// <typeparam name="TProblemSolver"></typeparam>
     /// <typeparam name="TSolution"></typeparam>
     public abstract class OrLinearProblemSolverBase<TProblemSolver, TSolution>
-        : ProblemSolverBase, IOrLinearProblemSolver<TProblemSolver>
+        : ProblemSolverBase<Solver, Variable>, IOrLinearProblemSolver<TProblemSolver>
         where TProblemSolver : OrLinearProblemSolverBase<TProblemSolver, TSolution>
     {
         /// <summary>
@@ -69,11 +69,7 @@ namespace Kingdom.OrTools.LinearSolver
         /// </summary>
         protected readonly dynamic Problem = new ExpandoObject();
 
-        /// <summary>
-        /// Prepares the Variables for the <paramref name="solver"/>.
-        /// </summary>
-        /// <param name="solver"></param>
-        protected abstract void PrepareVariables(Solver solver);
+        // TODO: TBD: moving away from the "Prepare" idiom quite as much in favor of a more simplified "Get" pattern...
 
         /// <summary>
         /// Prepares the Constraints for the <paramref name="solver"/>.
@@ -245,7 +241,7 @@ namespace Kingdom.OrTools.LinearSolver
 
         /// <summary>
         /// Try to Resolve the <see cref="Solver"/> given
-        /// <see cref="ProblemSolverBase.ModelName"/> and <see cref="_problemType"/>.
+        /// <see cref="ProblemSolverBase{TSolver,TVariable}.ModelName"/> and <see cref="_problemType"/>.
         /// </summary>
         /// <returns></returns>
         public override bool TryResolve()
@@ -255,7 +251,9 @@ namespace Kingdom.OrTools.LinearSolver
             using (var solver = new Solver(ModelName, _problemType.ForSolver()))
             {
                 // TODO: TBD: consider what sort of Linear Search Agent, fluent configuration, could be done here...
-                PrepareVariables(solver);
+
+                // TODO: TBD: do anything further with the variables here?
+                var variables = GetVariables(solver).Select(x => x.TrackClrObject(this)).ToArray();
 
                 PrepareConstraints(solver);
 
