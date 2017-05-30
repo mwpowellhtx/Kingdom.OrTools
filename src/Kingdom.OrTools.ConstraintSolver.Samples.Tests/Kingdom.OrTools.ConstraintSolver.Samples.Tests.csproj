@@ -59,6 +59,7 @@
     <Compile Include="..\tools\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AspectBasedSudokuSolverTests.cs" />
     <Compile Include="BasicTests.cs" />
     <Compile Include="SerializationTests.cs" />
     <Compile Include="SudokoSolverTests.cs" />
