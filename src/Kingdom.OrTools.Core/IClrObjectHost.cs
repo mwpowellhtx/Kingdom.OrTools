@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Kingdom.OrTools
 {
@@ -31,5 +33,23 @@ namespace Kingdom.OrTools
             host.ClrCreatedObjects.Add(obj);
             return obj;
         }
+
+        /// <summary>
+        /// Dispose of the <paramref name="host"/>.
+        /// </summary>
+        /// <param name="host"></param>
+        /// <returns></returns>
+        internal static IClrObjectHost DisposeHost(this IClrObjectHost host)
+        {
+            foreach (var o in host.ClrCreatedObjects.OfType<IDisposable>().ToArray())
+            {
+                o.Dispose();
+            }
+
+            host.ClrCreatedObjects.Clear();
+
+            return host;
+        }
     }
 }
+

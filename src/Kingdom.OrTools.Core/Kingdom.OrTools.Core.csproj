@@ -51,6 +51,8 @@
     </Compile>
     <Compile Include="IClrObjectHost.cs" />
     <Compile Include="IProblemSolver.cs" />
+    <Compile Include="IProblemSolverAspect.cs" />
+    <Compile Include="ProblemSolverAspectBase.cs" />
     <Compile Include="ProblemSolverBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
