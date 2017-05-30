@@ -4,8 +4,6 @@ using System.Linq;
 namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
 {
     using Google.OrTools.ConstraintSolver;
-    using static IntVarStrategy;
-    using static IntValueStrategy;
 
     /// <summary>
     /// Sudoku problem solver.
@@ -53,7 +51,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// </summary>
         /// <param name="solver"></param>
         /// <returns></returns>
-        protected override IEnumerable<IntVar> PrepareVariables(Solver solver)
+        protected sealed override IEnumerable<IntVar> GetVariables(Solver solver)
         {
             return from cell in ((SudokuPuzzle) Puzzle)
                 .OrderBy(c => c.Key.Row).ThenBy(c => c.Key.Column)
@@ -61,7 +59,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
                 into key
                 let i = key.Row
                 let j = key.Column
-                select _cells[i, j] = MakeCell(solver, i, j);
+                select _cells[i, j] = MakeCell(solver, i, j).TrackClrObject(this);
         }
 
         /// <summary>

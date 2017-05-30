@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Kingdom.OrTools.LinearSolver.Samples.Feasibility
 {
     using Google.OrTools.LinearSolver;
@@ -19,14 +21,13 @@ namespace Kingdom.OrTools.LinearSolver.Samples.Feasibility
         {
         }
 
-        protected override void PrepareVariables(Solver solver)
+        protected override IEnumerable<Variable> GetVariables(Solver solver)
         {
             var x = solver.MakeNumVar(NegativeInfinity, PositiveInfinity, "x");
+            yield return SetProblemComponent(x, (p, m) => p.x = m);
+
             var y = solver.MakeNumVar(NegativeInfinity, PositiveInfinity, "y");
-            ClrCreatedObjects.Add(x);
-            ClrCreatedObjects.Add(y);
-            SetProblemComponent(x, (p, m) => p.x = m);
-            SetProblemComponent(y, (p, m) => p.y = m);
+            yield return SetProblemComponent(y, (p, m) => p.y = m);
         }
 
         protected override void PrepareConstraints(Solver solver)
