@@ -11,15 +11,19 @@ namespace Kingdom.OrTools.ConstraintSolver
     /// </summary>
     internal class SearchAgent : ISearchAgent
     {
+        private readonly IProblemSolver<Solver> _problemSolver;
+
         /// <summary>
         /// Gets the Host.
         /// </summary>
-        private IOrClrObjectHost Host { get; }
+        /// <see cref="_problemSolver"/>
+        private IClrObjectHost Host => _problemSolver;
 
         /// <summary>
         /// Gets the Solver.
         /// </summary>
-        public Solver Solver => Host?.Solver;
+        /// <see cref="IProblemSolver{Solver}"/>
+        public Solver Solver => _problemSolver?.Solver;
 
         /// <summary>
         /// Predicated event.
@@ -79,11 +83,11 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="host"></param>
+        /// <param name="problemSolver"></param>
         /// <param name="variables"></param>
-        public SearchAgent(IOrClrObjectHost host, params IntVar[] variables)
+        public SearchAgent(IProblemSolver<Solver> problemSolver, params IntVar[] variables)
         {
-            Host = host;
+            _problemSolver = problemSolver;
 
             Variables = variables;
 

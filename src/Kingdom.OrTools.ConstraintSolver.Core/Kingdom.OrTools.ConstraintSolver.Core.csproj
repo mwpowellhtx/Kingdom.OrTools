@@ -63,7 +63,6 @@
     <Compile Include="Extensions\IntVarIteratorExtensionMethods.cs" />
     <Compile Include="Internal\Events.cs" />
     <Compile Include="Internal\ISearchAgent.cs" />
-    <Compile Include="Internal\IOrClrObjectHost.cs" />
     <Compile Include="Internal\SearchAgent.cs" />
     <Compile Include="Extensions\SearchAgentExtensionMethods.cs" />
     <Compile Include="IntVarIteratorEnumerator.cs" />
@@ -71,6 +70,7 @@
     <Compile Include="Interfaces\IOrProblemSolver.cs" />
     <Compile Include="Callbacks\VariableChooser.cs" />
     <Compile Include="Callbacks\ValueChooser.cs" />
+    <Compile Include="ProblemSolverImplementation.cs" />
     <Compile Include="SolutionCollectorAssignmentEnumerator.cs" />
     <Compile Include="ReadOnlyAssignmentCollection.cs" />
     <Compile Include="OrProblemSolverBase.cs" />
