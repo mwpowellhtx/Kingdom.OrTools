@@ -339,26 +339,30 @@ namespace Kingdom.OrTools.ConstraintSolver
 
                     ReSeed(s);
 
-                    /* Capture the Variables and Constraints. At the same time, Track them as CLR objects,
-                     * and Add the Constraints to the Solver. */
+                    /* Capture the Variables and Constraints. At the same time, Track them
+                     * as CLR objects, and Add the Constraints to the Solver. */
 
                     var variables = GetVariables(s).ToList();
 
                     {
                         // Get all the B's that are not A and Intersect their Variables.
                         var intersected = Intersect(Aspects, Aspects, (a, b) => a.IntersectVariables(s, b)).ToArray();
+
                         // Track these Variables in the scope of the Problem Solver.
                         variables.AddRange(intersected.Select(x => x.TrackClrObject(this)));
                     }
 
-                    // Now coordinate the Constraints from each of the Aspects, and track them with each Aspect.
+                    /* Now coordinate the Constraints from each of the Aspects,
+                     *  and track them with each Aspect. */
                     var constraints = Aspects.SelectMany(a => a.GetConstraints(s).Select(x => x.TrackClrObject(a))).ToList();
 
                     {
                         // Now, Intersect the Constraints along the same lines.
                         var intersected = Intersect(Aspects, Aspects, (a, b) => a.Intersect(s, b)).ToArray();
-                        // Track these Constraints in the scope of the Problem Solver.
-                        constraints.AddRange(intersected.TrackClrObject(this));
+
+                        /* Track these Constraints in the scope of the Problem Solver.
+                         * Oops, additionally, track the Constraints not the Array. */
+                        constraints.AddRange(intersected.Select(x => x.TrackClrObject(this)));
                     }
 
                     foreach (var c in constraints)
