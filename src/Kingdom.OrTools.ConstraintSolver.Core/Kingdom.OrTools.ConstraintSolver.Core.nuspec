@@ -2,7 +2,7 @@
 <package>
     <metadata>
         <id>$id$</id>
-        <version>5.0.2</version>
+        <version>5.0.3</version>
         <authors>Michael W. Powell</authors>
         <owners>$author$</owners>
         <dependencies>
