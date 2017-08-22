@@ -2,11 +2,11 @@
 <package>
     <metadata>
         <id>$id$</id>
-        <version>5.0.3</version>
+        <version>5.0.4</version>
         <authors>Michael W. Powell</authors>
         <owners>$author$</owners>
         <dependencies>
-            <dependency id="Google.OrTools" version="[5.1,7)" />
+            <dependency id="Google.OrTools" version="[6.0,7)" />
             <dependency id="Kingdom.OrTools.Core" version="[2.0.1,3)" />
         </dependencies>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
