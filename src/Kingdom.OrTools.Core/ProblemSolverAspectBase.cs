@@ -63,21 +63,11 @@ namespace Kingdom.OrTools
         where TAspect : ProblemSolverAspectBase<TSolver, TVariable, TConstraint, TAspect>
     {
         /// <summary>
-        /// Gets or sets the Variables.
-        /// </summary>
-        protected virtual IEnumerable<TVariable> Variables { get; set; }
-
-        /// <summary>
         /// Returns the <typeparamref name="TVariable"/> instances related to this aspect.
         /// </summary>
         /// <param name="solver"></param>
         /// <returns></returns>
         public abstract IEnumerable<TVariable> GetVariables(TSolver solver);
-
-        /// <summary>
-        /// Gets or sets the Constraints.
-        /// </summary>
-        protected virtual IEnumerable<TConstraint> Constraints { get; set; }
 
         /// <summary>
         /// Returns the <typeparamref name="TConstraint"/> instances related to this aspect.
