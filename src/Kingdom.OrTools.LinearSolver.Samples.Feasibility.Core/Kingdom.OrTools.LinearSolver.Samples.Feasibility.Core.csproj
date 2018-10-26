@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>3.0.2.9657</Version>
+    <AssemblyVersion>3.0.2.9657</AssemblyVersion>
+    <FileVersion>3.0.2.9657</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PlatformTarget>x64</PlatformTarget>
+    <RootNamespace>Kingdom.OrTools.LinearSolver.Samples.Feasibility</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.OrTools" Version="6.9.5841" />
+    <PackageReference Include="Google.Protobuf" Version="3.6.1" />
+    <PackageReference Include="BumpAssemblyVersions" Version="1.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('..\packages\BumpAssemblyVersions.1.2.0\build\BumpAssemblyVersions.targets')">
+    <BumpVersionSpec Include="Version" BuildProviderTemplate="SecondsSinceMidnight" />
+    <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="SecondsSinceMidnight" />
+    <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="SecondsSinceMidnight" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kingdom.OrTools.LinearSolver.Core\Kingdom.OrTools.LinearSolver.Core.csproj" />
+  </ItemGroup>
+
+</Project>
