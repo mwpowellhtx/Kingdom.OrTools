@@ -6,4 +6,3 @@ packages/
 *.user
 *.suo
 *.Caches/
-publish.cmd
