@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.ConstraintSolver.Core", "Kingdom.OrTools.ConstraintSolver.Core\Kingdom.OrTools.ConstraintSolver.Core.csproj", "{C45F0A18-0E2F-4E82-B507-C7F0DAC1CEA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.ConstraintSolver.Core", "Kingdom.OrTools.ConstraintSolver.Core\Kingdom.OrTools.ConstraintSolver.Core.csproj", "{C45F0A18-0E2F-4E82-B507-C7F0DAC1CEA9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.ConstraintSolver.Samples.Sudoku", "Kingdom.OrTools.ConstraintSolver.Samples.Sudoku\Kingdom.OrTools.ConstraintSolver.Samples.Sudoku.csproj", "{89739502-B187-4D1B-BAD8-88380BCCD260}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.ConstraintSolver.Samples.Tests", "Kingdom.OrTools.ConstraintSolver.Samples.Tests\Kingdom.OrTools.ConstraintSolver.Samples.Tests.csproj", "{C1AFBF85-734E-4F91-8908-9D5921EA8B22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility", "Kingdom.OrTools.LinearSolver.Samples.Feasibility\Kingdom.OrTools.LinearSolver.Samples.Feasibility.csproj", "{DDA0727B-8837-4CE2-A02C-D60F583AB60A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility", "Kingdom.OrTools.LinearSolver.Samples.Feasibility\Kingdom.OrTools.LinearSolver.Samples.Feasibility.csproj", "{DDA0727B-8837-4CE2-A02C-D60F583AB60A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{60CFBABA-3E01-4CA2-A698-68D8A7742979}"
 	ProjectSection(SolutionItems) = preProject
@@ -24,9 +24,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{141E2837
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.ConstraintSolver.Sample.Fixturing.Tests", "Kingdom.OrTools.ConstraintSolver.Sample.Fixturing.Tests\Kingdom.OrTools.ConstraintSolver.Sample.Fixturing.Tests.csproj", "{05D37050-50DA-459D-A62F-C051BA62FA0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.LinearSolver.Core", "Kingdom.OrTools.LinearSolver.Core\Kingdom.OrTools.LinearSolver.Core.csproj", "{43B7A0DF-8D75-4C61-83E7-265E7F140E9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolver.Core", "Kingdom.OrTools.LinearSolver.Core\Kingdom.OrTools.LinearSolver.Core.csproj", "{43B7A0DF-8D75-4C61-83E7-265E7F140E9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.Core", "Kingdom.OrTools.Core\Kingdom.OrTools.Core.csproj", "{146963E3-6764-4DBA-8CFD-57196A0F9D5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Core", "Kingdom.OrTools.Core\Kingdom.OrTools.Core.csproj", "{146963E3-6764-4DBA-8CFD-57196A0F9D5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests", "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests\Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests.csproj", "{0A214042-80B3-4F12-93BA-084A22A3139F}"
 EndProject
@@ -34,6 +34,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{54E31570
 	ProjectSection(SolutionItems) = preProject
 		tools\NuGet\package.cmd = tools\NuGet\package.cmd
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{5EDB9086-DACF-4D1D-A3F6-91C826684B38}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.ConstraintSolver.Samples.Tests.Core", "Kingdom.OrTools.ConstraintSolver.Samples.Tests.Core\Kingdom.OrTools.ConstraintSolver.Samples.Tests.Core.csproj", "{B43B3586-DC00-4A81-8ADD-4C96DAD46DF6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.ConstraintSolver.Samples.Sudoku.Core", "Kingdom.OrTools.ConstraintSolver.Samples.Sudoku.Core\Kingdom.OrTools.ConstraintSolver.Samples.Sudoku.Core.csproj", "{78D97A99-8B55-4608-AA52-C8E19642D0CD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Core", "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Core\Kingdom.OrTools.LinearSolver.Samples.Feasibility.Core.csproj", "{B055EC6C-994A-48F5-B41B-1473775FE5F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.ConstraintSolver.Sample.Fixturing.Tests.Core", "Kingdom.OrTools.ConstraintSolver.Sample.Fixturing.Tests.Core\Kingdom.OrTools.ConstraintSolver.Sample.Fixturing.Tests.Core.csproj", "{F826380B-0DE1-49D3-9AF0-BC7A8A5BE38B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests.Core", "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests.Core\Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests.Core.csproj", "{1201CAB7-7431-42F7-98D7-F643F8853796}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,21 +61,13 @@ Global
 		{C45F0A18-0E2F-4E82-B507-C7F0DAC1CEA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C45F0A18-0E2F-4E82-B507-C7F0DAC1CEA9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89739502-B187-4D1B-BAD8-88380BCCD260}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89739502-B187-4D1B-BAD8-88380BCCD260}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89739502-B187-4D1B-BAD8-88380BCCD260}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89739502-B187-4D1B-BAD8-88380BCCD260}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C1AFBF85-734E-4F91-8908-9D5921EA8B22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1AFBF85-734E-4F91-8908-9D5921EA8B22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1AFBF85-734E-4F91-8908-9D5921EA8B22}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1AFBF85-734E-4F91-8908-9D5921EA8B22}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DDA0727B-8837-4CE2-A02C-D60F583AB60A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DDA0727B-8837-4CE2-A02C-D60F583AB60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDA0727B-8837-4CE2-A02C-D60F583AB60A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DDA0727B-8837-4CE2-A02C-D60F583AB60A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{05D37050-50DA-459D-A62F-C051BA62FA0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05D37050-50DA-459D-A62F-C051BA62FA0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05D37050-50DA-459D-A62F-C051BA62FA0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05D37050-50DA-459D-A62F-C051BA62FA0A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43B7A0DF-8D75-4C61-83E7-265E7F140E9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43B7A0DF-8D75-4C61-83E7-265E7F140E9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43B7A0DF-8D75-4C61-83E7-265E7F140E9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -70,9 +77,27 @@ Global
 		{146963E3-6764-4DBA-8CFD-57196A0F9D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{146963E3-6764-4DBA-8CFD-57196A0F9D5B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0A214042-80B3-4F12-93BA-084A22A3139F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A214042-80B3-4F12-93BA-084A22A3139F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A214042-80B3-4F12-93BA-084A22A3139F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A214042-80B3-4F12-93BA-084A22A3139F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B43B3586-DC00-4A81-8ADD-4C96DAD46DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B43B3586-DC00-4A81-8ADD-4C96DAD46DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B43B3586-DC00-4A81-8ADD-4C96DAD46DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B43B3586-DC00-4A81-8ADD-4C96DAD46DF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78D97A99-8B55-4608-AA52-C8E19642D0CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78D97A99-8B55-4608-AA52-C8E19642D0CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78D97A99-8B55-4608-AA52-C8E19642D0CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78D97A99-8B55-4608-AA52-C8E19642D0CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B055EC6C-994A-48F5-B41B-1473775FE5F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B055EC6C-994A-48F5-B41B-1473775FE5F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B055EC6C-994A-48F5-B41B-1473775FE5F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B055EC6C-994A-48F5-B41B-1473775FE5F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F826380B-0DE1-49D3-9AF0-BC7A8A5BE38B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F826380B-0DE1-49D3-9AF0-BC7A8A5BE38B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F826380B-0DE1-49D3-9AF0-BC7A8A5BE38B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F826380B-0DE1-49D3-9AF0-BC7A8A5BE38B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1201CAB7-7431-42F7-98D7-F643F8853796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1201CAB7-7431-42F7-98D7-F643F8853796}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1201CAB7-7431-42F7-98D7-F643F8853796}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1201CAB7-7431-42F7-98D7-F643F8853796}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,5 +111,13 @@ Global
 		{43B7A0DF-8D75-4C61-83E7-265E7F140E9C} = {327DE516-77D1-42D4-8DCE-484E40AD3885}
 		{146963E3-6764-4DBA-8CFD-57196A0F9D5B} = {327DE516-77D1-42D4-8DCE-484E40AD3885}
 		{0A214042-80B3-4F12-93BA-084A22A3139F} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
+		{B43B3586-DC00-4A81-8ADD-4C96DAD46DF6} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
+		{78D97A99-8B55-4608-AA52-C8E19642D0CD} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
+		{B055EC6C-994A-48F5-B41B-1473775FE5F4} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
+		{F826380B-0DE1-49D3-9AF0-BC7A8A5BE38B} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
+		{1201CAB7-7431-42F7-98D7-F643F8853796} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7966AFF7-6884-4957-984E-1CC9AFE4FDF2}
 	EndGlobalSection
 EndGlobal
