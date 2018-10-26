@@ -254,6 +254,10 @@ public enum LinearResultStatus
 }
 ```
 
+## ``netstandard`` Now Supported
+
+Both Constraint and Linear Solver projects have now been updated to reflect the latest ``netstandard`` support from the *Google.OrTools*.
+
 ## Conclusions
 
 If there are any other extensible features you would like to see added, by all means do not hesitate to contact me, clone and create a pull request, and I'd be happy to take a look. I try to keep up to date with the latest OrTools developments.
