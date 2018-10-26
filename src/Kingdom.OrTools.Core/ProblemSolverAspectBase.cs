@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Kingdom.OrTools
@@ -7,14 +8,13 @@ namespace Kingdom.OrTools
     /// </summary>
     /// <typeparam name="TSolver"></typeparam>
     /// <typeparam name="TAspect"></typeparam>
+    /// <inheritdoc />
     public abstract class ProblemSolverAspectBase<TSolver, TAspect>
         : IProblemSolverAspect<TSolver, TAspect>
         where TSolver : class
         where TAspect : ProblemSolverAspectBase<TSolver, TAspect>
     {
-        /// <summary>
-        /// Gets the ClrCreatedObjects.
-        /// </summary>
+        /// <inheritdoc />
         public IList<object> ClrCreatedObjects { get; } = new List<object>();
 
         /// <summary>
@@ -30,15 +30,19 @@ namespace Kingdom.OrTools
         {
             if (IsDisposed || !disposing)
             {
-                // ReSharper disable once RedundantJumpStatement
                 return;
             }
-            this.DisposeHost();
+
+            foreach (var obj in ClrCreatedObjects)
+            {
+                if (obj != null && obj is IDisposable disposableObj)
+                {
+                    disposableObj.Dispose();
+                }
+            }
         }
 
-        /// <summary>
-        /// Disposes the object.
-        /// </summary>
+        /// <inheritdoc />
         public void Dispose()
         {
             Dispose(true);
@@ -54,6 +58,7 @@ namespace Kingdom.OrTools
     /// <typeparam name="TVariable"></typeparam>
     /// <typeparam name="TConstraint"></typeparam>
     /// <typeparam name="TAspect"></typeparam>
+    /// <inheritdoc cref="ProblemSolverAspectBase{TSolver,TAspect}"/>
     public abstract class ProblemSolverAspectBase<TSolver, TVariable, TConstraint, TAspect>
         : ProblemSolverAspectBase<TSolver, TAspect>
             , IProblemSolverAspect<TSolver, TVariable, TConstraint, TAspect>
@@ -62,49 +67,31 @@ namespace Kingdom.OrTools
         where TConstraint : class
         where TAspect : ProblemSolverAspectBase<TSolver, TVariable, TConstraint, TAspect>
     {
-        /// <summary>
-        /// Returns the <typeparamref name="TVariable"/> instances related to this aspect.
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public abstract IEnumerable<TVariable> GetVariables(TSolver solver);
 
-        /// <summary>
-        /// Returns the <typeparamref name="TConstraint"/> instances related to this aspect.
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public abstract IEnumerable<TConstraint> GetConstraints(TSolver solver);
 
+        // ReSharper disable once UnusedMember.Global
         /// <summary>
         /// Gets any <typeparamref name="TVariable"/> instances corresponding with this aspect.
         /// </summary>
         protected virtual IList<TVariable> IntersectedVariables { get; } = new List<TVariable>();
 
+        // ReSharper disable once UnusedMember.Global
         /// <summary>
         /// Get any <typeparamref name="TConstraint"/> instances corresponding with this aspect.
         /// </summary>
         protected virtual IList<TConstraint> IntersectedConstraints { get; } = new List<TConstraint>();
 
-        /// <summary>
-        /// Returns any <typeparamref name="TVariable"/> instances discovered by Intersecting this
-        /// aspect with the <paramref name="otherAspect"/>.
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <param name="otherAspect"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public virtual IEnumerable<TVariable> IntersectVariables(TSolver solver, TAspect otherAspect)
         {
             yield break;
         }
 
-        /// <summary>
-        /// Returns any <typeparamref name="TConstraint"/> instances discovered by Intersecting
-        /// this aspect with the <paramref name="otherAspect"/>.
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <param name="otherAspect"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public virtual IEnumerable<TConstraint> Intersect(TSolver solver, TAspect otherAspect)
         {
             yield break;

@@ -5,16 +5,15 @@ using System.Linq;
 namespace Kingdom.OrTools
 {
     /// <summary>
-    /// Establishes a loosely coupled problem solver for use throughout.
+    /// Establishes a loosely coupled Problem Solver for use throughout.
     /// </summary>
     /// <typeparam name="TSolver"></typeparam>
     /// <typeparam name="TVariable"></typeparam>
+    /// <inheritdoc />
     public abstract class ProblemSolverBase<TSolver, TVariable> : IProblemSolver<TSolver>
         where TSolver : class
     {
-        /// <summary>
-        /// Gets the Solver.
-        /// </summary>
+        /// <inheritdoc />
         public virtual TSolver Solver { get; protected set; }
 
         /// <summary>
@@ -29,11 +28,9 @@ namespace Kingdom.OrTools
         /// <summary>
         /// Gets the ModelName.
         /// </summary>
-        protected string ModelName { get; private set; }
+        protected string ModelName { get; }
 
-        /// <summary>
-        /// Gets the ClrCreatedObjects.
-        /// </summary>
+        /// <inheritdoc />
         public IList<object> ClrCreatedObjects { get; } = new List<object>();
 
         /// <summary>
@@ -45,23 +42,16 @@ namespace Kingdom.OrTools
             ModelName = modelName;
         }
 
-        /// <summary>
-        /// Resolves the problem.
-        /// </summary>
+        /// <inheritdoc />
         public void Resolve()
         {
             TryResolve();
         }
 
-        /// <summary>
-        /// Tries to <see cref="Resolve"/> the problem.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public abstract bool TryResolve();
 
-        /// <summary>
-        /// Occurs just after Preparation and prior to solver initiating a new Search.
-        /// </summary>
+        /// <inheritdoc />
         public virtual event EventHandler<EventArgs> Resolving;
 
         /// <summary>
@@ -73,9 +63,7 @@ namespace Kingdom.OrTools
             Resolving?.Invoke(this, e);
         }
 
-        /// <summary>
-        /// Occurs when the Solver has completely Resolved.
-        /// </summary>
+        /// <inheritdoc />
         public virtual event EventHandler<EventArgs> Resolved;
 
         /// <summary>
@@ -102,12 +90,19 @@ namespace Kingdom.OrTools
             {
                 return;
             }
-            this.DisposeHost();
+
+            foreach (var obj in ClrCreatedObjects)
+            {
+                if (obj != null && obj is IDisposable disposableObj)
+                {
+                    disposableObj.Dispose();
+                }
+            }
+
+            ClrCreatedObjects.Clear();
         }
 
-        /// <summary>
-        /// Disposes the object.
-        /// </summary>
+        /// <inheritdoc />
         public void Dispose()
         {
             Dispose(true);
@@ -123,6 +118,7 @@ namespace Kingdom.OrTools
     /// <typeparam name="TVariable"></typeparam>
     /// <typeparam name="TConstraint"></typeparam>
     /// <typeparam name="TAspect"></typeparam>
+    /// <inheritdoc cref="ProblemSolverBase{TSolver,TVariable}"/>
     public abstract class ProblemSolverBase<TSolver, TVariable, TConstraint, TAspect>
         : ProblemSolverBase<TSolver, TVariable>
             , IProblemSolver<TSolver, TVariable, TConstraint, TAspect>
@@ -138,29 +134,18 @@ namespace Kingdom.OrTools
         /// </summary>
         protected IEnumerable<TAspect> Aspects { get; }
 
-        /// <summary>
-        /// Returns the Variables corresponding to each of the <see cref="Aspects"/>.
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override IEnumerable<TVariable> GetVariables(TSolver solver)
             => Aspects?.SelectMany(a => a.GetVariables(solver).Select(x => x.TrackClrObject(a)));
 
-        /// <summary>
-        /// Protected Constructor
-        /// </summary>
-        /// <param name="modelName"></param>
-        /// <param name="aspects"></param>
+        /// <inheritdoc />
         protected ProblemSolverBase(string modelName, IEnumerable<TAspect> aspects)
             : base(modelName)
         {
             Aspects = (aspects ?? new TAspect[] {}).ToArray();
         }
 
-        /// <summary>
-        /// Disposes of the object.
-        /// </summary>
-        /// <param name="disposing"></param>
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (IsDisposed || !disposing)
@@ -168,9 +153,8 @@ namespace Kingdom.OrTools
                 return;
             }
 
-            foreach (var a in Aspects)
+            foreach (var a in Aspects.OfType<IDisposable>())
             {
-                a.DisposeHost();
                 a.Dispose();
             }
 
