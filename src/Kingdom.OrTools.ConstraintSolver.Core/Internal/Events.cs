@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Policy;
 
 namespace Kingdom.OrTools.ConstraintSolver
 {
@@ -11,6 +10,7 @@ namespace Kingdom.OrTools.ConstraintSolver
     /// </summary>
     public interface IBreakable
     {
+        // ReSharper disable once UnusedMember.Global
         /// <summary>
         /// Gets or sets whether ShouldBreak.
         /// </summary>
@@ -20,6 +20,7 @@ namespace Kingdom.OrTools.ConstraintSolver
     /// <summary>
     /// 
     /// </summary>
+    /// <inheritdoc cref="EventArgs"/>
     public abstract class AgentEventArgsBase : EventArgs, IBreakable
     {
         /// <summary>
@@ -27,24 +28,21 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// </summary>
         public Solver Solver { get; }
 
-        /// <summary>
-        /// Gets or sets whether Should Break.
-        /// </summary>
+        /// <inheritdoc />
         public bool ShouldBreak { get; set; }
 
         /// <summary>
         /// Protected Constructor
         /// </summary>
         /// <param name="solver"></param>
+        /// <inheritdoc />
         protected AgentEventArgsBase(Solver solver)
         {
             Solver = solver;
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <inheritdoc />
     public class SearchAgentPredicateEventArgs : AgentEventArgsBase
     {
         /// <summary>
@@ -59,9 +57,7 @@ namespace Kingdom.OrTools.ConstraintSolver
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <inheritdoc />
     public class ReceiveAssignmentEventArgs : AgentEventArgsBase
     {
         /// <summary>
@@ -81,9 +77,7 @@ namespace Kingdom.OrTools.ConstraintSolver
         }
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <inheritdoc />
     public class ProcessVariablesEventArgs : AgentEventArgsBase
     {
         /// <summary>
