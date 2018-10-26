@@ -1,0 +1,19 @@
+<Project>
+
+  <PropertyGroup>
+    <Authors>Michael W. Powell</Authors>
+    <Company>Kingdom Software</Company>
+    <Product>Kingdom.OrTools</Product>
+    <Copyright>Copyright © 2015-2018</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageProjectUrl>http://github.com/mwpowellhtx/Kingdom.OrTools</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/mwpowellhtx/Kingdom.OrTools/blob/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools</RootNamespace>
+  </PropertyGroup>
+
+</Project>
