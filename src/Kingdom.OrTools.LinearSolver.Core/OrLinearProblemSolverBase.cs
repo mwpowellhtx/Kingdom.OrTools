@@ -10,21 +10,32 @@ namespace Kingdom.OrTools.LinearSolver
     using static OptimizationProblemType;
 
     /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="problem"></param>
+    /// <param name="value"></param>
+    public delegate void ProblemComponentSetter<in T>(dynamic problem, T value);
+
+    /// <summary>
     /// Linear Problem Solver base class.
     /// </summary>
     /// <typeparam name="TProblemSolver"></typeparam>
     /// <typeparam name="TSolution"></typeparam>
+    /// <inheritdoc cref="ProblemSolverBase{Solver,Variable}"/>
     public abstract class OrLinearProblemSolverBase<TProblemSolver, TSolution>
         : ProblemSolverBase<Solver, Variable>, IOrLinearProblemSolver<TProblemSolver>
         where TProblemSolver : OrLinearProblemSolverBase<TProblemSolver, TSolution>
     {
+        // ReSharper disable once UnusedMember.Global
         /// <summary>
-        /// <see cref="Double.NegativeInfinity"/>
+        /// <see cref="double.NegativeInfinity"/>
         /// </summary>
         protected const double NegativeInfinity = double.NegativeInfinity;
 
+        // ReSharper disable once UnusedMember.Global
         /// <summary>
-        /// <see cref="Double.PositiveInfinity"/>
+        /// <see cref="double.PositiveInfinity"/>
         /// </summary>
         protected const double PositiveInfinity = double.PositiveInfinity;
 
@@ -55,9 +66,9 @@ namespace Kingdom.OrTools.LinearSolver
         /// <param name="modelName"></param>
         /// <param name="getSolution"></param>
         /// <param name="problemType"></param>
-        protected OrLinearProblemSolverBase(string modelName,
-            GetSolutionDelegate getSolution,
-            OptimizationProblemType problemType = DefaultProblemType)
+        /// <inheritdoc />
+        protected OrLinearProblemSolverBase(string modelName, GetSolutionDelegate getSolution
+            , OptimizationProblemType problemType = DefaultProblemType)
             : base(modelName)
         {
             _getSolution = getSolution;
@@ -111,6 +122,7 @@ namespace Kingdom.OrTools.LinearSolver
             yield break;
         }
 
+        // ReSharper disable once UnusedMember.Global
         /// <summary>
         /// Sets the <see cref="Problem"/> <paramref name="value"/> via the <paramref name="setter"/>.
         /// </summary>
@@ -118,7 +130,7 @@ namespace Kingdom.OrTools.LinearSolver
         /// <param name="value"></param>
         /// <param name="setter"></param>
         /// <returns></returns>
-        protected T SetProblemComponent<T>(T value, Action<dynamic, T> setter)
+        protected T SetProblemComponent<T>(T value, ProblemComponentSetter<T> setter)
         {
             setter(Problem, value);
             return value;
@@ -164,35 +176,33 @@ namespace Kingdom.OrTools.LinearSolver
             return values;
         }
 
-        /// <summary>
-        /// SolutionEventArgs event arguments.
-        /// </summary>
+        /// <inheritdoc />
         public class SolutionEventArgs : EventArgs
         {
             /// <summary>
             /// Gets the <see cref="Solver.NumVariables"/> modeled.
             /// </summary>
-            public int VariableCount { get; private set; }
+            public int VariableCount { get; }
 
             /// <summary>
             /// Gets the <see cref="Solver.NumConstraints"/> modeled.
             /// </summary>
-            public int ConstraintCount { get; private set; }
+            public int ConstraintCount { get; }
 
             /// <summary>
             /// Gets the <see cref="Solver.Solve()"/> result.
             /// </summary>
-            public LinearResultStatus ResultStatus { get; private set; }
+            public LinearResultStatus ResultStatus { get; }
 
             /// <summary>
             /// Gets the Solution calculated from the model.
             /// </summary>
-            public TSolution Solution { get; private set; }
+            public TSolution Solution { get; }
 
             /// <summary>
             /// Gets the <see cref="ExpandoObject"/> SolutionValues.
             /// </summary>
-            public dynamic SolutionValues { get; private set; }
+            public dynamic SolutionValues { get; }
 
             /// <summary>
             /// Internal Constructor
@@ -201,8 +211,9 @@ namespace Kingdom.OrTools.LinearSolver
             /// <param name="resultStatus"></param>
             /// <param name="solution"></param>
             /// <param name="solutionValues"></param>
-            public SolutionEventArgs(Solver solver, LinearResultStatus resultStatus,
-                TSolution solution, dynamic solutionValues)
+            /// <inheritdoc />
+            public SolutionEventArgs(Solver solver, LinearResultStatus resultStatus, TSolution solution
+                , dynamic solutionValues)
             {
                 VariableCount = solver.NumVariables();
                 ConstraintCount = solver.NumConstraints();
@@ -244,6 +255,7 @@ namespace Kingdom.OrTools.LinearSolver
         /// <see cref="ProblemSolverBase{TSolver,TVariable}.ModelName"/> and <see cref="_problemType"/>.
         /// </summary>
         /// <returns></returns>
+        /// <inheritdoc />
         public override bool TryResolve()
         {
             var e = EventArgs.Empty;
@@ -286,6 +298,7 @@ namespace Kingdom.OrTools.LinearSolver
         /// Disposes the object.
         /// </summary>
         /// <param name="disposing"></param>
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
         }
