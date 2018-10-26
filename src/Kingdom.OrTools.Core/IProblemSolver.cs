@@ -5,6 +5,7 @@ namespace Kingdom.OrTools
     /// <summary>
     /// Establishes a loosely coupled problem solver for use throughout.
     /// </summary>
+    /// <inheritdoc cref="IClrObjectHost"/>
     public interface IProblemSolver : IClrObjectHost, IDisposable
     {
         /// <summary>
@@ -34,6 +35,7 @@ namespace Kingdom.OrTools
     /// Intermediate interface for search agent purposes.
     /// </summary>
     /// <typeparam name="TSolver"></typeparam>
+    /// <inheritdoc />
     public interface IProblemSolver<out TSolver> : IProblemSolver
     {
         /// <summary>
@@ -49,7 +51,8 @@ namespace Kingdom.OrTools
     /// <typeparam name="TVariable"></typeparam>
     /// <typeparam name="TConstraint"></typeparam>
     /// <typeparam name="TAspect"></typeparam>
-    public interface IProblemSolver<TSolver, TVariable, TConstraint, TAspect> : IProblemSolver<TSolver>
+    /// <inheritdoc />
+    public interface IProblemSolver<out TSolver, TVariable, TConstraint, TAspect> : IProblemSolver<TSolver>
         where TSolver : class
         where TVariable : class
         where TConstraint : class
