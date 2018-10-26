@@ -5,6 +5,7 @@
     /// <summary>
     /// Provides a problem solving interface for adaptation.
     /// </summary>
+    /// <inheritdoc />
     public interface IOrProblemSolver : IProblemSolver<Solver>
     {
     }
@@ -14,6 +15,7 @@
     /// <see cref="IProblemSolver{Solver,IntVar,Constraint,TAspect}"/>.
     /// </summary>
     /// <typeparam name="TAspect"></typeparam>
+    /// <inheritdoc cref="IProblemSolver{Solver,IntVar,Constraint,TAspect}"/>
     public interface IOrProblemSolver<TAspect> : IProblemSolver<Solver, IntVar, Constraint, TAspect>, IOrProblemSolver
         where TAspect : IProblemSolverAspect<Solver, IntVar, Constraint, TAspect>
     {
