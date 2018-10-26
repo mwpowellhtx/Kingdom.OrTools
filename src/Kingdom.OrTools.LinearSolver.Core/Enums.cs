@@ -18,6 +18,7 @@ namespace Kingdom.OrTools.LinearSolver
         /// <see cref="!:http://www.coin-or.org/" />
         ClpLinearProgramming,
 
+        // ReSharper disable once IdentifierTypo, UnusedMember.Global
         /// <summary>
         /// GNU Linear Programming Kit Linear Programming (LP).
         /// </summary>
@@ -30,6 +31,7 @@ namespace Kingdom.OrTools.LinearSolver
         /// <see cref="!:http://developers.google.com/optimization/lp/glop" />
         GlopLinearProgramming,
 
+        // ReSharper disable once CommentTypo, IdentifierTypo, UnusedMember.Global
         /// <summary>
         /// SCIP mixed integer programming.
         /// </summary>
@@ -37,6 +39,7 @@ namespace Kingdom.OrTools.LinearSolver
         [Obsolete("Obsolete in its current form without third part inclusion and custom build.")]
         ScipMixedIntegerProgramming,
 
+        // ReSharper disable once IdentifierTypo, UnusedMember.Global
         /// <summary>
         /// GNU Linear Programming Kit Mixed Integer Programming (MIP).
         /// </summary>
@@ -80,6 +83,7 @@ namespace Kingdom.OrTools.LinearSolver
         /// </summary>
         Abnormal,
 
+        // ReSharper disable once UnusedMember.Global
         /// <summary>
         /// MODEL_INVALID
         /// </summary>
@@ -104,7 +108,9 @@ namespace Kingdom.OrTools.LinearSolver
                     {ClpLinearProgramming, CLP_LINEAR_PROGRAMMING},
                     {CbcMixedIntegerProgramming, CBC_MIXED_INTEGER_PROGRAMMING},
                     //// TODO: TBD: http://www.lia.disi.unibo.it/Staff/MicheleLombardi/or-tools-doc/reference_manual/or-tools/src/linear_solver/linear__solver_8h-source.html#l00168
+                    // ReSharper disable once CommentTypo
                     //{GlpkLinearProgramming, 0},
+                    // ReSharper disable once CommentTypo
                     //{GlpkLinearProgramming, 0},
                 });
 
