@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Kingdom.OrTools
 {
-    // ReSharper disable once UnusedTypeParameter
     /// <summary>
     /// Represents a <see cref="IProblemSolver{TSolver}"/> aspect.
     /// </summary>
     /// <typeparam name="TSolver"></typeparam>
     /// <typeparam name="TAspect"></typeparam>
+    /// <inheritdoc cref="IClrObjectHost"/>
     public interface IProblemSolverAspect<TSolver, TAspect> : IClrObjectHost, IDisposable
         where TSolver : class
         where TAspect : IProblemSolverAspect<TSolver, TAspect>
@@ -22,6 +22,7 @@ namespace Kingdom.OrTools
     /// <typeparam name="TVariable"></typeparam>
     /// <typeparam name="TConstraint"></typeparam>
     /// <typeparam name="TAspect"></typeparam>
+    /// <inheritdoc />
     public interface IProblemSolverAspect<TSolver, out TVariable, out TConstraint, TAspect>
         : IProblemSolverAspect<TSolver, TAspect>
         where TSolver : class
