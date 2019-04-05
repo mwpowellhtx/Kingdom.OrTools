@@ -6,7 +6,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
     using Google.OrTools.ConstraintSolver;
     using static SudokuPuzzle;
 
-    public class SudokuProblemSolverAspect : ProblemSolverAspectBase<Solver, IntVar, Constraint, SudokuProblemSolverAspect>
+    public class SudokuProblemSolverAspect : ProblemSolverAspectBase<Solver, Solver, IntVar, Constraint, SudokuProblemSolverAspect>
     {
         /// <summary>
         /// Internal Constructor
@@ -20,9 +20,9 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// </summary>
         public IntVar[,] Cells { get; private set; }
 
-        public override IEnumerable<IntVar> GetVariables(Solver solver)
+        public override IEnumerable<IntVar> GetVariables(Solver source)
         {
-            var s = solver;
+            var s = source;
 
             Cells = new IntVar[Size, Size];
 
@@ -45,9 +45,9 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
             return from i in rows from j in columns select Cells[i, j];
         }
 
-        public override IEnumerable<Constraint> GetConstraints(Solver solver)
+        public override IEnumerable<Constraint> GetConstraints(Solver source)
         {
-            var s = solver;
+            var s = source;
 
             foreach (var cell in Cells.Flatten())
             {

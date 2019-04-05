@@ -49,21 +49,25 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// </summary>
         private readonly IntVar[,] _cells = new IntVar[Size, Size];
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <returns></returns>
+        private IEnumerable<IntVar> _variables;
+
         /// <inheritdoc />
-        protected sealed override IEnumerable<IntVar> GetVariables(Solver solver)
+        protected sealed override IEnumerable<IntVar> Variables
         {
-            return from cell in ((SudokuPuzzle) Puzzle)
-                .OrderBy(c => c.Key.Row).ThenBy(c => c.Key.Column)
-                select cell.Key
-                into key
-                let i = key.Row
-                let j = key.Column
-                select _cells[i, j] = MakeCell(solver, i, j).TrackClrObject(this);
+            get
+            {
+                var solver = Solver;
+
+                IEnumerable<IntVar> GetAll()
+                    => from cell in ((SudokuPuzzle) Puzzle).OrderBy(c => c.Key.Row).ThenBy(c => c.Key.Column)
+                        select cell.Key
+                        into key
+                        let i = key.Row
+                        let j = key.Column
+                        select _cells[i, j] = MakeCell(solver, i, j).TrackClrObject(this);
+
+                return _variables ?? (_variables = GetAll().ToArray());
+            }
         }
 
         /// <summary>
@@ -103,11 +107,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override IEnumerable<Constraint> PrepareConstraints(Solver solver)
         {
             foreach (var cell in (SudokuPuzzle) Puzzle)
