@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.ConstraintSolver.Samples.Sudoku", "Kingdom.OrTools.ConstraintSolver.Samples.Sudoku\Kingdom.OrTools.ConstraintSolver.Samples.Sudoku.csproj", "{89739502-B187-4D1B-BAD8-88380BCCD260}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.ConstraintSolver.Samples.Sudoku", "Kingdom.OrTools.ConstraintSolver.Samples.Sudoku\Kingdom.OrTools.ConstraintSolver.Samples.Sudoku.csproj", "{89739502-B187-4D1B-BAD8-88380BCCD260}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.ConstraintSolver.Samples.Tests", "Kingdom.OrTools.ConstraintSolver.Samples.Tests\Kingdom.OrTools.ConstraintSolver.Samples.Tests.csproj", "{C1AFBF85-734E-4F91-8908-9D5921EA8B22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.ConstraintSolver.Samples.Tests", "Kingdom.OrTools.ConstraintSolver.Samples.Tests\Kingdom.OrTools.ConstraintSolver.Samples.Tests.csproj", "{C1AFBF85-734E-4F91-8908-9D5921EA8B22}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility", "Kingdom.OrTools.LinearSolver.Samples.Feasibility\Kingdom.OrTools.LinearSolver.Samples.Feasibility.csproj", "{DDA0727B-8837-4CE2-A02C-D60F583AB60A}"
 EndProject
@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolve
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Core", "Kingdom.OrTools.Core\Kingdom.OrTools.Core.csproj", "{146963E3-6764-4DBA-8CFD-57196A0F9D5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests", "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests\Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests.csproj", "{0A214042-80B3-4F12-93BA-084A22A3139F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests", "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests\Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests.csproj", "{0A214042-80B3-4F12-93BA-084A22A3139F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{54E31570-1D9E-45F8-A608-70918273D50B}"
 	ProjectSection(SolutionItems) = preProject
@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.ConstraintS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests.Core", "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests.Core\Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests.Core.csproj", "{1201CAB7-7431-42F7-98D7-F643F8853796}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.ConstraintSolver.Core", "Kingdom.OrTools.ConstraintSolver.Core\Kingdom.OrTools.ConstraintSolver.Core.csproj", "{EFA736E9-3727-42BB-8788-BC0DC822C883}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.ConstraintSolver.Core", "Kingdom.OrTools.ConstraintSolver.Core\Kingdom.OrTools.ConstraintSolver.Core.csproj", "{EFA736E9-3727-42BB-8788-BC0DC822C883}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,10 +52,13 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{89739502-B187-4D1B-BAD8-88380BCCD260}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89739502-B187-4D1B-BAD8-88380BCCD260}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89739502-B187-4D1B-BAD8-88380BCCD260}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1AFBF85-734E-4F91-8908-9D5921EA8B22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1AFBF85-734E-4F91-8908-9D5921EA8B22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1AFBF85-734E-4F91-8908-9D5921EA8B22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDA0727B-8837-4CE2-A02C-D60F583AB60A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDA0727B-8837-4CE2-A02C-D60F583AB60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDA0727B-8837-4CE2-A02C-D60F583AB60A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05D37050-50DA-459D-A62F-C051BA62FA0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{05D37050-50DA-459D-A62F-C051BA62FA0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -68,6 +71,7 @@ Global
 		{146963E3-6764-4DBA-8CFD-57196A0F9D5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{146963E3-6764-4DBA-8CFD-57196A0F9D5B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0A214042-80B3-4F12-93BA-084A22A3139F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A214042-80B3-4F12-93BA-084A22A3139F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A214042-80B3-4F12-93BA-084A22A3139F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B43B3586-DC00-4A81-8ADD-4C96DAD46DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B43B3586-DC00-4A81-8ADD-4C96DAD46DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
