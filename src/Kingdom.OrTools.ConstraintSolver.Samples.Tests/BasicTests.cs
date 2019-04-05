@@ -3,41 +3,48 @@
 namespace Kingdom.OrTools.ConstraintSolver.Samples
 {
     using Google.OrTools.ConstraintSolver;
-    using NUnit.Framework;
     using OrTools.Samples;
+    using Xunit;
+    using Xunit.Abstractions;
+    using static Sudoku.Domain;
 
     /// <summary>
     /// Performs some basic unit testing.
     /// </summary>
     public class BasicTests : TestFixtureBase
     {
+        public BasicTests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         /// <summary>
         /// Verifies that the Flatten functionality works as expected.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        [Test]
-        [TestCase(0, 10)]
-        [TestCase(10, 0)]
-        [TestCase(10, 10)]
+        [Theory
+         , InlineData(0, 10)
+         , InlineData(10, 0)
+         , InlineData(10, 10)]
         public void VerifyThatFlattenWorksCorrectly(int x, int y)
         {
             // Assumes that at least one dimension actually has dimension.
-            Assert.That(x, Is.GreaterThanOrEqualTo(0));
-            Assert.That(y, Is.GreaterThanOrEqualTo(0));
-            Assert.That(x + y, Is.GreaterThan(0));
+            Assert.True(x >= MinimumValue);
+            Assert.True(y >= MinimumValue);
+            Assert.True(x + y > 0);
 
-            var xmax = Math.Max(x, 1);
-            var ymax = Math.Max(y, 1);
+            var xMax = Math.Max(x, 1);
+            var yMax = Math.Max(y, 1);
 
-            var arr = new IntVar[xmax, ymax];
+            var arr = new IntVar[xMax, yMax];
 
-            Assert.That(arr.GetLength(0), Is.EqualTo(xmax));
-            Assert.That(arr.GetLength(1), Is.EqualTo(ymax));
+            Assert.Equal(xMax, arr.GetLength(0));
+            Assert.Equal(yMax, arr.GetLength(1));
 
             var flattened = arr.Flatten();
 
-            Assert.That(flattened, Has.Length.EqualTo(xmax*ymax));
+            Assert.Equal(xMax * yMax, flattened.Length);
         }
     }
 }

@@ -1,43 +1,25 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
 
 namespace Kingdom.OrTools.Samples
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    [TestFixture]
+    using Xunit.Abstractions;
+
     public abstract class TestFixtureBase
     {
-        /// <summary>
-        /// Sets up the test fixture prior to running all unit tests.
-        /// </summary>
-        [TestFixtureSetUp]
-        public virtual void TestFixtureSetUp()
+        protected static IEnumerable<T> GetRange<T>(params T[] values)
         {
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var x in values)
+            {
+                yield return x;
+            }
         }
 
-        /// <summary>
-        /// Tears down the test fixture after running all unit tests.
-        /// </summary>
-        [TestFixtureTearDown]
-        public virtual void TestFixtureTearDown()
-        {
-        }
+        protected ITestOutputHelper OutputHelper { get; }
 
-        /// <summary>
-        /// Sets up just prior to running each unit test.
-        /// </summary>
-        [SetUp]
-        public virtual void SetUp()
+        protected TestFixtureBase(ITestOutputHelper outputHelper)
         {
-        }
-
-        /// <summary>
-        /// Tears down just after running each unit test.
-        /// </summary>
-        [TearDown]
-        public virtual void TearDown()
-        {
+            OutputHelper = outputHelper;
         }
     }
 }

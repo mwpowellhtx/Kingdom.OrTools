@@ -7,34 +7,42 @@ using System.Xml.Linq;
 
 namespace Kingdom.OrTools.ConstraintSolver.Samples
 {
-    using NUnit.Framework;
     using OrTools.Samples;
     using Sudoku;
+    using Xunit;
+    using Xunit.Abstractions;
+    using static Sudoku.Domain;
 
+    // ReSharper disable once IdentifierTypo
     /// <summary>
     /// 
     /// </summary>
     /// <see cref="!:http://cpg.stparchive.com/Year2015/"/>
     public class SudokoSolverTests : TestFixtureBase
     {
+        // ReSharper disable once IdentifierTypo
+        public SudokoSolverTests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         /// <summary>
         /// Verifies the problem represented by <paramref name="theValuesText"/>.
         /// </summary>
         /// <param name="theValuesText"></param>
         private static void VerifyProblem(string theValuesText)
         {
-            Assert.That(theValuesText, Is.Not.Null);
+            Assert.NotNull(theValuesText);
 
-            Assert.That(theValuesText, Has.Length.EqualTo(9*9));
+            Assert.Equal(MaximumValue * MaximumValue, theValuesText.Length);
 
-            var theValues = theValuesText.ToCharArray()
-                .Select(x => int.Parse(x.ToString())).ToArray();
+            var theValues = theValuesText.ToCharArray().Select(x => int.Parse(x.ToString())).ToArray();
 
             VerifyProblem(theValues);
         }
 
         /// <summary>
-        /// Verifies the problem repesented by <paramref name="theValues"/>.
+        /// Verifies the problem represented by <paramref name="theValues"/>.
         /// </summary>
         /// <param name="theValues"></param>
         private static void VerifyProblem(int[] theValues)
@@ -51,18 +59,17 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
             {
                 s.Solved += (sender, e) =>
                 {
-                    Assert.That(sender, Is.InstanceOf<SudokuProblemSolver>());
-                    var problemSolver = (SudokuProblemSolver) sender;
-                    Assert.That(problemSolver.Solution, Is.Not.Null);
+                    var problemSolver = Assert.IsAssignableFrom<SudokuProblemSolver>(sender);
+                    Assert.NotNull(problemSolver.Solution);
                     theSolution = problemSolver.Solution;
                 };
 
-                Assert.That(s.TryResolve());
+                Assert.True(s.TryResolve());
             }
 
-            Assert.That(theSolution, Is.Not.Null);
-            Assert.That(theSolution, Is.Not.SameAs(theProblem));
-            Assert.That(theSolution.IsSolved);
+            Assert.NotNull(theSolution);
+            Assert.NotSame(theProblem, theSolution);
+            Assert.True(theSolution.IsSolved);
 
             theSolution.PrettyPrint(Console.Out);
         }
@@ -70,7 +77,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         /// <summary>
         /// 
         /// </summary>
-        [Test]
+        [Fact]
         public void Verify_first_problem()
         {
             // Published: Cape Gazette, Tue, Jun 23 - Thu, Jun 25, 2015, p. 21
@@ -96,7 +103,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         /// </summary>
         /// <see cref="!:http://cpg.stparchive.com/Archive/CPG/CPG02132015p101.php" />
         /// <see cref="!:http://cpg.stparchive.com/Archive/CPG/CPG02132015p128.php" />
-        [Test]
+        [Fact]
         public void Verify_second_problem()
         {
             // Published: Cape Gazette, Fri, Feb 13 - Mon, Feb 16, 2015, p. 101
@@ -121,7 +128,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         /// 
         /// </summary>
         /// <see cref="!:http://www.sudoku.com/"/>
-        [Test]
+        [Fact]
         public void Verify_third_problem()
         {
             // Little bit different, more concise representation of the problem.
@@ -145,7 +152,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         /// 
         /// </summary>
         /// <see cref="!:http://www.websudoku.com/"/>
-        [Test]
+        [Fact]
         public void Verify_fourth_problem()
         {
             // Published: Cape Gazette, Fri, Feb 13 - Mon, Feb 16, 2015, p. 101
@@ -170,7 +177,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         /// <summary>
         /// 
         /// </summary>
-        [Test]
+        [Fact]
         public void Verify_fifth_problem()
         {
             // Published: Cape Gazette, Fri, Jun 26 - Mon, Jun 29, 2015, p. 107
@@ -209,61 +216,62 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         {
             var assembly = type.Assembly;
 
+            // ReSharper disable once IdentifierTypo, StringLiteralTypo
             const string sudokusXml = @"Sudokus.xml";
 
             using (var rs = assembly.GetManifestResourceStream(type, sudokusXml))
             {
-                Assert.That(rs, Is.Not.Null);
+                Assert.NotNull(rs);
+
+                string GetAttributeValue(XElement element, string attributeName)
+                {
+                    Assert.NotNull(element);
+                    var attribute = element.Attribute(attributeName);
+                    Assert.NotNull(attribute);
+                    return attribute.Value;
+                }
 
                 using (var reader = new StreamReader(rs, Encoding.UTF8))
                 {
                     var loaded = XElement.Load(reader);
 
-                    //TODO: TBD: could validate gainst a schema...
+                    // TODO: TBD: consider phasing out SudokuTestCaseItem for simple Xunit friendly object[] range...
 
-                    foreach (var x in from s in loaded.Descendants(@"Sudoku")
-                        select new SudokuTestCaseItem
+                    var loadedItems = loaded.Descendants(@"Sudoku")
+                        .Select(x =>
                         {
-                            Puzzle = s.Attribute(@"Puzzle").Value,
-                            Description = s.Attribute(@"Description").Value
+                            Assert.NotNull(x);
+                            return x;
                         })
+                        .Select(x => new SudokuTestCaseItem
+                        {
+                            Puzzle = GetAttributeValue(x, "Puzzle"),
+                            Description = GetAttributeValue(x, "Description")
+                        });
+
+                    foreach (var x in loadedItems)
+                    {
                         yield return x;
+                    }
                 }
             }
         }
 
+        // TODO: TBD: should consider refactoring into class data...
         /// <summary>
-        /// Gets the EmbeddedResourceTestCases as a <see cref="TestCaseSourceAttribute"/>.
+        /// Gets the EmbeddedResourceTestCases.
         /// </summary>
-        public IEnumerable<TestCaseData> EmbeddedResourceTestCases
-        {
-            get
-            {
-                return GetSudokuTestCaseItems(GetType())
-                    .Select(x => new TestCaseData(x.Description, x.Puzzle));
-            }
-        }
+        public static IEnumerable<object[]> EmbeddedResourceTestCases
+            => GetSudokuTestCaseItems(typeof(SudokoSolverTests))
+                .Select(y => GetRange<object>(y.Description, y.Puzzle).ToArray());
 
         /// <summary>
         /// Verifies that the embedded resource may be loaded.
         /// </summary>
-        [Test]
+        [Fact]
         public void Verify_the_embedded_resource()
         {
-            SudokuTestCaseItem[] items = null;
-
-            TestDelegate test = () => items = GetSudokuTestCaseItems(GetType()).ToArray();
-
-            Assert.That(test, Throws.Nothing);
-            Assert.That(items, Has.Length.GreaterThan(0));
-        }
-
-        private static class TestCases
-        {
-            /// <summary>
-            /// @"EmbeddedResourceTestCases"
-            /// </summary>
-            internal const string EmbeddedResourceTestCases = @"EmbeddedResourceTestCases";
+            Assert.NotEmpty(GetSudokuTestCaseItems(GetType()));
         }
 
         /// <summary>
@@ -271,12 +279,13 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         /// </summary>
         /// <param name="theValuesText"></param>
         /// <param name="theDescription"></param>
-        [Test]
-        [TestCaseSource(TestCases.EmbeddedResourceTestCases)]
+        [Theory, MemberData(nameof(EmbeddedResourceTestCases))]
         public void Verify_embedded_resource_problem(string theDescription, string theValuesText)
         {
             if (!string.IsNullOrEmpty(theDescription))
-                Console.WriteLine(theDescription);
+            {
+                OutputHelper.WriteLine(theDescription);
+            }
 
             VerifyProblem(theValuesText);
         }

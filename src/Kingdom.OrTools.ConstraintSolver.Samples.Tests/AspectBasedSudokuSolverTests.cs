@@ -1,27 +1,28 @@
-using System;
-
 namespace Kingdom.OrTools.ConstraintSolver.Samples
 {
-    using NUnit.Framework;
     using OrTools.Samples;
     using Sudoku;
+    using Xunit;
+    using Xunit.Abstractions;
 
-    /// <summary>
-    /// 
-    /// </summary>
     public class AspectBasedSudokuSolverTests : TestFixtureBase
     {
+        public AspectBasedSudokuSolverTests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         /// <summary>
         /// Verifies that the aspect yields a solution.
         /// </summary>
-        [Test]
+        [Fact]
         public void Verify_that_aspect_yields_solution()
         {
             using (var ps = new AspectBasedSudokuProblemSolver("Sudoku Problem Solver"))
             {
-                Assert.That(ps.TryResolve());
-                Assert.That(ps.Solution, Is.Not.Null);
-                ps.Solution.PrettyPrint(Console.Out);
+                Assert.True(ps.TryResolve());
+                Assert.NotNull(ps.Solution);
+                ps.Solution.PrettyPrint(OutputHelper.WriteLine);
             }
         }
     }
