@@ -24,13 +24,11 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         [Fact]
         public void Verify_that_aspect_yields_solution()
         {
-            void Show(string s) => ShowMessage(s);
-
             using (var ps = new AspectBasedSudokuProblemSolver("Sudoku Problem Solver"))
             {
                 Assert.True(ps.TryResolve());
                 Assert.NotNull(ps.Solution);
-                ps.Solution.PrettyPrint(Show);
+                ps.Solution.PrettyPrint(OutputHelper.WriteLine);
             }
         }
     }

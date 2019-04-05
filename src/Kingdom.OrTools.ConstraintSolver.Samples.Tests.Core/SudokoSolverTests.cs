@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
-using Kingdom.OrTools.ConstraintSolver.Samples.Sudoku;
+﻿using System.Linq;
 
 namespace Kingdom.OrTools.ConstraintSolver.Samples
 {
     using OrTools.Samples;
+    using Sudoku;
     using Xunit;
     using Xunit.Abstractions;
-    using static SudokuPuzzle;
+    using static Sudoku.Domain;
 
+    //// TODO: TBD: may want to consolidate a couple of these Sudoku assets since it seems I have a bit of duplication going on...
     // ReSharper disable once CommentTypo, IdentifierTypo
     /// <summary>
     /// Basically many examples drawn from Cape Gazette newspapers.
@@ -40,7 +36,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         {
             Assert.NotNull(theValuesText);
 
-            Assert.Equal(Size * Size, theValuesText.Length);
+            Assert.Equal(MaximumValue * MaximumValue, theValuesText.Length);
 
             var theValues = theValuesText.ToCharArray()
                 .Select(x => int.Parse(x.ToString())).ToArray();
@@ -209,54 +205,13 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         }
 
         /// <summary>
-        /// Supports loading the Sudoku puzzles from embedded resource.
-        /// </summary>
-        internal class SudokuTestCaseItem
-        {
-            public string Puzzle { get; set; }
-            public string Description { get; set; }
-        }
-
-        /// <summary>
-        /// Returns the Sudoku puzzles from resource for test purposes.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        private static IEnumerable<SudokuTestCaseItem> GetSudokuTestCaseItems(Type type)
-        {
-            var assembly = type.Assembly;
-
-            // ReSharper disable once IdentifierTypo, StringLiteralTypo
-            const string sudokusXml = @"Sudokus.xml";
-
-            using (var rs = assembly.GetManifestResourceStream(type, sudokusXml))
-            {
-                Assert.NotNull(rs);
-
-                using (var reader = new StreamReader(rs, Encoding.UTF8))
-                {
-                    var loaded = XElement.Load(reader);
-
-                    // TODO: TBD: could validate against a schema...
-                    foreach (var x in from s in loaded.Descendants(@"Sudoku")
-                        select new SudokuTestCaseItem
-                        {
-                            Puzzle = s.Attribute(@"Puzzle")?.Value,
-                            Description = s.Attribute(@"Description")?.Value
-                        })
-                        yield return x;
-                }
-            }
-        }
-
-        /// <summary>
         /// Verifies that the embedded resource may be loaded.
         /// </summary>
         [Fact]
         public void Verify_the_embedded_resource()
         {
-            var items = GetSudokuTestCaseItems(GetType()).ToArray();
-            Assert.True(items.Length > 0);
+            // We could even verify the precise count, but this will do for now.
+            Assert.NotEmpty(new EmbeddedXmlTestCases());
         }
 
         /// <summary>
@@ -264,7 +219,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         /// </summary>
         /// <param name="theValuesText"></param>
         /// <param name="theDescription"></param>
-        [Theory, MemberData(nameof(EmbeddedResourceTestCases))]
+        [Theory, ClassData(typeof(EmbeddedXmlTestCases))]
         public void Verify_embedded_resource_problem(string theDescription, string theValuesText)
         {
             if (!string.IsNullOrEmpty(theDescription))
@@ -273,33 +228,6 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
             }
 
             VerifyProblem(theValuesText);
-        }
-
-        private static IEnumerable<object[]> _embeddedResourceTestCases;
-
-        /// <summary>
-        /// Gets the EmbeddedResourceTestCases.
-        /// </summary>
-        public static IEnumerable<object[]> EmbeddedResourceTestCases
-        {
-            get
-            {
-                IEnumerable<object[]> GetAll()
-                {
-                    IEnumerable<object> GetOne(string description, string puzzle)
-                    {
-                        yield return description;
-                        yield return puzzle;
-                    }
-
-                    foreach (var item in GetSudokuTestCaseItems(typeof(SudokoSolverTests)))
-                    {
-                        yield return GetOne(item.Description, item.Puzzle).ToArray();
-                    }
-                }
-
-                return _embeddedResourceTestCases ?? (_embeddedResourceTestCases = GetAll().ToArray());
-            }
         }
     }
 }

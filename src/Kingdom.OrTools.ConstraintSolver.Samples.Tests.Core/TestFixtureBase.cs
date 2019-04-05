@@ -1,4 +1,6 @@
-﻿namespace Kingdom.OrTools.Samples
+﻿using System.Collections.Generic;
+
+namespace Kingdom.OrTools.Samples
 {
     using Xunit.Abstractions;
 
@@ -7,10 +9,19 @@
     /// </summary>
     public abstract class TestFixtureBase
     {
+        protected static IEnumerable<T> GetRange<T>(params T[] values)
+        {
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var x in values)
+            {
+                yield return x;
+            }
+        }
+
         /// <summary>
         /// Gets the OutputHelper.
         /// </summary>
-        private ITestOutputHelper OutputHelper { get; }
+        protected ITestOutputHelper OutputHelper { get; }
 
         /// <summary>
         /// Protected Constructor.
