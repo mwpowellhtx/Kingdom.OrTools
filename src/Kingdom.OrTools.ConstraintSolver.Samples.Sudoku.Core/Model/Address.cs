@@ -20,7 +20,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
 
         // ReSharper disable once UnusedMember.Global
         /// <summary>
-        /// Default Constructor
+        /// Default Constructor.
         /// </summary>
         /// <inheritdoc />
         public Address()
@@ -29,7 +29,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         }
 
         /// <summary>
-        /// Copy Constructor
+        /// Copy Constructor.
         /// </summary>
         /// <param name="other"></param>
         /// <inheritdoc />
@@ -39,7 +39,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         }
 
         /// <summary>
-        /// Constructor
+        /// Constructor.
         /// </summary>
         /// <param name="row"></param>
         /// <param name="column"></param>
@@ -48,8 +48,6 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
             Row = row;
             Column = column;
         }
-
-        #region Equatable Members
 
         /// <summary>
         /// Returns whether <paramref name="a"/> Equals <paramref name="b"/>.
@@ -70,13 +68,11 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// <inheritdoc />
         public virtual bool Equals(Address other) => Equals(this, other);
 
-        #endregion
-
+        // ReSharper disable NonReadonlyMemberInGetHashCode
         /// <summary>
-        /// 
+        /// Returns the Hash Code.
         /// </summary>
         /// <returns></returns>
-        // ReSharper disable NonReadonlyMemberInGetHashCode
         public override int GetHashCode() => 3 * Row ^ 5 * Column;
     }
 }
