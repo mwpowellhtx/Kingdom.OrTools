@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>3.0.2.9658</Version>
-    <AssemblyVersion>3.0.2.9658</AssemblyVersion>
-    <FileVersion>3.0.2.9658</FileVersion>
+    <Version>3.0.2.6503</Version>
+    <AssemblyVersion>3.0.2.6503</AssemblyVersion>
+    <FileVersion>3.0.2.6503</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -13,40 +13,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Sudokus.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Sudokus.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.analyzers" Version="0.7.0" />
-    <PackageReference Include="xunit.runner.console" Version="2.3.1">
+    <!-- ReSharper disable once UnknownProperty -->
+    <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.analyzers" Version="0.10.0" />
+    <PackageReference Include="xunit.runner.console" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1">
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="BumpAssemblyVersions" Version="1.2.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="Exists('..\packages\BumpAssemblyVersions.1.2.0\build\BumpAssemblyVersions.targets')">
-    <BumpVersionSpec Include="Version" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="SecondsSinceMidnight" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.ConstraintSolver.Core\Kingdom.OrTools.ConstraintSolver.Core.csproj" />
-    <ProjectReference Include="..\Kingdom.OrTools.ConstraintSolver.Samples.Sudoku.Core\Kingdom.OrTools.ConstraintSolver.Samples.Sudoku.Core.csproj" />
+    <ProjectReference Include="..\Kingdom.OrTools.ConstraintSolver.Samples.Sudoku\Kingdom.OrTools.ConstraintSolver.Samples.Sudoku.csproj" />
     <ProjectReference Include="..\Kingdom.OrTools.LinearSolver.Samples.Feasibility.Core\Kingdom.OrTools.LinearSolver.Samples.Feasibility.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Sudokus.xml" />
   </ItemGroup>
 
 </Project>

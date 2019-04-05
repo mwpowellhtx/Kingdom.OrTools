@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>3.0.2.9656</Version>
-    <AssemblyVersion>3.0.2.9656</AssemblyVersion>
-    <FileVersion>3.0.2.9656</FileVersion>
+    <Version>3.0.2.8422</Version>
+    <AssemblyVersion>3.0.2.8422</AssemblyVersion>
+    <FileVersion>3.0.2.8422</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -13,23 +13,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.OrTools" Version="6.9.5841" />
-    <PackageReference Include="Google.Protobuf" Version="3.6.1" />
-    <PackageReference Include="BumpAssemblyVersions" Version="1.2.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.analyzers" Version="0.7.0" />
-  </ItemGroup>
-
-  <ItemGroup Condition="Exists('..\packages\BumpAssemblyVersions.1.2.0\build\BumpAssemblyVersions.targets')">
-    <BumpVersionSpec Include="Version" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="SecondsSinceMidnight" />
+    <!-- ReSharper disable once UnknownProperty -->
+    <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.analyzers" Version="0.10.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kingdom.OrTools.Core\Kingdom.OrTools.Core.csproj" />
     <ProjectReference Include="..\Kingdom.OrTools.ConstraintSolver.Core\Kingdom.OrTools.ConstraintSolver.Core.csproj" />
   </ItemGroup>
 
@@ -40,6 +31,12 @@
     <Compile Update="Model\SudokuPuzzle.*.cs">
       <DependentUpon>SudokuPuzzle.cs</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Kingdom.OrTools.ConstraintSolver.Samples.Tests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 
 </Project>

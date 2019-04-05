@@ -2,15 +2,33 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.0.2.9655</Version>
-    <AssemblyVersion>1.0.2.9655</AssemblyVersion>
-    <FileVersion>1.0.2.9655</FileVersion>
+    <Version>1.0.2.8308</Version>
+    <AssemblyVersion>1.0.2.8308</AssemblyVersion>
+    <FileVersion>1.0.2.8308</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
     <PlatformTarget>x64</PlatformTarget>
     <RootNamespace>Kingdom.Constraints.Sample.Fixturing.Tests</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- ReSharper disable once UnknownProperty -->
+    <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
+    <!-- ReSharper disable once UnknownProperty -->
+    <PackageReference Include="Google.Protobuf" Version="$(GoogleProtobufVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.analyzers" Version="0.10.0" />
+    <PackageReference Include="xunit.runner.console" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="ExportedSolverModel.dat" />
@@ -20,35 +38,6 @@
     <Content Include="ExportedSolverModel.dat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Google.OrTools" Version="6.9.5841" />
-    <PackageReference Include="Google.OrTools.runtime.linux-x64" Version="6.9.5841" />
-    <PackageReference Include="Google.OrTools.runtime.osx-x64" Version="6.9.5841" />
-    <PackageReference Include="Google.OrTools.runtime.win-x64" Version="6.9.5841" />
-    <PackageReference Include="Google.Protobuf" Version="3.6.1" />
-    <PackageReference Include="BumpAssemblyVersions" Version="1.2.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.analyzers" Version="0.7.0" />
-    <PackageReference Include="xunit.runner.console" Version="2.4.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="Exists('..\packages\BumpAssemblyVersions.1.2.0\build\BumpAssemblyVersions.targets')">
-    <BumpVersionSpec Include="Version" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="SecondsSinceMidnight" />
   </ItemGroup>
 
 </Project>

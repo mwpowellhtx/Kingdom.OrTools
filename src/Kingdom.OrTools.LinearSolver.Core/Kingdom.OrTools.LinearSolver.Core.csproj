@@ -10,10 +10,14 @@
     <Description>Provides a convenient, easy to use wrapper for Linear Programming based on the Google OR-tools.</Description>
     <PackageTags>Google; Operations; Research; Tools; wrapper; dispose; disposable; CLR; object; host; linear; satisfaction; problem; solver; LP; LSP; variable; variables; int; integer; bool; boolean; solution</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.2.0.27846</Version>
-    <AssemblyVersion>1.2.0.27846</AssemblyVersion>
-    <FileVersion>1.2.0.27846</FileVersion>
-    <PackageVersion>1.2.0.27846</PackageVersion>
+    <Version>1.2.0.8065</Version>
+    <AssemblyVersion>1.2.0.8065</AssemblyVersion>
+    <FileVersion>1.2.0.8065</FileVersion>
+    <PackageVersion>1.2.0.8065</PackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.LinearSolver</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
@@ -23,19 +27,14 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="Google.OrTools" Version="6.9.5841" />
-    <PackageReference Include="Google.Protobuf" Version="3.6.1" />
-    <PackageReference Include="BumpAssemblyVersions" Version="1.2.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
+    <!-- ReSharper disable once UnknownProperty -->
+    <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
+    <!-- ReSharper disable once UnknownProperty -->
+    <PackageReference Include="Google.Protobuf" Version="$(GoogleProtobufVersion)" />
   </ItemGroup>
 
-  <ItemGroup Condition="Exists('..\packages\BumpAssemblyVersions.1.2.0\build\BumpAssemblyVersions.targets')">
-    <BumpVersionSpec Include="Version" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="PackageVersion" BuildProviderTemplate="SecondsSinceMidnight" />
+  <ItemGroup>
+    <ProjectReference Include="..\Kingdom.OrTools.Core\Kingdom.OrTools.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,13 +42,5 @@
       <DependentUpon>OrLinearProblemSolverBase.cs</DependentUpon>
     </Compile>
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Kingdom.OrTools.Core\Kingdom.OrTools.Core.csproj" />
-  </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="if exist &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot; del /f &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot;" />
-  </Target>
 
 </Project>

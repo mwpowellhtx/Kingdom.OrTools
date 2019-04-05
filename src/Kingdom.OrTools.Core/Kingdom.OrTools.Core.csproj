@@ -10,39 +10,14 @@
     <Description>Provides the core problem solver abstraction for use with Google OR-tools Constraint Solver and Linear Solver wrappers.</Description>
     <PackageTags>Google; Operations; Research; Tools; wrapper; disposable; CLR; object; host; problem; solver</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.17.0.9478</Version>
-    <AssemblyVersion>2.17.0.9478</AssemblyVersion>
-    <FileVersion>2.17.0.9478</FileVersion>
-    <PackageVersion>2.17.0.9478</PackageVersion>
+    <Version>2.17.0.13313</Version>
+    <AssemblyVersion>2.17.0.13313</AssemblyVersion>
+    <FileVersion>2.17.0.13313</FileVersion>
+    <PackageVersion>2.17.0.13313</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
     <DocumentationFile>bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.Core.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="BumpAssemblyVersions" Version="1.2.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' And Exists('..\packages\BumpAssemblyVersions.1.2.0\build\BumpAssemblyVersions.targets')">
-    <BumpVersionSpec Include="Version" UseUtc="true" MayReset="true" MinorProviderTemplate="Increment" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="AssemblyVersion" UseUtc="true" MayReset="true" MinorProviderTemplate="Increment" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="FileVersion" UseUtc="true" MayReset="true" MinorProviderTemplate="Increment" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="PackageVersion" UseUtc="true" MayReset="true" MinorProviderTemplate="Increment" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU' And Exists('..\packages\BumpAssemblyVersions.1.2.0\build\BumpAssemblyVersions.targets')">
-    <BumpVersionSpec Include="Version" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="SecondsSinceMidnight" />
-    <BumpVersionSpec Include="PackageVersion" BuildProviderTemplate="SecondsSinceMidnight" />
-  </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="if exist &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot; del /f &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot;" />
-  </Target>
 
 </Project>
