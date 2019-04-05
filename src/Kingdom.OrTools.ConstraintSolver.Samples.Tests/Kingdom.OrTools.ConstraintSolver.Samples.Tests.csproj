@@ -28,14 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.ConstraintSolver.Samples.Sudoku.Core\Kingdom.OrTools.ConstraintSolver.Samples.Sudoku.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Sudokus.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Sudokus.xml" />
+    <ProjectReference Include="..\Kingdom.OrTools.Csp.Problems\Kingdom.OrTools.Csp.Problems.csproj" />
   </ItemGroup>
 
 </Project>
