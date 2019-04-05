@@ -1,26 +1,40 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Kingdom.OrTools.LinearSolver.Samples.Feasibility
 {
     using Google.OrTools.LinearSolver;
+    using static LinearOptimizationProblemType;
 
     public class CbcMipFeasibleRegionComparisonProblemSolver
         : FeasibleRegionComparisonProblemSolverBase<
             CbcMipFeasibleRegionComparisonProblemSolver>
     {
         public CbcMipFeasibleRegionComparisonProblemSolver()
-            : base(OptimizationProblemType.CbcMixedIntegerProgramming)
+            : base(CbcMixedIntegerProgramming)
         {
         }
 
-        protected sealed override IEnumerable<Variable> GetVariables(Solver solver)
-        {
-            // x and y are non-negative integer variables
-            var xVar = solver.MakeIntVar(0d, PositiveInfinity, "x");
-            yield return SetProblemComponent(xVar, (p, x) => p.x = x);
+        private IEnumerable<Variable> _variables;
 
-            var yVar = solver.MakeIntVar(0d, PositiveInfinity, "y");
-            yield return SetProblemComponent(yVar, (p, y) => p.y = y);
+        protected sealed override IEnumerable<Variable> Variables
+        {
+            get
+            {
+                IEnumerable<Variable> GetAll()
+                {
+                    var solver = Solver;
+
+                    // x and y are non-negative integer variables
+                    var xVar = solver.MakeIntVar(0d, PositiveInfinity, "x");
+                    yield return SetProblemComponent(xVar, (p, x) => p.x = x);
+
+                    var yVar = solver.MakeIntVar(0d, PositiveInfinity, "y");
+                    yield return SetProblemComponent(yVar, (p, y) => p.y = y);
+                }
+
+                return _variables ?? (_variables = GetAll().ToArray());
+            }
         }
 
         protected override bool VerifySolution(Solver solver, LinearResultStatus resultStatus)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Kingdom.OrTools.LinearSolver.Samples.Feasibility
 {
@@ -19,13 +20,25 @@ namespace Kingdom.OrTools.LinearSolver.Samples.Feasibility
         {
         }
 
-        protected override IEnumerable<Variable> GetVariables(Solver solver)
-        {
-            var x = solver.MakeNumVar(NegativeInfinity, PositiveInfinity, "x");
-            yield return SetProblemComponent(x, (p, m) => p.x = m);
+        private IEnumerable<Variable> _variables;
 
-            var y = solver.MakeNumVar(NegativeInfinity, PositiveInfinity, "y");
-            yield return SetProblemComponent(y, (p, m) => p.y = m);
+        protected override IEnumerable<Variable> Variables
+        {
+            get
+            {
+                IEnumerable<Variable> GetAll()
+                {
+                    var solver = Solver;
+
+                    var x = solver.MakeNumVar(NegativeInfinity, PositiveInfinity, "x");
+                    yield return SetProblemComponent(x, (p, m) => p.x = m);
+
+                    var y = solver.MakeNumVar(NegativeInfinity, PositiveInfinity, "y");
+                    yield return SetProblemComponent(y, (p, m) => p.y = m);
+                }
+
+                return _variables ?? (_variables = GetAll().ToArray());
+            }
         }
 
         protected override void PrepareConstraints(Solver solver)

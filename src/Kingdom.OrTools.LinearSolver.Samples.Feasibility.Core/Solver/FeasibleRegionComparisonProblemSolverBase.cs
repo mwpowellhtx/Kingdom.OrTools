@@ -8,7 +8,7 @@
     {
         // ???? p => p.o.Value()
         // Apparently not testing this: p => p.x.SolutionValue() + 7d*p.y.SolutionValue() = 17 (integer)
-        protected FeasibleRegionComparisonProblemSolverBase(OptimizationProblemType problemType)
+        protected FeasibleRegionComparisonProblemSolverBase(LinearOptimizationProblemType problemType)
             : base(@"Feasible Integer Region", p => p.o.Value(), problemType)
         {
         }
