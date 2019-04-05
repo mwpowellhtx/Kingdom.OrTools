@@ -5,7 +5,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
 {
     using Google.OrTools.ConstraintSolver;
 
-    public class SudokuProblemSolverAspect : ProblemSolverAspectBase<Solver, IntVar, Constraint, SudokuProblemSolverAspect>
+    public class SudokuProblemSolverAspect : ProblemSolverAspectBase<Solver, Solver, IntVar, Constraint, SudokuProblemSolverAspect>
     {
         /// <summary>
         /// Internal Constructor
@@ -39,17 +39,16 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// </summary>
         public const int Div = 3;
 
+        /// <inheritdoc />
         public override IEnumerable<IntVar> GetVariables(Solver solver)
         {
-            var s = solver;
-
             Cells = new IntVar[Size, Size];
 
             for (var i = 0; i < Size; i++)
             {
                 for (var j = 0; j < Size; j++)
                 {
-                    Cells[i, j] = s.MakeIntVar(Min, Max, $@"[{i},{j}]");
+                    Cells[i, j] = solver.MakeIntVar(Min, Max, $@"[{i},{j}]");
                 }
             }
 
@@ -64,9 +63,9 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
             return from i in rows from j in columns select Cells[i, j];
         }
 
-        public override IEnumerable<Constraint> GetConstraints(Solver solver)
+        public override IEnumerable<Constraint> GetConstraints(Solver source)
         {
-            var s = solver;
+            var s = source;
 
             foreach (var cell in Cells.Flatten())
             {
@@ -77,19 +76,19 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
 
             for (var i = 0; i < Size; i++)
             {
-                var perpIdx = Enumerable.Range(0, Size).ToArray();
+                var perpendicularIndex = Enumerable.Range(0, Size).ToArray();
                 var rowOrColumnIdx = new[] {i};
 
                 {
-                    var vect = new IntVarVector(GetGroup(rowOrColumnIdx, perpIdx).ToList()).TrackClrObject(this);
-                    var c = s.MakeAllDifferent(vect).TrackClrObject(this);
+                    var vector = new IntVarVector(GetGroup(rowOrColumnIdx, perpendicularIndex).ToList()).TrackClrObject(this);
+                    var c = s.MakeAllDifferent(vector).TrackClrObject(this);
                     s.Add(c);
                     yield return c;
                 }
 
                 {
-                    var vect = new IntVarVector(GetGroup(perpIdx, rowOrColumnIdx).ToList()).TrackClrObject(this);
-                    var c = s.MakeAllDifferent(vect).TrackClrObject(this);
+                    var vector = new IntVarVector(GetGroup(perpendicularIndex, rowOrColumnIdx).ToList()).TrackClrObject(this);
+                    var c = s.MakeAllDifferent(vector).TrackClrObject(this);
                     s.Add(c);
                     yield return c;
                 }
@@ -102,8 +101,8 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
                 for (var j = 0; j < Div; j++)
                 {
                     var columnIdx = Enumerable.Range(j * Div, Div).ToArray();
-                    var vect = new IntVarVector(GetGroup(rowIdx, columnIdx).ToList()).TrackClrObject(this);
-                    var c = s.MakeAllDifferent(vect).TrackClrObject(this);
+                    var vector = new IntVarVector(GetGroup(rowIdx, columnIdx).ToList()).TrackClrObject(this);
+                    var c = s.MakeAllDifferent(vector).TrackClrObject(this);
                     s.Add(c);
                     yield return c;
                 }

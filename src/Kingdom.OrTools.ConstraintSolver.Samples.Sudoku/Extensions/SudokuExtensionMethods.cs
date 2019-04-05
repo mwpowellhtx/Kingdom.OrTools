@@ -2,6 +2,8 @@
 
 namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
 {
+    using static Domain;
+
     /// <summary>
     /// 
     /// </summary>
@@ -13,10 +15,12 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// <param name="value"></param>
         public static void VerifyValue(this int value)
         {
-            if (value.TryVerifyValue()) return;
+            if (value.TryVerifyValue())
+            {
+                return;
+            }
 
-            throw new ArgumentOutOfRangeException(@"value",
-                string.Format(@"value must be between {0} and {1}", 0, 9));
+            throw new ArgumentOutOfRangeException(nameof(value), $"value must be between {MinimumValue} and {MaximumValue}");
         }
 
         /// <summary>
@@ -24,20 +28,14 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool TryVerifyValue(this int value)
-        {
-            return value >= 0 && value <= 9;
-        }
+        public static bool TryVerifyValue(this int value) => value >= MinimumValue && value <= MaximumValue;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool TrySolvedValue(this int value)
-        {
-            return value > 0 && value <= 9;
-        }
+        public static bool TrySolvedValue(this int value) => value > MinimumValue && value <= MaximumValue;
 
         /// <summary>
         /// Returns a Sudoku SudokuPuzzle based on the <paramref name="values"/>. Values are
@@ -48,13 +46,19 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         public static SudokuPuzzle ToSudokuPuzzle(this int[] values)
         {
             foreach (var value in values)
+            {
                 value.VerifyValue();
+            }
 
             var result = new SudokuPuzzle();
 
-            for (var row = 0; row < 9; row++)
-                for (var column = 0; column < 9; column++)
-                    result[new Address(row, column)] = values[row*9 + column];
+            for (var row = MinimumValue; row < MaximumValue; row++)
+            {
+                for (var column = MinimumValue; column < MaximumValue; column++)
+                {
+                    result[new Address(row, column)] = values[row * MaximumValue + column];
+                }
+            }
 
             return result;
         }

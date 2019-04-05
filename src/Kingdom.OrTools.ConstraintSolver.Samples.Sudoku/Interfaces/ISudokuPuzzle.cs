@@ -9,7 +9,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
     public interface ISudokuPuzzle
     {
         /// <summary>
-        /// Returns whether IsSolved.
+        /// Gets whether IsSolved.
         /// </summary>
         bool IsSolved { get; }
 
@@ -51,7 +51,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// <summary>
         /// Writes the puzzle to the writer.
         /// </summary>
-        /// <param name="writer"></param>
-        void PrettyPrint(TextWriter writer);
+        /// <param name="callback"></param>
+        void PrettyPrint(PrettyPrintCallback callback);
     }
 }

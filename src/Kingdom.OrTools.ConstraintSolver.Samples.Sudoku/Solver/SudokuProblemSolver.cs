@@ -5,9 +5,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
 {
     using Google.OrTools.ConstraintSolver;
 
-    /// <summary>
-    /// Sudoku problem solver.
-    /// </summary>
+    /// <inheritdoc />
     /// <see cref="!:http://github.com/google/or-tools/blob/master/examples/python/sudoku.py"/>
     public class SudokuProblemSolver : OrProblemSolverBase
     {
@@ -46,20 +44,25 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// </summary>
         private readonly IntVar[,] _cells = new IntVar[9, 9];
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <returns></returns>
-        protected sealed override IEnumerable<IntVar> GetVariables(Solver solver)
+        private IEnumerable<IntVar> _variables;
+
+        /// <inheritdoc />
+        protected sealed override IEnumerable<IntVar> Variables
         {
-            return from cell in ((SudokuPuzzle) Puzzle)
-                .OrderBy(c => c.Key.Row).ThenBy(c => c.Key.Column)
-                select cell.Key
-                into key
-                let i = key.Row
-                let j = key.Column
-                select _cells[i, j] = MakeCell(solver, i, j).TrackClrObject(this);
+            get
+            {
+                var solver = Solver;
+
+                IEnumerable<IntVar> GetAll()
+                    => from cell in ((SudokuPuzzle) Puzzle).OrderBy(c => c.Key.Row).ThenBy(c => c.Key.Column)
+                        select cell.Key
+                        into key
+                        let i = key.Row
+                        let j = key.Column
+                        select _cells[i, j] = MakeCell(solver, i, j).TrackClrObject(this);
+
+                return _variables ?? (_variables = GetAll().ToArray());
+            }
         }
 
         /// <summary>
@@ -69,7 +72,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// <param name="variable"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        private IEnumerable<Constraint> MakeInitialConstraints(Solver solver, IntExpr variable, int value)
+        private static IEnumerable<Constraint> MakeInitialConstraints(Solver solver, IntExpr variable, int value)
         {
             // TODO: TBD: this one may change for partially solved puzzles.
             yield return solver.MakeBetweenCt(variable, 1, 9);
@@ -92,18 +95,13 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
             var groupedCells = groups.Select(g => g.Select(
                 h => _cells[h.Key.Row, h.Key.Column]).ToList()).ToArray();
 
-            foreach (var cdiff in groupedCells
-                .Select(g => solver.MakeAllDifferent(new IntVarVector(g))))
+            foreach (var x in groupedCells.Select(g => solver.MakeAllDifferent(new IntVarVector(g))))
             {
-                yield return cdiff;
+                yield return x;
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         protected override IEnumerable<Constraint> PrepareConstraints(Solver solver)
         {
             foreach (var cell in (SudokuPuzzle) Puzzle)
@@ -126,11 +124,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
             }
         }
 
-        /// <summary>
-        /// <see cref="ISearchAgent"/> ProcessVariables event handler.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <inheritdoc />
         protected override void OnProcessVariables(object sender, ProcessVariablesEventArgs e)
         {
             var candidate = new SudokuPuzzle();
