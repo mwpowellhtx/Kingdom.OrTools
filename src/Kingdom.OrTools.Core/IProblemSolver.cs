@@ -48,15 +48,17 @@ namespace Kingdom.OrTools
     /// <typeparamref name="TAspect"/> based <see cref="IProblemSolver"/>.
     /// </summary>
     /// <typeparam name="TSolver"></typeparam>
+    /// <typeparam name="TSource"></typeparam>
     /// <typeparam name="TVariable"></typeparam>
     /// <typeparam name="TConstraint"></typeparam>
     /// <typeparam name="TAspect"></typeparam>
     /// <inheritdoc />
-    public interface IProblemSolver<out TSolver, TVariable, TConstraint, TAspect> : IProblemSolver<TSolver>
+    public interface IProblemSolver<out TSolver, TSource, TVariable, TConstraint, TAspect> : IProblemSolver<TSolver>
         where TSolver : class
+        where TSource : class
         where TVariable : class
         where TConstraint : class
-        where TAspect : IProblemSolverAspect<TSolver, TVariable, TConstraint, TAspect>
+        where TAspect : IProblemSolverAspect<TSolver, TSource, TVariable, TConstraint, TAspect>
     {
     }
 }

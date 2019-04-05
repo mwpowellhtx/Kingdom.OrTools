@@ -3,11 +3,6 @@ using System.Collections.Generic;
 
 namespace Kingdom.OrTools
 {
-    /// <summary>
-    /// Represents a Problem Solver Aspect base class.
-    /// </summary>
-    /// <typeparam name="TSolver"></typeparam>
-    /// <typeparam name="TAspect"></typeparam>
     /// <inheritdoc />
     public abstract class ProblemSolverAspectBase<TSolver, TAspect>
         : IProblemSolverAspect<TSolver, TAspect>
@@ -50,28 +45,25 @@ namespace Kingdom.OrTools
         }
     }
 
-    /// <summary>
-    /// Represents Problem Solver Aspect base class with special consideration for
-    /// <typeparamref name="TVariable"/> and <typeparamref name="TConstraint"/> concerns.
-    /// </summary>
-    /// <typeparam name="TSolver"></typeparam>
-    /// <typeparam name="TVariable"></typeparam>
-    /// <typeparam name="TConstraint"></typeparam>
-    /// <typeparam name="TAspect"></typeparam>
-    /// <inheritdoc cref="ProblemSolverAspectBase{TSolver,TAspect}"/>
-    public abstract class ProblemSolverAspectBase<TSolver, TVariable, TConstraint, TAspect>
+    /// <inheritdoc cref="IProblemSolverAspect{TSolver,TSource,TVariable,TConstraint,TAspect}"/>
+    /// <see cref="IProblemSolverAspect{TSolver,TSource,TVariable,TConstraint,TAspect}"/>
+    public abstract class ProblemSolverAspectBase<TSolver, TSource, TVariable, TConstraint, TAspect>
         : ProblemSolverAspectBase<TSolver, TAspect>
-            , IProblemSolverAspect<TSolver, TVariable, TConstraint, TAspect>
+            , IProblemSolverAspect<TSolver, TSource, TVariable, TConstraint, TAspect>
         where TSolver : class
+        where TSource : class
         where TVariable : class
         where TConstraint : class
-        where TAspect : ProblemSolverAspectBase<TSolver, TVariable, TConstraint, TAspect>
+        where TAspect : ProblemSolverAspectBase<TSolver, TSource, TVariable, TConstraint, TAspect>
     {
         /// <inheritdoc />
-        public abstract IEnumerable<TVariable> GetVariables(TSolver solver);
+        public virtual IEnumerable<TVariable> GetVariables(TSource source)
+        {
+            yield break;
+        }
 
         /// <inheritdoc />
-        public abstract IEnumerable<TConstraint> GetConstraints(TSolver solver);
+        public abstract IEnumerable<TConstraint> GetConstraints(TSource source);
 
         // ReSharper disable once UnusedMember.Global
         /// <summary>
@@ -86,13 +78,13 @@ namespace Kingdom.OrTools
         protected virtual IList<TConstraint> IntersectedConstraints { get; } = new List<TConstraint>();
 
         /// <inheritdoc />
-        public virtual IEnumerable<TVariable> IntersectVariables(TSolver solver, TAspect otherAspect)
+        public virtual IEnumerable<TVariable> IntersectVariables(TSource source, TAspect otherAspect)
         {
             yield break;
         }
 
         /// <inheritdoc />
-        public virtual IEnumerable<TConstraint> Intersect(TSolver solver, TAspect otherAspect)
+        public virtual IEnumerable<TConstraint> Intersect(TSource source, TAspect otherAspect)
         {
             yield break;
         }

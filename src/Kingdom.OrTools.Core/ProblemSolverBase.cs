@@ -21,17 +21,26 @@ namespace Kingdom.OrTools
         /// this Problem Solver. It is suggested to capture your Variables in the most-derived
         /// possible class necessary to support your modeling requirements.
         /// </summary>
-        /// <param name="solver"></param>
         /// <returns></returns>
-        protected abstract IEnumerable<TVariable> GetVariables(TSolver solver);
+        /// <remarks>No longer must we receive any <typeparamref name="TSolver"/>, especially
+        /// with the advent of Sat. Instead let the derived concern inform the variables however
+        /// it sees fit.</remarks>
+        protected abstract IEnumerable<TVariable> Variables { get; }
 
         /// <summary>
         /// Gets the ModelName.
+        /// This is optional depending on the Solver context.
         /// </summary>
         protected string ModelName { get; }
 
         /// <inheritdoc />
         public IList<object> ClrCreatedObjects { get; } = new List<object>();
+
+        /// <inheritdoc />
+        protected ProblemSolverBase()
+            : this(null)
+        {
+        }
 
         /// <summary>
         /// Protected Constructor
@@ -115,17 +124,19 @@ namespace Kingdom.OrTools
     /// <see cref="ProblemSolverBase{TSolver,TVariable}"/> class.
     /// </summary>
     /// <typeparam name="TSolver"></typeparam>
+    /// <typeparam name="TSource"></typeparam>
     /// <typeparam name="TVariable"></typeparam>
     /// <typeparam name="TConstraint"></typeparam>
     /// <typeparam name="TAspect"></typeparam>
     /// <inheritdoc cref="ProblemSolverBase{TSolver,TVariable}"/>
-    public abstract class ProblemSolverBase<TSolver, TVariable, TConstraint, TAspect>
+    public abstract class ProblemSolverBase<TSolver, TSource, TVariable, TConstraint, TAspect>
         : ProblemSolverBase<TSolver, TVariable>
-            , IProblemSolver<TSolver, TVariable, TConstraint, TAspect>
+            , IProblemSolver<TSolver, TSource, TVariable, TConstraint, TAspect>
         where TSolver : class
+        where TSource : class
         where TVariable : class
         where TConstraint : class
-        where TAspect : IProblemSolverAspect<TSolver, TVariable, TConstraint, TAspect>
+        where TAspect : IProblemSolverAspect<TSolver, TSource, TVariable, TConstraint, TAspect>
     {
         /// <summary>
         /// Gets the Aspects involved. Aspects represents unique parts of the Problem Solver
@@ -134,9 +145,15 @@ namespace Kingdom.OrTools
         /// </summary>
         protected IEnumerable<TAspect> Aspects { get; }
 
+        /// <summary>
+        /// Gets the Source.
+        /// </summary>
+        protected abstract TSource Source { get; }
+
         /// <inheritdoc />
-        protected override IEnumerable<TVariable> GetVariables(TSolver solver)
-            => Aspects?.SelectMany(a => a.GetVariables(solver).Select(x => x.TrackClrObject(a)));
+        protected override IEnumerable<TVariable> Variables => Aspects?.SelectMany(
+            aspect => aspect.GetVariables(Source).Select(variable => variable.TrackClrObject(aspect))
+        );
 
         /// <inheritdoc />
         protected ProblemSolverBase(string modelName, IEnumerable<TAspect> aspects)
