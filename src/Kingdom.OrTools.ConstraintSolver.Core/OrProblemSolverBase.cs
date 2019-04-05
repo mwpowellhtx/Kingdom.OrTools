@@ -13,6 +13,7 @@ namespace Kingdom.OrTools.ConstraintSolver
     /// <summary>
     /// or-tools-based Constraint Programming problem solver.
     /// </summary>
+    /// <inheritdoc cref="ProblemSolverBase{TSolver,TVariable}"/>
     /// <see cref="!:http://code.google.com/p/or-tools/"/>
     public abstract class OrProblemSolverBase : ProblemSolverBase<Solver, IntVar>, IOrProblemSolver
     {
@@ -20,10 +21,7 @@ namespace Kingdom.OrTools.ConstraintSolver
 
         private ProblemSolverImplementation Implementation => _lazyImplementation.Value;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="modelName"></param>
+        /// <inheritdoc />
         protected OrProblemSolverBase(string modelName)
             : base(modelName)
         {
@@ -73,9 +71,9 @@ namespace Kingdom.OrTools.ConstraintSolver
                 agent.Monitor(a =>
                 {
                     var m = a.Solver.MakeAllSolutionCollector();
-                    var vect = new IntVarVector().TrackClrObject(this);
-                    foreach (var v in variables) vect.Add(v);
-                    m.Add(vect);
+                    var vector = new IntVarVector().TrackClrObject(this);
+                    foreach (var v in variables) vector.Add(v);
+                    m.Add(vector);
                     return m;
                 });
             }
@@ -135,10 +133,7 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// </summary>
         protected IEnumerable<OptimizeVar> Optimizations => ClrCreatedObjects.OfType<OptimizeVar>().ToArray();
 
-        /// <summary>
-        /// Tries to Resolve the problem.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override bool TryResolve()
         {
             try
@@ -153,7 +148,7 @@ namespace Kingdom.OrTools.ConstraintSolver
                     /* Capture the Variables and Constraints. At the same time, Track them as CLR objects,
                      * and Add the Constraints to the Solver. */
 
-                    var variables = GetVariables(s).ToArray();
+                    var variables = Variables.ToArray();
 
                     foreach (var c in PrepareConstraints(s).ToArray())
                     {
@@ -190,10 +185,7 @@ namespace Kingdom.OrTools.ConstraintSolver
         // TODO: TBD: Model Export/Load features are not yet available in the current NuGet published package.
         // TODO: TBD: when they do become available, consider whether there is value exporting the model...
 
-        /// <summary>
-        /// Disposes the object.
-        /// </summary>
-        /// <param name="disposing"></param>
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             // TODO: TBD: dispose of disposable objects here?
@@ -204,16 +196,18 @@ namespace Kingdom.OrTools.ConstraintSolver
     /// <typeparamref name="TAspect"/> based Operational Research problem solver.
     /// </summary>
     /// <typeparam name="TAspect"></typeparam>
+    /// <inheritdoc cref="ProblemSolverBase{TSolver,TVariable}"/>
     public abstract class OrProblemSolverBase<TAspect>
-        : ProblemSolverBase<Solver, IntVar, Constraint, TAspect>
+        : ProblemSolverBase<Solver, Solver, IntVar, Constraint, TAspect>
             , IOrProblemSolver<TAspect>
-        where TAspect : IProblemSolverAspect<Solver, IntVar, Constraint, TAspect>
+        where TAspect : IProblemSolverAspect<Solver, Solver, IntVar, Constraint, TAspect>
     {
-        /// <summary>
-        /// Protected Constructor
-        /// </summary>
-        /// <param name="modelName"></param>
-        /// <param name="aspects"></param>
+        /// <inheritdoc />
+        /// <remarks>In this case, Source is the Solver.</remarks>
+        /// <see cref="ProblemSolverBase{TSolver,TVariable}.Solver"/>
+        protected override Solver Source => Solver;
+
+        /// <inheritdoc />
         protected OrProblemSolverBase(string modelName, IEnumerable<TAspect> aspects)
             : base(modelName, aspects)
         {
@@ -268,9 +262,9 @@ namespace Kingdom.OrTools.ConstraintSolver
                 agent.Monitor(a =>
                 {
                     var m = a.Solver.MakeAllSolutionCollector();
-                    var vect = new IntVarVector().TrackClrObject(this);
-                    foreach (var v in variables) vect.Add(v);
-                    m.Add(vect);
+                    var vector = new IntVarVector().TrackClrObject(this);
+                    foreach (var v in variables) vector.Add(v);
+                    m.Add(vector);
                     return m;
                 });
             }
@@ -324,10 +318,7 @@ namespace Kingdom.OrTools.ConstraintSolver
             return agent.NewSearch(a => a.Solver.MakePhase(a.Variables, IntVarSimple, IntValueSimple));
         }
 
-        /// <summary>
-        /// Tries to Resolve the problem.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public override bool TryResolve()
         {
             try
@@ -335,18 +326,19 @@ namespace Kingdom.OrTools.ConstraintSolver
                 using (Solver = new Solver(ModelName))
                 {
                     // Capture the Solver instance for local usage.
-                    var s = Solver;
+                    var solver = Solver;
+                    var source = Source;
 
-                    ReSeed(s);
+                    ReSeed(solver);
 
                     /* Capture the Variables and Constraints. At the same time, Track them
                      * as CLR objects, and Add the Constraints to the Solver. */
 
-                    var variables = GetVariables(s).ToList();
+                    var variables = Variables.ToList();
 
                     {
                         // Get all the B's that are not A and Intersect their Variables.
-                        var intersected = Intersect(Aspects, Aspects, (a, b) => a.IntersectVariables(s, b)).ToArray();
+                        var intersected = Intersect(Aspects, Aspects, (a, b) => a.IntersectVariables(source, b)).ToArray();
 
                         // Track these Variables in the scope of the Problem Solver.
                         variables.AddRange(intersected.Select(x => x.TrackClrObject(this)));
@@ -354,11 +346,11 @@ namespace Kingdom.OrTools.ConstraintSolver
 
                     /* Now coordinate the Constraints from each of the Aspects,
                      *  and track them with each Aspect. */
-                    var constraints = Aspects.SelectMany(a => a.GetConstraints(s).Select(x => x.TrackClrObject(a))).ToList();
+                    var constraints = Aspects.SelectMany(a => a.GetConstraints(source).Select(x => x.TrackClrObject(a))).ToList();
 
                     {
                         // Now, Intersect the Constraints along the same lines.
-                        var intersected = Intersect(Aspects, Aspects, (a, b) => a.Intersect(s, b)).ToArray();
+                        var intersected = Intersect(Aspects, Aspects, (a, b) => a.Intersect(source, b)).ToArray();
 
                         /* Track these Constraints in the scope of the Problem Solver.
                          * Oops, additionally, track the Constraints not the Array. */
@@ -367,7 +359,7 @@ namespace Kingdom.OrTools.ConstraintSolver
 
                     foreach (var c in constraints)
                     {
-                        s.Add(c);
+                        solver.Add(c);
                     }
 
                     var e = EventArgs.Empty;
@@ -397,10 +389,7 @@ namespace Kingdom.OrTools.ConstraintSolver
             return true;
         }
 
-        /// <summary>
-        /// Disposes the object.
-        /// </summary>
-        /// <param name="disposing"></param>
+        /// <inheritdoc />
         protected override void Dispose(bool disposing)
         {
             if (disposing && !IsDisposed)

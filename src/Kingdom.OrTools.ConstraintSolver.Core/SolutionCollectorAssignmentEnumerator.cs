@@ -5,6 +5,7 @@ namespace Kingdom.OrTools.ConstraintSolver
 {
     using Google.OrTools.ConstraintSolver;
 
+    /// <inheritdoc />
     internal class SolutionCollectorAssignmentEnumerator : IEnumerator<Assignment>
     {
         private int _currentIndex;
@@ -24,39 +25,28 @@ namespace Kingdom.OrTools.ConstraintSolver
             _collector = collector;
         }
 
-        /// <summary>
-        /// Gets the Current <see cref="Assignment"/>.
-        /// </summary>
+        /// <inheritdoc />
         public Assignment Current => _collector.Solution(_currentIndex);
 
-        /// <summary>
-        /// Gets the Current assignment.
-        /// </summary>
+        /// <inheritdoc />
         object IEnumerator.Current => Current;
 
-        /// <summary>
-        /// Moves to the next <see cref="Assignment"/> in sequence.
-        /// </summary>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool MoveNext()
         {
             if (_currentIndex >= _collector.SolutionCount())
+            {
                 return false;
+            }
+
             _currentIndex++;
             return true;
         }
 
-        /// <summary>
-        /// Resets the enumerator to the beginning.
-        /// </summary>
-        public void Reset()
-        {
-            _currentIndex = 0;
-        }
+        /// <inheritdoc />
+        public void Reset() => _currentIndex = 0;
 
-        /// <summary>
-        /// Disposes the object.
-        /// </summary>
+        /// <inheritdoc />
         public void Dispose()
         {
             //Does not assume any ownership of the members.

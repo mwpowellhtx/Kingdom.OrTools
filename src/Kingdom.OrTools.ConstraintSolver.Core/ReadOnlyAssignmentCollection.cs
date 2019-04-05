@@ -6,9 +6,7 @@ namespace Kingdom.OrTools.ConstraintSolver
 {
     using Google.OrTools.ConstraintSolver;
 
-    /// <summary>
-    /// 
-    /// </summary>
+    /// <inheritdoc />
     public class ReadOnlyAssignmentCollection : IReadOnlyList<Assignment>
     {
         /// <summary>
@@ -20,22 +18,14 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// Internal Constructor
         /// </summary>
         /// <param name="collector"></param>
-        protected internal ReadOnlyAssignmentCollection(SolutionCollector collector)
-        {
-            _collector = collector;
-        }
+        protected internal ReadOnlyAssignmentCollection(SolutionCollector collector) => _collector = collector;
 
         /// <summary>
         /// Gets whether the Collection Has a <see cref="SolutionCollector"/>.
         /// </summary>
         public virtual bool HasCollector => _collector != null;
 
-        /// <summary>
-        /// Read-Only Indexer
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <inheritdoc />
         public Assignment this[int index]
         {
             get
@@ -52,25 +42,13 @@ namespace Kingdom.OrTools.ConstraintSolver
             }
         }
 
-        /// <summary>
-        /// Gets the <see cref="SolutionCollector.SolutionCount()"/>.
-        /// </summary>
+        /// <inheritdoc />
         public int Count => _collector.SolutionCount();
 
-        /// <summary>
-        /// Gets the <see cref="IEnumerator{Assignment}"/> corresponding to the
-        /// <see cref="_collector"/>.
-        /// </summary>
-        /// <returns></returns>
-        /// <see cref="SolutionCollectorAssignmentEnumerator"/>
-        public IEnumerator<Assignment> GetEnumerator()
-        {
-            return new SolutionCollectorAssignmentEnumerator(_collector);
-        }
+        /// <inheritdoc />
+        public IEnumerator<Assignment> GetEnumerator() => new SolutionCollectorAssignmentEnumerator(_collector);
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

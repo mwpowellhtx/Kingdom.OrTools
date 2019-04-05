@@ -12,12 +12,12 @@
 
     /// <summary>
     /// <typeparamref name="TAspect"/> based
-    /// <see cref="IProblemSolver{Solver,IntVar,Constraint,TAspect}"/>.
+    /// <see cref="IProblemSolver{Solver,Solver,IntVar,Constraint,TAspect}"/>.
     /// </summary>
     /// <typeparam name="TAspect"></typeparam>
-    /// <inheritdoc cref="IProblemSolver{Solver,IntVar,Constraint,TAspect}"/>
-    public interface IOrProblemSolver<TAspect> : IProblemSolver<Solver, IntVar, Constraint, TAspect>, IOrProblemSolver
-        where TAspect : IProblemSolverAspect<Solver, IntVar, Constraint, TAspect>
+    /// <inheritdoc cref="IProblemSolver{TSolver,TSource,TVariable,TConstraint,TAspect}"/>
+    public interface IOrProblemSolver<TAspect> : IProblemSolver<Solver, Solver, IntVar, Constraint, TAspect>, IOrProblemSolver
+        where TAspect : IProblemSolverAspect<Solver, Solver, IntVar, Constraint, TAspect>
     {
     }
 }

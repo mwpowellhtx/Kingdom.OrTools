@@ -1,6 +1,7 @@
 namespace Kingdom.OrTools.ConstraintSolver
 {
     using Google.OrTools.ConstraintSolver;
+    using VariableChooser = Google.OrTools.ConstraintSolver.LongLongToLong;
 
     /// <summary>
     /// Provides some helpful <see cref="Solver"/> extension methods.
@@ -18,13 +19,11 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// <returns></returns>
         public static DecisionBuilder MakePhase(this Solver solver, IntVarVector variables,
             IntVarStrategy varStrategy, IntValueStrategy valStrategy)
-        {
-            return solver.MakePhase(variables, varStrategy.ToInt(), valStrategy.ToInt());
-        }
+            => solver.MakePhase(variables, varStrategy.ToInt(), valStrategy.ToInt());
 
         /// <summary>
         /// Provides a helpful C-Sharp friendly extension method for <see
-        /// cref="Solver.MakePhase(IntVarVector, LongToLong, int)"/>.
+        /// cref="Solver.MakePhase(IntVarVector, VariableChooser, int)"/>.
         /// </summary>
         /// <param name="solver"></param>
         /// <param name="variables"></param>
@@ -33,8 +32,6 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// <returns></returns>
         public static DecisionBuilder MakePhase(this Solver solver, IntVarVector variables,
             VariableChooser varChooser, EvaluatorStrategy evalStrategy)
-        {
-            return solver.MakePhase(variables, varChooser, evalStrategy.ToInt());
-        }
+            => solver.MakePhase(variables, varChooser, evalStrategy.ToInt());
     }
 }

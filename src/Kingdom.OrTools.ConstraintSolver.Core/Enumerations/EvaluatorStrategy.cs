@@ -6,6 +6,8 @@ namespace Kingdom.OrTools.ConstraintSolver
 {
     using static Solver;
     using static EvaluatorStrategy;
+    using VariableChooser = LongToLong;
+    using ValueChooser = LongLongToLong;
 
     /// <summary>
     /// This enum is used by Solver.MakePhase to specify how to select variables and values during
@@ -15,12 +17,12 @@ namespace Kingdom.OrTools.ConstraintSolver
     /// cref="IntVarStrategy"/> and <see cref="IntValueStrategy"/>; see for more in depth
     /// description. Variables are selected first, and then the associated value.
     ///
-    /// In <see cref="Solver.MakePhase(IntVarVector, LongToLong, int)"/>, corresponding to
+    /// In <see cref="Solver.MakePhase(IntVarVector, VariableChooser, int)"/>, corresponding to
     /// IndexEvaluator2 and EvaluatorStrategy, the selection is done scanning every pair
     /// {variable, possible value}. The next selected pair is then the best among all
     /// possibilities, i.e. the pair with the smallest evaluation. As this is costly, two options
     /// are offered: static or dynamic evaluation. <see cref="LongToLong"/> is used for
-    /// IndexEvaluator2. Whereas the non-descript <see cref="System.Int32"/> is the <see
+    /// IndexEvaluator2. Whereas the nondescript <see cref="int"/> is the <see
     /// cref="EvaluatorStrategy"/>.
     /// 
     /// See <see cref="VariableChooser"/> for more background on IndexEvaluator2 (<see
@@ -28,7 +30,8 @@ namespace Kingdom.OrTools.ConstraintSolver
     /// </summary>
     /// <see cref="!:http://github.com/google/or-tools/blob/792c1358a57469c9948edc004b07262348544f94/src/constraint_solver/constraint_solver.h" />
     /// <see cref="Solver.MakePhase(IntVarVector, int, int)"/>
-    /// <see cref="Solver.MakePhase(IntVarVector, LongToLong, int)"/>
+    /// <see cref="Solver.MakePhase(IntVarVector, VariableChooser, int)"/>
+    /// <see cref="Solver.MakePhase(IntVarVector, VariableChooser, ValueChooser)"/>
     public enum EvaluatorStrategy
     {
         /// <summary>
