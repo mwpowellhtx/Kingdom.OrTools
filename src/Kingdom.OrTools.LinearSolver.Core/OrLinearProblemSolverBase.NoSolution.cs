@@ -19,7 +19,7 @@ namespace Kingdom.OrTools.LinearSolver
         /// <param name="modelName"></param>
         /// <param name="problemType"></param>
         /// <inheritdoc />
-        protected OrLinearProblemSolverBase(string modelName, OptimizationProblemType problemType = DefaultProblemType)
+        protected OrLinearProblemSolverBase(string modelName, LinearOptimizationProblemType problemType = DefaultProblemType)
             : base(modelName, p => true, problemType)
         {
         }

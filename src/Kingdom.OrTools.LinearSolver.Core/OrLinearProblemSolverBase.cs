@@ -6,8 +6,9 @@ using System.Linq;
 namespace Kingdom.OrTools.LinearSolver
 {
     using Google.OrTools.LinearSolver;
+    using MpParamSpec = Tuple<MpParamDoubleParam, double>;
     using static LinearResultStatus;
-    using static OptimizationProblemType;
+    using static LinearOptimizationProblemType;
 
     /// <summary>
     /// 
@@ -40,25 +41,28 @@ namespace Kingdom.OrTools.LinearSolver
         protected const double PositiveInfinity = double.PositiveInfinity;
 
         /// <summary>
-        /// ProblemType backing field.
+        /// Gets the ProblemType.
         /// </summary>
-        private readonly OptimizationProblemType _problemType;
+        private LinearOptimizationProblemType ProblemType { get; }
 
         /// <summary>
         /// <see cref="GlopLinearProgramming"/>
         /// </summary>
         /// <see cref="GlopLinearProgramming"/>
-        protected const OptimizationProblemType DefaultProblemType = GlopLinearProgramming;
+        protected const LinearOptimizationProblemType DefaultProblemType = GlopLinearProgramming;
 
         /// <summary>
         /// Delegate responsible for
-        /// <see cref="OrLinearProblemSolverBase{TProblemSolver,TSolution}._getSolution"/>.
+        /// <see cref="OrLinearProblemSolverBase{TProblemSolver,TSolution}.GetSolution"/>.
         /// </summary>
         /// <param name="problem"></param>
         /// <returns></returns>
         public delegate TSolution GetSolutionDelegate(dynamic problem);
 
-        private readonly GetSolutionDelegate _getSolution;
+        /// <summary>
+        /// Gets the Solution Getter delegate.
+        /// </summary>
+        private GetSolutionDelegate GetSolution { get; }
 
         /// <summary>
         /// Protected Constructor
@@ -68,11 +72,11 @@ namespace Kingdom.OrTools.LinearSolver
         /// <param name="problemType"></param>
         /// <inheritdoc />
         protected OrLinearProblemSolverBase(string modelName, GetSolutionDelegate getSolution
-            , OptimizationProblemType problemType = DefaultProblemType)
+            , LinearOptimizationProblemType problemType = DefaultProblemType)
             : base(modelName)
         {
-            _getSolution = getSolution;
-            _problemType = problemType;
+            GetSolution = getSolution;
+            ProblemType = problemType;
         }
 
         /// <summary>
@@ -117,7 +121,7 @@ namespace Kingdom.OrTools.LinearSolver
         /// Returns the <see cref="MPSolverParameters"/> in <see cref="IEnumerable{Double}"/> form.
         /// </summary>
         /// <returns></returns>
-        protected virtual IEnumerable<double> GetParameters()
+        protected virtual IEnumerable<MpParamSpec> GetMpParamSpecs()
         {
             yield break;
         }
@@ -136,15 +140,32 @@ namespace Kingdom.OrTools.LinearSolver
             return value;
         }
 
-        private MPSolverParameters BuildParameters(IEnumerable<double> values)
+        // ReSharper disable once UnusedMember.Global
+        /// <summary>
+        /// Returns the <see cref="MpParamSpec"/> corresponding to the <paramref name="param"/>
+        /// and <paramref name="value"/>.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static MpParamSpec CreateMpParamPair(MpParamDoubleParam param, double value)
+            => Tuple.Create(param, value);
+
+        // TODO: TBD: taking LinearSolver assembly(ies) out of the build configuration for the time being until a usage/migration path can be established...
+        /// <summary>
+        /// Builds the <see cref="MPSolverParameters"/> instance given a set of
+        /// <see cref="MpParamSpec"/> pairs.
+        /// </summary>
+        /// <param name="specs"></param>
+        /// <returns></returns>
+        protected virtual MPSolverParameters BuildParameters(params MpParamSpec[] specs)
         {
             var parameters = new MPSolverParameters();
-            // ReSharper disable PossibleMultipleEnumeration
-            for (var i = 0; i < values.Count(); i++)
+            foreach (var (spec, value) in specs)
             {
-                parameters.SetDoubleParam(i, values.ElementAt(i));
-                // ReSharper enable PossibleMultipleEnumeration
+                parameters.SetDoubleParam(spec.ForSolver(), value);
             }
+
             ClrCreatedObjects.Add(parameters);
             return parameters;
         }
@@ -252,7 +273,8 @@ namespace Kingdom.OrTools.LinearSolver
 
         /// <summary>
         /// Try to Resolve the <see cref="Solver"/> given
-        /// <see cref="ProblemSolverBase{TSolver,TVariable}.ModelName"/> and <see cref="_problemType"/>.
+        /// <see cref="ProblemSolverBase{TSolver,TVariable}.ModelName"/> and
+        /// <see cref="ProblemType"/>.
         /// </summary>
         /// <returns></returns>
         /// <inheritdoc />
@@ -260,32 +282,32 @@ namespace Kingdom.OrTools.LinearSolver
         {
             var e = EventArgs.Empty;
 
-            using (var solver = new Solver(ModelName, _problemType.ForSolver()))
+            using (Solver = new Solver(ModelName, ProblemType.ForSolver()))
             {
+                var solver = Solver;
+
                 // TODO: TBD: consider what sort of Linear Search Agent, fluent configuration, could be done here...
 
                 // TODO: TBD: do anything further with the variables here?
-                var variables = GetVariables(solver).Select(x => x.TrackClrObject(this)).ToArray();
+                var variables = Variables.Select(x => x.TrackClrObject(this)).ToArray();
 
                 PrepareConstraints(solver);
 
                 PrepareObjective(solver);
 
-                var parameters = BuildParameters(GetParameters());
+                var parameters = BuildParameters(GetMpParamSpecs().ToArray());
 
                 OnResolving(e);
 
                 // TODO: TBD: what does "result" mean?
-                var resultStatus = (parameters == null
-                    ? solver.Solve()
-                    : solver.Solve(parameters)).FromSolver();
+                var resultStatus = (parameters == null ? solver.Solve() : solver.Solve(parameters)).FromSolver();
 
                 var verified = VerifySolution(solver, resultStatus);
 
                 if (verified)
                 {
                     // TODO: TBD: should rethink this along the same lines as with Constraint Solver...
-                    ReceiveSolution(solver, resultStatus, _getSolution(Problem), Problem);
+                    ReceiveSolution(solver, resultStatus, GetSolution(Problem), Problem);
                 }
 
                 OnResolved(e);
