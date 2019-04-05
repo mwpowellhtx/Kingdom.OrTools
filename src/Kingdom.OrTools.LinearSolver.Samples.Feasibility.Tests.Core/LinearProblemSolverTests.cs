@@ -3,11 +3,17 @@
 namespace Kingdom.OrTools.LinearSolver.Samples.Feasibility
 {
     using Xunit;
+    using Xunit.Abstractions;
     using static Math;
     using static LinearResultStatus;
 
     public class LinearProblemSolverTests : TestFixtureBase
     {
+        public LinearProblemSolverTests(ITestOutputHelper outputHelper)
+            : base(outputHelper)
+        {
+        }
+
         [Fact]
         public void Feasibility_Problem_Solver_is_Correct()
         {
