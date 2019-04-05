@@ -1,28 +1,14 @@
 ﻿namespace Kingdom.OrTools.LinearSolver.Samples.Feasibility
 {
-    using NUnit.Framework;
+    using Xunit.Abstractions;
 
-    [TestFixture]
     public abstract class TestFixtureBase
     {
-        [TestFixtureSetUp]
-        public virtual void SetupFixture()
-        {
-        }
+        protected ITestOutputHelper OutputHelper { get; }
 
-        [TestFixtureTearDown]
-        public virtual void TearDownFixture()
+        protected TestFixtureBase(ITestOutputHelper outputHelper)
         {
-        }
-
-        [SetUp]
-        public virtual void SetUp()
-        {
-        }
-
-        [TearDown]
-        public virtual void TearDown()
-        {
+            OutputHelper = outputHelper;
         }
     }
 }
