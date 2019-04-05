@@ -4,7 +4,7 @@
     <Authors>Michael W. Powell</Authors>
     <Company>Kingdom Software</Company>
     <Product>Kingdom.OrTools</Product>
-    <Copyright>Copyright © 2015-2018</Copyright>
+    <Copyright>Copyright (c) 2015-2019</Copyright>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -14,6 +14,32 @@
 
   <PropertyGroup>
     <RootNamespace>Kingdom.OrTools</RootNamespace>
+    <GoogleOrToolsVersion>7.0.6546</GoogleOrToolsVersion>
+    <GoogleProtobufVersion>3.7.0</GoogleProtobufVersion>
+    <CodeGenerationRoslynVersion>0.5.13</CodeGenerationRoslynVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BumpAssemblyVersions" Version="1.2.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('..\packages\BumpAssemblyVersions\1.2.0\build\BumpAssemblyVersions.targets')">
+    <BumpVersionSpec Include="Version" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+    <BumpVersionSpec Include="AssemblyVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+    <BumpVersionSpec Include="FileVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+    <BumpVersionSpec Include="PackageVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+
+    <BumpVersionSpec Include="Version" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
+    <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
+    <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
+    <BumpVersionSpec Include="PackageVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="if exist &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot; del /f &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot;" />
+  </Target>
 
 </Project>
