@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace Kingdom.OrTools.ConstraintSolver.Samples
 {
+    using Kingdom.OrTools.Samples.Sudoku;
     using OrTools.Samples;
     using Sudoku;
     using Xunit;
     using Xunit.Abstractions;
-    using static Sudoku.Domain;
+    using static Kingdom.OrTools.Samples.Sudoku.Domain;
 
     /// <summary>
     /// 
@@ -65,7 +65,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
 
             ReportTheValues();
 
-            theProblem.PrettyPrint(Console.Out);
+            theProblem.PrettyPrint(s => OutputHelper.WriteLine(s));
 
             //TODO: introduce time outs to the solver ...
             // Should solve and not time out...
@@ -85,7 +85,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
             Assert.NotSame(theProblem, theSolution);
             Assert.True(theSolution.IsSolved);
 
-            theSolution.PrettyPrint(Console.Out);
+            theSolution.PrettyPrint(s => OutputHelper.WriteLine(s));
         }
 
         /// <summary>
@@ -114,9 +114,17 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         /// Verifies that the Embedded Resource may be Loaded and is Not Empty.
         /// </summary>
         [Fact]
-        public void Verify_the_embedded_resource()
+        public void Verify_the_Embedded_Resource_is_Valid()
         {
-            Assert.NotEmpty(new EmbeddedXmlTestCases());
+            var cases = new EmbeddedXmlTestCases().ToArray();
+
+            Assert.NotEmpty(cases);
+
+            Assert.All(cases, x =>
+            {
+                Assert.NotNull(x);
+                Assert.NotEmpty(x);
+            });
         }
 
         /// <summary>
@@ -125,7 +133,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         /// <param name="theValuesText"></param>
         /// <param name="theDescription"></param>
         [Theory, ClassData(typeof(EmbeddedXmlTestCases))]
-        public void Verify_embedded_resource_problem(string theDescription, string theValuesText)
+        public void Verify_Embedded_Resource_Problem(string theDescription, string theValuesText)
         {
             if (!string.IsNullOrEmpty(theDescription))
             {

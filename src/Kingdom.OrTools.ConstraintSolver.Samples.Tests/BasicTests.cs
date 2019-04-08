@@ -6,7 +6,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
     using OrTools.Samples;
     using Xunit;
     using Xunit.Abstractions;
-    using static Sudoku.Domain;
+    using static Kingdom.OrTools.Samples.Sudoku.Domain;
 
     /// <summary>
     /// Performs some basic unit testing.
