@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -10,10 +10,10 @@
     <Description>Provides a convenient, easy to use wrapper for Constraint Satisfaction Programming based on the Google OR-tools.</Description>
     <PackageTags>Google; Operations; Research; Tools; wrapper; dispose; disposable; CLR; object; host; constraint; satisfaction; problem; solver; CP; CSP; variable; variables; int; integer; bool; boolean; solution</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>5.1.0.13022</Version>
-    <AssemblyVersion>5.1.0.13022</AssemblyVersion>
-    <FileVersion>5.1.0.13022</FileVersion>
-    <PackageVersion>5.1.0.13022</PackageVersion>
+    <Version>5.1.0.13036</Version>
+    <AssemblyVersion>5.1.0.13036</AssemblyVersion>
+    <FileVersion>5.1.0.13036</FileVersion>
+    <PackageVersion>5.1.0.13036</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
