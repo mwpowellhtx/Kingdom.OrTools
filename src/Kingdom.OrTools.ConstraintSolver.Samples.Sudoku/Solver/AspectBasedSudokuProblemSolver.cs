@@ -1,15 +1,24 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
 {
+    using Google.OrTools.ConstraintSolver;
+    using Kingdom.OrTools.Samples.Sudoku;
     using Xunit;
-    using static IntVarStrategy;
     using static IntValueStrategy;
+    using static IntVarStrategy;
+    using static Kingdom.OrTools.Samples.Sudoku.Domain;
 
     public class AspectBasedSudokuProblemSolver : OrProblemSolverBase<SudokuProblemSolverAspect>
     {
+        private static IEnumerable<SudokuProblemSolverAspect> GetDefaultAspects()
+        {
+            yield return new SudokuProblemSolverAspect();
+        }
+
         public AspectBasedSudokuProblemSolver(string modelName)
-            : base(modelName, new[] {new SudokuProblemSolverAspect()})
+            : base(modelName, GetDefaultAspects())
         {
         }
 
@@ -18,6 +27,12 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// </summary>
         public ISudokuPuzzle Solution { get; private set; } = new SudokuPuzzle();
 
+        /// <summary>
+        /// Begins a New Search corresponding with the <see cref="Solver"/> and
+        /// <paramref name="agent"/>.
+        /// </summary>
+        /// <param name="agent"></param>
+        /// <returns></returns>
         /// <inheritdoc />
         protected override ISearchAgent NewSearch(ISearchAgent agent)
         {
@@ -28,6 +43,11 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
             return agent.NewSearch(a => a.Solver.MakePhase(a.Variables, ChooseRandom, AssignRandomValue));
         }
 
+        /// <summary>
+        /// <see cref="ISearchAgent"/> ProcessVariables event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         /// <inheritdoc />
         protected override void OnProcessVariables(object sender, ProcessVariablesEventArgs e)
         {
@@ -38,11 +58,9 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
             var aspect = Aspects.SingleOrDefault();
             Assert.NotNull(aspect);
 
-            const int size = SudokuProblemSolverAspect.Size;
-
-            for (var row = 0; row < size; row++)
+            for (var row = MinimumValue; row < MaximumValue; row++)
             {
-                for (var col = 0; col < size; col++)
+                for (var col = MinimumValue; col < MaximumValue; col++)
                 {
                     // ReSharper disable once PossibleNullReferenceException
                     local[row, col] = (int) aspect.Cells[row, col].Value();

@@ -4,9 +4,15 @@ using System.Linq;
 namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
 {
     using Google.OrTools.ConstraintSolver;
+    using Kingdom.OrTools.Samples.Sudoku;
+    using static Kingdom.OrTools.Samples.Sudoku.Domain;
+    using static Kingdom.OrTools.Samples.Sudoku.SudokuPuzzle;
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Sudoku problem solver.
+    /// </summary>
     /// <see cref="!:http://github.com/google/or-tools/blob/master/examples/python/sudoku.py"/>
+    /// <inheritdoc />
     public class SudokuProblemSolver : OrProblemSolverBase
     {
         /// <summary>
@@ -20,9 +26,10 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         public ISudokuPuzzle Solution { get; private set; } = new SudokuPuzzle();
 
         /// <summary>
-        /// Default Constructor
+        /// Default Constructor.
         /// </summary>
         /// <param name="puzzle"></param>
+        /// <inheritdoc />
         public SudokuProblemSolver(ISudokuPuzzle puzzle)
             : base(@"Sudoku Solver")
         {
@@ -36,13 +43,14 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// <param name="row"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public IntVar MakeCell(Solver solver, int row, int column)
-            => solver.MakeIntVar(0, 9, $@"SudokuPuzzle[{row}, {column}]");
+        public IntVar MakeCell(Solver solver, int row, int column) => solver.MakeIntVar(
+            MinimumValue, Size, $@"SudokuPuzzle[{row}, {column}]"
+        );
 
         /// <summary>
         /// Cells backing field.
         /// </summary>
-        private readonly IntVar[,] _cells = new IntVar[9, 9];
+        private readonly IntVar[,] _cells = new IntVar[Size, Size];
 
         private IEnumerable<IntVar> _variables;
 
@@ -75,7 +83,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         private static IEnumerable<Constraint> MakeInitialConstraints(Solver solver, IntExpr variable, int value)
         {
             // TODO: TBD: this one may change for partially solved puzzles.
-            yield return solver.MakeBetweenCt(variable, 1, 9);
+            yield return solver.MakeBetweenCt(variable, MinimumValue + 1, MaximumValue);
 
             if (value.TrySolvedValue())
             {
@@ -92,12 +100,16 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         private IEnumerable<Constraint> MakeAllDifferentConstraints(Solver solver,
             IEnumerable<IDictionary<Address, int>> groups)
         {
-            var groupedCells = groups.Select(g => g.Select(
-                h => _cells[h.Key.Row, h.Key.Column]).ToList()).ToArray();
+            var groupedCells = groups.Select(
+                g => g.Select(
+                    h => _cells[h.Key.Row, h.Key.Column]).ToList()
+            ).ToArray();
 
-            foreach (var x in groupedCells.Select(g => solver.MakeAllDifferent(new IntVarVector(g))))
+            foreach (var c in groupedCells.Select(
+                g => solver.MakeAllDifferent(new IntVarVector(g)))
+            )
             {
-                yield return x;
+                yield return c;
             }
         }
 
@@ -124,15 +136,20 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
             }
         }
 
+        /// <summary>
+        /// <see cref="ISearchAgent"/> ProcessVariables event handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         /// <inheritdoc />
         protected override void OnProcessVariables(object sender, ProcessVariablesEventArgs e)
         {
             var candidate = new SudokuPuzzle();
             ISudokuPuzzle local = candidate;
 
-            for (var row = 0; row < 9; row++)
+            for (var row = MinimumValue; row < MaximumValue; row++)
             {
-                for (var col = 0; col < 9; col++)
+                for (var col = MinimumValue; col < MaximumValue; col++)
                 {
                     local[row, col] = (int) _cells[row, col].Value();
                 }
@@ -141,7 +158,10 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
             /* If we're here processing variables, it should be because we are processing the next
              * solution. However, in the event we still do not have a solution, then simply return. */
 
-            if (!local.IsSolved) return;
+            if (!local.IsSolved)
+            {
+                return;
+            }
 
             Solution = local;
 

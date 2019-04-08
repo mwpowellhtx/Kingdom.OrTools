@@ -4,6 +4,8 @@ using System.Linq;
 namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
 {
     using Google.OrTools.ConstraintSolver;
+    using static Kingdom.OrTools.Samples.Sudoku.Domain;
+    using static Kingdom.OrTools.Samples.Sudoku.SudokuPuzzle;
 
     public class SudokuProblemSolverAspect : ProblemSolverAspectBase<Solver, Solver, IntVar, Constraint, SudokuProblemSolverAspect>
     {
@@ -19,36 +21,17 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// </summary>
         public IntVar[,] Cells { get; private set; }
 
-        /// <summary>
-        /// Min: 1L
-        /// </summary>
-        public const long Min = 1L;
-
-        /// <summary>
-        /// Max: 9L
-        /// </summary>
-        public const long Max = 9L;
-
-        /// <summary>
-        /// Size: 9
-        /// </summary>
-        public const int Size = 9;
-
-        /// <summary>
-        /// Div: 3
-        /// </summary>
-        public const int Div = 3;
-
-        /// <inheritdoc />
-        public override IEnumerable<IntVar> GetVariables(Solver solver)
+        public override IEnumerable<IntVar> GetVariables(Solver source)
         {
+            var s = source;
+
             Cells = new IntVar[Size, Size];
 
-            for (var i = 0; i < Size; i++)
+            for (var i = MinimumValue; i < MaximumValue; i++)
             {
-                for (var j = 0; j < Size; j++)
+                for (var j = MinimumValue; j < MaximumValue; j++)
                 {
-                    Cells[i, j] = solver.MakeIntVar(Min, Max, $@"[{i},{j}]");
+                    Cells[i, j] = s.MakeIntVar(MinimumValue + 1, MaximumValue, $"[{i},{j}]");
                 }
             }
 
@@ -69,39 +52,39 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
 
             foreach (var cell in Cells.Flatten())
             {
-                var c = s.MakeBetweenCt(cell, Min, Max);
+                var c = s.MakeBetweenCt(cell, MinimumValue + 1, MaximumValue);
                 s.Add(c);
                 yield return c;
             }
 
-            for (var i = 0; i < Size; i++)
+            for (var i = MinimumValue; i < MaximumValue; i++)
             {
-                var perpendicularIndex = Enumerable.Range(0, Size).ToArray();
+                var perpendicularIndexes = Enumerable.Range(0, Size).ToArray();
                 var rowOrColumnIdx = new[] {i};
 
                 {
-                    var vector = new IntVarVector(GetGroup(rowOrColumnIdx, perpendicularIndex).ToList()).TrackClrObject(this);
+                    var vector = new IntVarVector(GetGroup(rowOrColumnIdx, perpendicularIndexes).ToList()).TrackClrObject(this);
                     var c = s.MakeAllDifferent(vector).TrackClrObject(this);
                     s.Add(c);
                     yield return c;
                 }
 
                 {
-                    var vector = new IntVarVector(GetGroup(perpendicularIndex, rowOrColumnIdx).ToList()).TrackClrObject(this);
+                    var vector = new IntVarVector(GetGroup(perpendicularIndexes, rowOrColumnIdx).ToList()).TrackClrObject(this);
                     var c = s.MakeAllDifferent(vector).TrackClrObject(this);
                     s.Add(c);
                     yield return c;
                 }
             }
 
-            for (var i = 0; i < Div; i++)
+            for (var i = MinimumValue; i < BlockSize; i++)
             {
-                var rowIdx = Enumerable.Range(i * Div, Div).ToArray();
+                var rowIdx = Enumerable.Range(i * BlockSize, BlockSize).ToArray();
 
-                for (var j = 0; j < Div; j++)
+                for (var j = MinimumValue; j < BlockSize; j++)
                 {
-                    var columnIdx = Enumerable.Range(j * Div, Div).ToArray();
-                    var vector = new IntVarVector(GetGroup(rowIdx, columnIdx).ToList()).TrackClrObject(this);
+                    var columnIndexes = Enumerable.Range(j * BlockSize, BlockSize).ToArray();
+                    var vector = new IntVarVector(GetGroup(rowIdx, columnIndexes).ToList()).TrackClrObject(this);
                     var c = s.MakeAllDifferent(vector).TrackClrObject(this);
                     s.Add(c);
                     yield return c;
