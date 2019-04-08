@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Kingdom.OrTools.Sudoku
 {
+    using static String;
+
     internal static class Domain
     {
         // ReSharper disable once UnusedMember.Local
@@ -25,22 +28,14 @@ namespace Kingdom.OrTools.Sudoku
         {
             get
             {
-                string AggregateLines(params string[] lines) => lines.Aggregate(string.Empty, (g, x) => g + x);
-
                 IEnumerable<string> GetAll()
                 {
                     // Little bit different, more concise representation of the problem.
-                    yield return AggregateLines(
-                        "905060340",
-                        "028000591",
-                        "000009600",
-                        "097630104",
-                        "000974000",
-                        "406028950",
-                        "009500000",
-                        "562000480",
-                        "083090205"
-                    );
+                    yield return Join(Empty, GetRange(
+                        "905060340", "028000591", "000009600"
+                        , "097630104", "000974000", "406028950"
+                        , "009500000", "562000480", "083090205"
+                    ));
                 }
 
                 return _stringProblems ?? (_stringProblems = GetAll().ToArray());
