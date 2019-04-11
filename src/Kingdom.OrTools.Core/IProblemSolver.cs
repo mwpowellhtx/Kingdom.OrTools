@@ -26,7 +26,9 @@ namespace Kingdom.OrTools
         event EventHandler<EventArgs> Resolving;
 
         /// <summary>
-        /// Occurs when the Solver has completely Resolved.
+        /// Occurs when the Solver has completely Resolved. Note that Resolved does
+        /// not necessarily mean Solved. Only that the Problem Solver has completed
+        /// the resolution procedure.
         /// </summary>
         event EventHandler<EventArgs> Resolved;
     }
@@ -35,13 +37,21 @@ namespace Kingdom.OrTools
     /// Intermediate interface for search agent purposes.
     /// </summary>
     /// <typeparam name="TSolver"></typeparam>
+    /// <typeparam name="TSource"></typeparam>
     /// <inheritdoc />
-    public interface IProblemSolver<out TSolver> : IProblemSolver
+    public interface IProblemSolver<out TSolver, out TSource> : IProblemSolver
+        where TSolver : class
+        where TSource : class
     {
         /// <summary>
         /// Gets the Solver corresponding to the Problem Solver.
         /// </summary>
         TSolver Solver { get; }
+
+        /// <summary>
+        /// Gets the Source corresponding to the Problem Solver.
+        /// </summary>
+        TSource Source { get; }
     }
 
     /// <summary>
@@ -53,7 +63,7 @@ namespace Kingdom.OrTools
     /// <typeparam name="TConstraint"></typeparam>
     /// <typeparam name="TAspect"></typeparam>
     /// <inheritdoc />
-    public interface IProblemSolver<out TSolver, TSource, TVariable, TConstraint, TAspect> : IProblemSolver<TSolver>
+    public interface IProblemSolver<out TSolver, out TSource, TVariable, TConstraint, TAspect> : IProblemSolver<TSolver, TSource>
         where TSolver : class
         where TSource : class
         where TVariable : class
