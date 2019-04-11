@@ -6,7 +6,7 @@
     /// Provides a problem solving interface for adaptation.
     /// </summary>
     /// <inheritdoc />
-    public interface IOrProblemSolver : IProblemSolver<Solver>
+    public interface IOrProblemSolver : IProblemSolver<Solver, Solver>
     {
     }
 

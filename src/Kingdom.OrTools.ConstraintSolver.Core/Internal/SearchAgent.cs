@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Google.OrTools.ConstraintSolver;
 
 namespace Kingdom.OrTools.ConstraintSolver
 {
-    using Google.OrTools.ConstraintSolver;
+    using ISolverProblemSolver = IProblemSolver<Solver, Solver>;
 
-    /// <summary>
-    /// Search agent for purposes of facilitating search through the configured <see cref="Solver"/>.
-    /// </summary>
+    /// <inheritdoc />
     internal class SearchAgent : ISearchAgent
     {
-        private readonly IProblemSolver<Solver> _problemSolver;
+        private readonly ISolverProblemSolver _problemSolver;
 
         /// <summary>
         /// Gets the Host.
@@ -19,15 +18,11 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// <see cref="_problemSolver"/>
         private IClrObjectHost Host => _problemSolver;
 
-        /// <summary>
-        /// Gets the Solver.
-        /// </summary>
-        /// <see cref="IProblemSolver{Solver}"/>
+        /// <inheritdoc />
+        /// <see cref="ISolverProblemSolver"/>
         public Solver Solver => _problemSolver?.Solver;
 
-        /// <summary>
-        /// Predicated event.
-        /// </summary>
+        /// <inheritdoc />
         public event EventHandler<SearchAgentPredicateEventArgs> Predicated;
 
         private SearchAgentPredicateEventArgs OnPredicated()
@@ -85,7 +80,7 @@ namespace Kingdom.OrTools.ConstraintSolver
         /// </summary>
         /// <param name="problemSolver"></param>
         /// <param name="variables"></param>
-        public SearchAgent(IProblemSolver<Solver> problemSolver, params IntVar[] variables)
+        public SearchAgent(ISolverProblemSolver problemSolver, params IntVar[] variables)
         {
             _problemSolver = problemSolver;
 
@@ -109,9 +104,7 @@ namespace Kingdom.OrTools.ConstraintSolver
         {
             var m = createMonitor(this).TrackClrObject(Host);
 
-            var sc = m as SolutionCollector;
-
-            if (sc != null)
+            if (m is SolutionCollector sc)
             {
                 Collector = sc;
             }
@@ -121,25 +114,13 @@ namespace Kingdom.OrTools.ConstraintSolver
             return this;
         }
 
-        /// <summary>
-        /// Returns whether the Search Agent Has Monitor of type <see cref="SearchMonitor"/>.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool HasMonitor<T>() where T : SearchMonitor => Monitors.OfType<T>().Any();
 
-        /// <summary>
-        /// Returns whether the Search Agent Has Monitor of type <see cref="SolutionCollector"/>.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <inheritdoc />
         public bool HasSolutionCollector<T>() where T : SolutionCollector => HasMonitor<T>();
 
-        /// <summary>
-        /// Prepares a <see cref="DecisionBuilder"/> given the <paramref name="factory"/>.
-        /// </summary>
-        /// <param name="factory"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public ISearchAgent NewSearch(Func<ISearchAgent, DecisionBuilder> factory)
         {
             // ReSharper disable once InvertIf
@@ -215,9 +196,7 @@ namespace Kingdom.OrTools.ConstraintSolver
             TearDown();
         }
 
-        /// <summary>
-        /// Disposes the object.
-        /// </summary>
+        /// <inheritdoc />
         public void Dispose()
         {
             Dispose(true);

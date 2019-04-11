@@ -9,14 +9,16 @@ namespace Kingdom.OrTools.ConstraintSolver
     using static IntValueStrategy;
 
     // TODO: TBD: consider a fluent configuration-based approach...
-
     /// <summary>
     /// or-tools-based Constraint Programming problem solver.
     /// </summary>
-    /// <inheritdoc cref="ProblemSolverBase{TSolver,TVariable}"/>
+    /// <inheritdoc cref="ProblemSolverBase{TSolver,TSource,TVariable,TConstraint}"/>
     /// <see cref="!:http://code.google.com/p/or-tools/"/>
-    public abstract class OrProblemSolverBase : ProblemSolverBase<Solver, IntVar>, IOrProblemSolver
+    public abstract class OrProblemSolverBase : ProblemSolverBase<Solver, Solver, IntVar, Constraint>, IOrProblemSolver
     {
+        /// <inheritdoc />
+        public override Solver Source => Solver;
+
         private readonly Lazy<ProblemSolverImplementation> _lazyImplementation;
 
         private ProblemSolverImplementation Implementation => _lazyImplementation.Value;
@@ -43,17 +45,7 @@ namespace Kingdom.OrTools.ConstraintSolver
         /* TODO: TBD: otherwise "free-standing" calls like PrepareVariables PrepareConstraints or
          * even ReSeed might be better exposed via an exposed fluent configuration... */
 
-        /// <summary>
-        /// Prepares the solver constraints. No need to add the Constraints to the
-        /// <paramref name="solver"/>. Just prepare and return them. The parent class will handle
-        /// the responsibility of adding them to the <paramref name="solver"/>.
-        /// </summary>
-        /// <param name="solver"></param>
-        /// <returns></returns>
-        protected abstract IEnumerable<Constraint> PrepareConstraints(Solver solver);
-
         // TODO: TBD: PrepareSearchMonitors is perhaps closer to a fluent style...
-
         /// <summary>
         /// Override to prepare the <see cref="SearchMonitor"/> or monitors for the
         /// <paramref name="agent"/> and corresponding <see cref="Solver"/>. If called, the base
@@ -129,9 +121,18 @@ namespace Kingdom.OrTools.ConstraintSolver
 
         /// <summary>
         /// Gets the <see cref="OptimizeVar"/> instances from the
-        /// <see cref="ProblemSolverBase{TSolver,TVariable}.ClrCreatedObjects"/>.
+        /// <see cref="ProblemSolverBase{TSolver,TSource,TVariable,TConstraint}.ClrCreatedObjects"/>.
         /// </summary>
         protected IEnumerable<OptimizeVar> Optimizations => ClrCreatedObjects.OfType<OptimizeVar>().ToArray();
+
+        /// <summary>
+        /// Prepares the solver constraints. No need to add the Constraints to the
+        /// <paramref name="source"/>. Just prepare and return them. The parent class will handle
+        /// the responsibility of adding them to the <paramref name="source"/>.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        protected abstract IEnumerable<Constraint> PrepareConstraints(Solver source);
 
         /// <inheritdoc />
         public override bool TryResolve()
@@ -141,18 +142,19 @@ namespace Kingdom.OrTools.ConstraintSolver
                 using (Solver = new Solver(ModelName))
                 {
                     // Capture the Solver instance for local usage.
-                    var s = Solver;
+                    var solver = Solver;
+                    var source = Source;
 
-                    ReSeed(s);
+                    ReSeed(solver);
 
                     /* Capture the Variables and Constraints. At the same time, Track them as CLR objects,
                      * and Add the Constraints to the Solver. */
 
                     var variables = Variables.ToArray();
 
-                    foreach (var c in PrepareConstraints(s).ToArray())
+                    foreach (var c in PrepareConstraints(source).ToArray())
                     {
-                        s.Add(c.TrackClrObject(this));
+                        solver.Add(c.TrackClrObject(this));
                     }
 
                     var e = EventArgs.Empty;
@@ -196,7 +198,7 @@ namespace Kingdom.OrTools.ConstraintSolver
     /// <typeparamref name="TAspect"/> based Operational Research problem solver.
     /// </summary>
     /// <typeparam name="TAspect"></typeparam>
-    /// <inheritdoc cref="ProblemSolverBase{TSolver,TVariable}"/>
+    /// <inheritdoc cref="ProblemSolverBase{TSolver,TSource,TVariable,TConstraint}"/>
     public abstract class OrProblemSolverBase<TAspect>
         : ProblemSolverBase<Solver, Solver, IntVar, Constraint, TAspect>
             , IOrProblemSolver<TAspect>
@@ -204,14 +206,22 @@ namespace Kingdom.OrTools.ConstraintSolver
     {
         /// <inheritdoc />
         /// <remarks>In this case, Source is the Solver.</remarks>
-        /// <see cref="ProblemSolverBase{TSolver,TVariable}.Solver"/>
-        protected override Solver Source => Solver;
+        /// <see cref="ProblemSolverBase{TSolver,TSolver,TVariable,TConstraint}.Solver"/>
+        public override Solver Source => Solver;
 
         /// <inheritdoc />
         protected OrProblemSolverBase(string modelName, IEnumerable<TAspect> aspects)
             : base(modelName, aspects)
         {
         }
+
+        /// <summary>
+        /// Override in order to Prepare the set of <paramref name="source"/>
+        /// <see cref="Constraint"/> instances.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        protected abstract IEnumerable<Constraint> PrepareConstraints(Solver source);
 
         /// <summary>
         /// Returns a random seed.
