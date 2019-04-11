@@ -74,5 +74,15 @@ namespace Kingdom.OrTools.Samples.Sudoku
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode() => 3 * Row ^ 5 * Column;
+
+        /// <summary>
+        /// Implicitly converts the <paramref name="address"/> to a <see cref="Row"/> major
+        /// <see cref="Tuple{T1,T2}"/>. Literally, <see cref="Tuple{T1,T2}.Item1"/> will be
+        /// <see cref="Row"/>, <see cref="Tuple{T1,T2}.Item2"/> will be <see cref="Column"/>.
+        /// </summary>
+        /// <param name="address"></param>
+        /// <remarks>Sadly, we cannot set the Tuple Item properties, or it would make better
+        /// sense to simple derive directly from Tuple itself.</remarks>
+        public static implicit operator Tuple<int, int>(Address address) => Tuple.Create(address.Row, address.Column);
     }
 }
