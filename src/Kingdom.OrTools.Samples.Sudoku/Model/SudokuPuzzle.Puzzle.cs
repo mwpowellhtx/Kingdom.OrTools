@@ -12,10 +12,10 @@ namespace Kingdom.OrTools.Samples.Sudoku
     public partial class SudokuPuzzle : ISudokuPuzzle
     {
         /// <summary>
-        /// <see cref="MaximumValue"/>
+        /// <see cref="BlockSize"/> squared.
         /// </summary>
-        /// <see cref="MaximumValue"/>
-        internal const int Size = MaximumValue;
+        /// <see cref="BlockSize"/>
+        internal const int Size = BlockSize * BlockSize;
 
         /// <summary>
         /// Returns whether IsSolved.
