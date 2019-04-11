@@ -23,9 +23,10 @@ namespace Kingdom.OrTools.LinearSolver
     /// </summary>
     /// <typeparam name="TProblemSolver"></typeparam>
     /// <typeparam name="TSolution"></typeparam>
-    /// <inheritdoc cref="ProblemSolverBase{Solver,Variable}"/>
+    /// <inheritdoc cref="ProblemSolverBase{TSolver,TSource,TVariable,TConstraint}"/>
     public abstract class OrLinearProblemSolverBase<TProblemSolver, TSolution>
-        : ProblemSolverBase<Solver, Variable>, IOrLinearProblemSolver<TProblemSolver>
+        : ProblemSolverBase<Solver, Solver, Variable, Constraint>
+            , IOrLinearProblemSolver<TProblemSolver>
         where TProblemSolver : OrLinearProblemSolverBase<TProblemSolver, TSolution>
     {
         // ReSharper disable once UnusedMember.Global
@@ -273,7 +274,7 @@ namespace Kingdom.OrTools.LinearSolver
 
         /// <summary>
         /// Try to Resolve the <see cref="Solver"/> given
-        /// <see cref="ProblemSolverBase{TSolver,TVariable}.ModelName"/> and
+        /// <see cref="ProblemSolverBase{TSolver,TSource,TVariable,TConstraint}.ModelName"/> and
         /// <see cref="ProblemType"/>.
         /// </summary>
         /// <returns></returns>
@@ -287,8 +288,8 @@ namespace Kingdom.OrTools.LinearSolver
                 var solver = Solver;
 
                 // TODO: TBD: consider what sort of Linear Search Agent, fluent configuration, could be done here...
-
                 // TODO: TBD: do anything further with the variables here?
+                // ReSharper disable once UnusedVariable
                 var variables = Variables.Select(x => x.TrackClrObject(this)).ToArray();
 
                 PrepareConstraints(solver);
