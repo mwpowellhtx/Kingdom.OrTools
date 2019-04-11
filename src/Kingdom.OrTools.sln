@@ -45,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Csp.Problem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Samples.Sudoku", "Kingdom.OrTools.Samples.Sudoku\Kingdom.OrTools.Samples.Sudoku.csproj", "{6BDE13EE-BCF6-4460-A08C-ED9793587FE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.Sat.Samples.Tests", "Kingdom.OrTools.Sat.Samples.Tests\Kingdom.OrTools.Sat.Samples.Tests.csproj", "{28FC7B3E-A191-4040-86B3-B02C5AEFC77D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -98,6 +100,10 @@ Global
 		{6BDE13EE-BCF6-4460-A08C-ED9793587FE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BDE13EE-BCF6-4460-A08C-ED9793587FE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BDE13EE-BCF6-4460-A08C-ED9793587FE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28FC7B3E-A191-4040-86B3-B02C5AEFC77D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28FC7B3E-A191-4040-86B3-B02C5AEFC77D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28FC7B3E-A191-4040-86B3-B02C5AEFC77D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28FC7B3E-A191-4040-86B3-B02C5AEFC77D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +122,7 @@ Global
 		{0D3D4738-5912-4392-9689-8C17BFEB6AA7} = {327DE516-77D1-42D4-8DCE-484E40AD3885}
 		{C958F26C-FA8C-4464-952F-69D9197644DD} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
 		{6BDE13EE-BCF6-4460-A08C-ED9793587FE6} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
+		{28FC7B3E-A191-4040-86B3-B02C5AEFC77D} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7966AFF7-6884-4957-984E-1CC9AFE4FDF2}
