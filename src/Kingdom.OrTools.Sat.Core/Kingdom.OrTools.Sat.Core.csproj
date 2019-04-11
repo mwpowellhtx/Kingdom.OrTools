@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>Provides a convenient, easy to use wrapper for Constraint Satisfaction Programming based on the Google OR-tools.</Description>
+    <PackageTags>Google; Operations; Research; Tools; wrapper; dispose; disposable; CLR; object; host; constraint; satisfaction; problem; solver; CP; CSP; variable; variables; int; integer; bool; boolean; solution</PackageTags>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Kingdom.OrTools.Sat</RootNamespace>
+    <Version>1.0.0.29307</Version>
+    <AssemblyVersion>1.0.0.29307</AssemblyVersion>
+    <FileVersion>1.0.0.29307</FileVersion>
+    <PackageVersion>1.0.0.29307</PackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+    <DocumentationFile>bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.Sat.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- ReSharper disable once UnknownProperty -->
+    <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kingdom.OrTools.Core\Kingdom.OrTools.Core.csproj" />
+    <!-- TODO: TBD: anticipating future code generation aspects... -->
+    <!-- <ProjectReference Include="..\Kingdom.OrTools.Sat.CodeGeneration.Attributes\Kingdom.OrTools.Sat.CodeGeneration.Attributes.csproj" /> -->
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="if exist &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot; del /f &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot;" />
+  </Target>
+
+</Project>
