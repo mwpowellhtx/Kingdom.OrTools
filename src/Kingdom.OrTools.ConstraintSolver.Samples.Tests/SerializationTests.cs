@@ -1,10 +1,9 @@
-﻿using System;
+﻿//using System;
 
 namespace Kingdom.OrTools.ConstraintSolver.Samples
 {
-    using Google.OrTools.ConstraintSolver;
-    using OrTools.Samples;
-    using Xunit;
+    //using Google.OrTools.ConstraintSolver;
+    //using Xunit;
 
     /// <summary>
     /// 

@@ -23,15 +23,13 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
 
         public override IEnumerable<IntVar> GetVariables(Solver source)
         {
-            var s = source;
-
             Cells = new IntVar[Size, Size];
 
-            for (var i = MinimumValue; i < MaximumValue; i++)
+            for (var row = MinimumValue; row < MaximumValue; row++)
             {
-                for (var j = MinimumValue; j < MaximumValue; j++)
+                for (var col = MinimumValue; col < MaximumValue; col++)
                 {
-                    Cells[i, j] = s.MakeIntVar(MinimumValue + 1, MaximumValue, $"[{i},{j}]");
+                    Cells[row, col] = source.MakeIntVar(MinimumValue + 1, MaximumValue, $"[{row},{col}]");
                 }
             }
 
@@ -42,51 +40,40 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         }
 
         private IEnumerable<IntVar> GetGroup(IEnumerable<int> rows, IEnumerable<int> columns)
-        {
-            return from i in rows from j in columns select Cells[i, j];
-        }
+            => from row in rows from col in columns select Cells[row, col];
 
         public override IEnumerable<Constraint> GetConstraints(Solver source)
         {
-            var s = source;
-
-            foreach (var cell in Cells.Flatten())
-            {
-                var c = s.MakeBetweenCt(cell, MinimumValue + 1, MaximumValue);
-                s.Add(c);
-                yield return c;
-            }
-
             for (var i = MinimumValue; i < MaximumValue; i++)
             {
                 var perpendicularIndexes = Enumerable.Range(0, Size).ToArray();
-                var rowOrColumnIdx = new[] {i};
+                var rowOrColumnIndexes = new[] {i};
 
                 {
-                    var vector = new IntVarVector(GetGroup(rowOrColumnIdx, perpendicularIndexes).ToList()).TrackClrObject(this);
-                    var c = s.MakeAllDifferent(vector).TrackClrObject(this);
-                    s.Add(c);
+                    var vector = new IntVarVector(GetGroup(rowOrColumnIndexes, perpendicularIndexes).ToList()).TrackClrObject(this);
+                    var c = source.MakeAllDifferent(vector).TrackClrObject(this);
+                    source.Add(c);
                     yield return c;
                 }
 
                 {
-                    var vector = new IntVarVector(GetGroup(perpendicularIndexes, rowOrColumnIdx).ToList()).TrackClrObject(this);
-                    var c = s.MakeAllDifferent(vector).TrackClrObject(this);
-                    s.Add(c);
+                    var vector = new IntVarVector(GetGroup(perpendicularIndexes, rowOrColumnIndexes).ToList()).TrackClrObject(this);
+                    var c = source.MakeAllDifferent(vector).TrackClrObject(this);
+                    source.Add(c);
                     yield return c;
                 }
             }
 
             for (var i = MinimumValue; i < BlockSize; i++)
             {
-                var rowIdx = Enumerable.Range(i * BlockSize, BlockSize).ToArray();
+                var rowIndexes = Enumerable.Range(i * BlockSize, BlockSize).ToArray();
 
                 for (var j = MinimumValue; j < BlockSize; j++)
                 {
                     var columnIndexes = Enumerable.Range(j * BlockSize, BlockSize).ToArray();
-                    var vector = new IntVarVector(GetGroup(rowIdx, columnIndexes).ToList()).TrackClrObject(this);
-                    var c = s.MakeAllDifferent(vector).TrackClrObject(this);
-                    s.Add(c);
+                    var vector = new IntVarVector(GetGroup(rowIndexes, columnIndexes).ToList()).TrackClrObject(this);
+                    var c = source.MakeAllDifferent(vector).TrackClrObject(this);
+                    source.Add(c);
                     yield return c;
                 }
             }

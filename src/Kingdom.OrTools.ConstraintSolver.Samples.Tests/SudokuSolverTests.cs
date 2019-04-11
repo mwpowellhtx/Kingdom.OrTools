@@ -3,7 +3,6 @@
 namespace Kingdom.OrTools.ConstraintSolver.Samples
 {
     using Kingdom.OrTools.Samples.Sudoku;
-    using OrTools.Samples;
     using Sudoku;
     using Xunit;
     using Xunit.Abstractions;

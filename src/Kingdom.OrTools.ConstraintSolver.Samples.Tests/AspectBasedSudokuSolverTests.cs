@@ -1,6 +1,5 @@
 namespace Kingdom.OrTools.ConstraintSolver.Samples
 {
-    using OrTools.Samples;
     using Sudoku;
     using Xunit;
     using Xunit.Abstractions;
@@ -13,10 +12,10 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples
         }
 
         /// <summary>
-        /// Verifies that the aspect yields a solution.
+        /// Verifies that the Aspect based Problem Solving Yields a Solution.
         /// </summary>
         [Fact]
-        public void Verify_that_aspect_yields_solution()
+        public void Aspect_Based_Problem_Solving_Should_Yield_Solution()
         {
             using (var ps = new AspectBasedSudokuProblemSolver("Sudoku Problem Solver"))
             {

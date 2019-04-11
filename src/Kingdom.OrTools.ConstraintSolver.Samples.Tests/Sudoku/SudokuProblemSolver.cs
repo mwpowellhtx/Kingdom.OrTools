@@ -37,14 +37,15 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         }
 
         /// <summary>
-        /// Returns a made cell variable.
+        /// Returns a Made <see cref="_cells"/> <see cref="IntVar"/>.
         /// </summary>
-        /// <param name="solver"></param>
+        /// <param name="source">In this case Source happens to also be <see cref="Solver"/>.
+        /// However, moving forward, we are not guaranteed of this.</param>
         /// <param name="row"></param>
         /// <param name="column"></param>
         /// <returns></returns>
-        public IntVar MakeCell(Solver solver, int row, int column) => solver.MakeIntVar(
-            MinimumValue, Size, $@"SudokuPuzzle[{row}, {column}]"
+        public IntVar MakeCell(Solver source, int row, int column) => source.MakeIntVar(
+            MinimumValue, MaximumValue, $@"SudokuPuzzle[{row}, {column}]"
         );
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         {
             get
             {
-                var solver = Solver;
+                var source = Source;
 
                 IEnumerable<IntVar> GetAll()
                     => from cell in ((SudokuPuzzle) Puzzle).OrderBy(c => c.Key.Row).ThenBy(c => c.Key.Column)
@@ -67,7 +68,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
                         into key
                         let i = key.Row
                         let j = key.Column
-                        select _cells[i, j] = MakeCell(solver, i, j).TrackClrObject(this);
+                        select _cells[i, j] = MakeCell(source, i, j).TrackClrObject(this);
 
                 return _variables ?? (_variables = GetAll().ToArray());
             }
@@ -116,7 +117,9 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// <inheritdoc />
         protected override IEnumerable<Constraint> PrepareConstraints(Solver solver)
         {
-            foreach (var cell in (SudokuPuzzle) Puzzle)
+            var p = Puzzle;
+
+            foreach (var cell in (SudokuPuzzle) p)
             {
                 var key = cell.Key;
                 var row = key.Row;
@@ -127,8 +130,6 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
                     yield return c;
                 }
             }
-
-            var p = Puzzle;
 
             foreach (var c in MakeAllDifferentConstraints(solver, p.Rows.Concat(p.Columns).Concat(p.Blocks)))
             {

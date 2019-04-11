@@ -22,6 +22,12 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         {
         }
 
+        protected override IEnumerable<Constraint> PrepareConstraints(Solver source)
+        {
+            // TODO: TBD: do we need to implement anything here?
+            yield break;
+        }
+
         /// <summary>
         /// Gets the Solution.
         /// </summary>
@@ -51,8 +57,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
         /// <inheritdoc />
         protected override void OnProcessVariables(object sender, ProcessVariablesEventArgs e)
         {
-            var candidate = new SudokuPuzzle();
-            ISudokuPuzzle local = candidate;
+            ISudokuPuzzle candidate = new SudokuPuzzle();
 
             // In this case we know that there is a Single Aspect.
             var aspect = Aspects.SingleOrDefault();
@@ -63,7 +68,7 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
                 for (var col = MinimumValue; col < MaximumValue; col++)
                 {
                     // ReSharper disable once PossibleNullReferenceException
-                    local[row, col] = (int) aspect.Cells[row, col].Value();
+                    candidate[row, col] = (int) aspect.Cells[row, col].Value();
                 }
             }
 
@@ -71,15 +76,13 @@ namespace Kingdom.OrTools.ConstraintSolver.Samples.Sudoku
              * solution. However, in the event we still do not have a solution, then simply return. */
 
             // TODO: TBD: we really should never land here I don't think...
-            if (!local.IsSolved)
+            if (candidate.IsSolved)
             {
-                return;
+                Solution = candidate;
+
+                // False is the default, so only mark whether ShouldBreak when we have one.
+                e.ShouldBreak = true;
             }
-
-            Solution = local;
-
-            // False is the default, so only mark whether ShouldBreak when we have one.
-            e.ShouldBreak = true;
 
             base.OnProcessVariables(sender, e);
         }
