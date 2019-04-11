@@ -29,11 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{5E
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Core", "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Core\Kingdom.OrTools.LinearSolver.Samples.Feasibility.Core.csproj", "{B055EC6C-994A-48F5-B41B-1473775FE5F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility", "Kingdom.OrTools.LinearSolver.Samples.Feasibility\Kingdom.OrTools.LinearSolver.Samples.Feasibility.csproj", "{B055EC6C-994A-48F5-B41B-1473775FE5F4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.ConstraintSolver.Sample.Fixturing.Tests.Core", "Kingdom.OrTools.ConstraintSolver.Sample.Fixturing.Tests.Core\Kingdom.OrTools.ConstraintSolver.Sample.Fixturing.Tests.Core.csproj", "{F826380B-0DE1-49D3-9AF0-BC7A8A5BE38B}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests.Core", "Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests.Core\Kingdom.OrTools.LinearSolver.Samples.Feasibility.Tests.Core.csproj", "{1201CAB7-7431-42F7-98D7-F643F8853796}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.ConstraintSolver.Core", "Kingdom.OrTools.ConstraintSolver.Core\Kingdom.OrTools.ConstraintSolver.Core.csproj", "{EFA736E9-3727-42BB-8788-BC0DC822C883}"
 EndProject
@@ -75,10 +73,6 @@ Global
 		{F826380B-0DE1-49D3-9AF0-BC7A8A5BE38B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F826380B-0DE1-49D3-9AF0-BC7A8A5BE38B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F826380B-0DE1-49D3-9AF0-BC7A8A5BE38B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1201CAB7-7431-42F7-98D7-F643F8853796}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1201CAB7-7431-42F7-98D7-F643F8853796}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1201CAB7-7431-42F7-98D7-F643F8853796}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1201CAB7-7431-42F7-98D7-F643F8853796}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EFA736E9-3727-42BB-8788-BC0DC822C883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EFA736E9-3727-42BB-8788-BC0DC822C883}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFA736E9-3727-42BB-8788-BC0DC822C883}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -111,7 +105,6 @@ Global
 		{0A214042-80B3-4F12-93BA-084A22A3139F} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
 		{B055EC6C-994A-48F5-B41B-1473775FE5F4} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
 		{F826380B-0DE1-49D3-9AF0-BC7A8A5BE38B} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
-		{1201CAB7-7431-42F7-98D7-F643F8853796} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
 		{EFA736E9-3727-42BB-8788-BC0DC822C883} = {327DE516-77D1-42D4-8DCE-484E40AD3885}
 		{0D3D4738-5912-4392-9689-8C17BFEB6AA7} = {327DE516-77D1-42D4-8DCE-484E40AD3885}
 		{C958F26C-FA8C-4464-952F-69D9197644DD} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
