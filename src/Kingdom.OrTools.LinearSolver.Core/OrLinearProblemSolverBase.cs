@@ -29,6 +29,9 @@ namespace Kingdom.OrTools.LinearSolver
             , IOrLinearProblemSolver<TProblemSolver>
         where TProblemSolver : OrLinearProblemSolverBase<TProblemSolver, TSolution>
     {
+        /// <inheritdoc />
+        public override Solver Source => Solver;
+
         // ReSharper disable once UnusedMember.Global
         /// <summary>
         /// <see cref="double.NegativeInfinity"/>
