@@ -2,6 +2,10 @@
 
 setlocal
 
+rem Bypass everything.
+echo Obsolete, use publish.cmd instead.
+goto :end
+
 rem TODO: TBD: borrowing the approach adopted for my Kingdom.Collections suite.
 
 :set_vars
