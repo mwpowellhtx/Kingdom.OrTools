@@ -10,10 +10,10 @@
     <Description>Provides a convenient, easy to use wrapper for Linear Programming based on the Google OR-tools.</Description>
     <PackageTags>Google; Operations; Research; Tools; wrapper; dispose; disposable; CLR; object; host; linear; satisfaction; problem; solver; LP; LSP; variable; variables; int; integer; bool; boolean; solution</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.2.0.8065</Version>
-    <AssemblyVersion>1.2.0.8065</AssemblyVersion>
-    <FileVersion>1.2.0.8065</FileVersion>
-    <PackageVersion>1.2.0.8065</PackageVersion>
+    <Version>1.2.1.4368</Version>
+    <AssemblyVersion>1.2.1.4368</AssemblyVersion>
+    <FileVersion>1.2.1.4368</FileVersion>
+    <PackageVersion>1.2.1.4368</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>

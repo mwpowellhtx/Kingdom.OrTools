@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>3.0.1.8429</Version>
-    <AssemblyVersion>3.0.1.8429</AssemblyVersion>
-    <FileVersion>3.0.1.8429</FileVersion>
+    <Version>3.0.1.8446</Version>
+    <AssemblyVersion>3.0.1.8446</AssemblyVersion>
+    <FileVersion>3.0.1.8446</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup>
