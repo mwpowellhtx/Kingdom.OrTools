@@ -5,6 +5,11 @@
     <Company>Kingdom Software</Company>
     <Product>Kingdom.OrTools</Product>
     <Copyright>Copyright (c) 2015-2019</Copyright>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+    <WarningLevel>2</WarningLevel>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -17,6 +22,7 @@
     <GoogleOrToolsVersion>7.0.6546</GoogleOrToolsVersion>
     <GoogleProtobufVersion>3.7.0</GoogleProtobufVersion>
     <CodeGenerationRoslynVersion>0.5.13</CodeGenerationRoslynVersion>
+    <MicrosoftCodeAnalysisCSharp>2.10.0</MicrosoftCodeAnalysisCSharp>
   </PropertyGroup>
 
   <ItemGroup>
