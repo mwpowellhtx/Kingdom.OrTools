@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>Provides the basis for a first class experience specifying SAT-CP solver parameters.</Description>
+    <PackageTags>Google; Operations; Research; Tools; SAT; CP; CSP; constraint; satisfaction; problem; solver; parameter; parameters; Variant; IVariant</PackageTags>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
+    <Version>1.0.0.3</Version>
+    <AssemblyVersion>1.0.0.3</AssemblyVersion>
+    <FileVersion>1.0.0.3</FileVersion>
+    <PackageVersion>1.0.0.3</PackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+    <DocumentationFile>bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.Sat.Parameters.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Kingdom.OrTools.Sat.Parameters.Core.csproj.DotSettings" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Kingdom.Collections.Variants" Version="1.1.0.26740" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Implementation\Parameter.*.cs">
+      <DependentUpon>Parameter.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Interfaces\IParameter.*.cs">
+      <DependentUpon>IParameter.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Kingdom.OrTools.Sat.Core</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+</Project>
