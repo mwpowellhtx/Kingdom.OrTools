@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Kingdom.OrTools.Sat.CodeGeneration</RootNamespace>
+    <Version>1.0.0.16691</Version>
+    <AssemblyVersion>1.0.0.16691</AssemblyVersion>
+    <FileVersion>1.0.0.16691</FileVersion>
+    <PackageVersion>1.0.0.16691</PackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="#sat_parameters.proto" />
+    <None Remove="sat_parameters.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Kingdom.Protobuf.Antlr" Version="1.0.12.22961" />
+    <!-- ReSharper disable once UnknownProperty -->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharp)" />
+    <!-- ReSharper disable once UnknownProperty -->
+    <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" PrivateAssets="all" />
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="&quot;$(ProjectDir)extract_google_ortools_proto.bat&quot;" />
+  </Target>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Kingdom.OrTools.Sat.CodeGeneration.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="extract_google_ortools_proto.bat">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\tools\Google\or-tools\sat\sat_parameters.proto" Link="Resources\sat_parameters.proto" />
+  </ItemGroup>
+
+</Project>
