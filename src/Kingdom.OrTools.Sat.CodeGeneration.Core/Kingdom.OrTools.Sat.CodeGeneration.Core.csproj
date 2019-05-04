@@ -3,10 +3,10 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Kingdom.OrTools.Sat.CodeGeneration</RootNamespace>
-    <Version>1.0.0.16691</Version>
-    <AssemblyVersion>1.0.0.16691</AssemblyVersion>
-    <FileVersion>1.0.0.16691</FileVersion>
-    <PackageVersion>1.0.0.16691</PackageVersion>
+    <Version>1.0.0.16705</Version>
+    <AssemblyVersion>1.0.0.16705</AssemblyVersion>
+    <FileVersion>1.0.0.16705</FileVersion>
+    <PackageVersion>1.0.0.16705</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
