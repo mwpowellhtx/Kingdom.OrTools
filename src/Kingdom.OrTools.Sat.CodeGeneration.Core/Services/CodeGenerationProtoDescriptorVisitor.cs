@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Kingdom.Collections.Variants;
 
 namespace Kingdom.OrTools.Sat.CodeGeneration
 {
+    using Collections.Variants;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Protobuf;
-    using static Protobuf.LabelKind;
 
     /*
      CompilationUnit()
@@ -262,46 +261,81 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
         protected override void EnterNormalFieldStatement(NormalFieldStatement statement)
         {
-            void PushBack()
-            {
-                switch (statement.FieldType)
-                {
-                    case IVariant<ProtoType> _:
-                        Stack.PushBack(
-                            ProtoTypeParameterClassDeclarationCodeGenerationStrategy.Create(PackageStatement, statement)
-                        );
-                        break;
-                    case IVariant<ElementTypeIdentifierPath> _:
-                        Stack.PushBack(
-                            ElementParameterClassDeclarationCodeGenerationStrategy.Create(PackageStatement, statement)
-                        );
-                        break;
-                }
-            }
+            // For shorthand throughout.
+            var x = statement;
 
-
-            switch (statement.Label)
+            /* Originally was thinking there needed to be specialized cases depending on the
+             * LabelKind, but at this point, I think it is just simpler to trap there here. */
+            switch (x.FieldType)
             {
-                case Optional:
-                    PushBack();
+                case IVariant<ProtoType> _:
+
+                    // ReSharper disable once InconsistentNaming
+                    const string default_restart_algorithms = nameof(default_restart_algorithms);
+
+                    switch (x.Name)
+                    {
+                        case Identifier identifier when identifier.Equals(default_restart_algorithms):
+                            Stack.PushBack(
+                                DefaultRestartAlgorithmsClassDeclarationCodeGenerationStrategy.Create(PackageStatement, x)
+                            );
+                            break;
+
+                        default:
+                            Stack.PushBack(
+                                ProtoTypeParameterClassDeclarationCodeGenerationStrategy.Create(PackageStatement, x)
+                            );
+                            break;
+                    }
+
                     break;
-                case Required:
-                    // TODO: TBD: IVariant<ProtoType>, IVariant<OptionIdentifierPath>, ...
-                    break;
-                default:
-                    // TODO: TBD: what to do about Repeated...
+
+                case IVariant<ElementTypeIdentifierPath> _:
+
+                    // ReSharper disable once InconsistentNaming
+                    const string restart_algorithms = nameof(restart_algorithms);
+
+                    switch (x.Name)
+                    {
+                        case Identifier identifier when identifier.Equals(restart_algorithms):
+                            Stack.PushBack(
+                                RestartAlgorithmsClassDeclarationCodeGenerationStrategy.Create(PackageStatement, x)
+                            );
+                            break;
+
+                        default:
+                            Stack.PushBack(
+                                ElementParameterClassDeclarationCodeGenerationStrategy.Create(PackageStatement, x)
+                            );
+                            break;
+                    }
+
                     break;
             }
         }
 
         protected override void ExitNormalFieldStatement(NormalFieldStatement statement)
         {
-            Stack.TryReduce((ref IDictionary<Guid, CompilationUnitSyntax> a, ProtoTypeParameterClassDeclarationCodeGenerationStrategy b) =>
-                a.Add(Guid.NewGuid(), b)
+            Guid NewGuid() => Guid.NewGuid();
+
+            Stack.TryReduce(
+                (ref IDictionary<Guid, CompilationUnitSyntax> a
+                    , ProtoTypeParameterClassDeclarationCodeGenerationStrategy b) => a.Add(NewGuid(), b)
             );
 
-            Stack.TryReduce((ref IDictionary<Guid, CompilationUnitSyntax> a, ElementParameterClassDeclarationCodeGenerationStrategy b) =>
-                a.Add(Guid.NewGuid(), b)
+            Stack.TryReduce(
+                (ref IDictionary<Guid, CompilationUnitSyntax> a
+                    , ElementParameterClassDeclarationCodeGenerationStrategy b) => a.Add(NewGuid(), b)
+            );
+
+            Stack.TryReduce(
+                (ref IDictionary<Guid, CompilationUnitSyntax> a
+                    , RestartAlgorithmsClassDeclarationCodeGenerationStrategy b) => a.Add(NewGuid(), b)
+            );
+
+            Stack.TryReduce(
+                (ref IDictionary<Guid, CompilationUnitSyntax> a
+                    , DefaultRestartAlgorithmsClassDeclarationCodeGenerationStrategy b) => a.Add(NewGuid(), b)
             );
         }
 
