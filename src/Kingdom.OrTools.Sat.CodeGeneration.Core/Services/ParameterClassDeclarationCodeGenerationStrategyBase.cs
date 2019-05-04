@@ -155,17 +155,10 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
             }
         }
 
-        private IEnumerable<ConstructorSpecification> _ctorSpecifications;
-
-        protected abstract IEnumerable<ConstructorSpecification> GetCtorSpecifications();
-
         /// <summary>
         /// Gets the <see cref="ConstructorSpecification"/> instances.
         /// </summary>
-        private IEnumerable<ConstructorSpecification> CtorSpecifications
-            => _ctorSpecifications ?? (_ctorSpecifications
-                   = GetCtorSpecifications()
-               );
+        protected abstract IEnumerable<ConstructorSpecification> CtorSpecifications { get; }
 
         private IEnumerable<MemberDeclarationSyntax> GetClassMembers(Identifier className)
         {
@@ -202,74 +195,45 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
             }
         }
 
-        private IEnumerable<SyntaxNodeOrToken> _typeArgumentSyntax;
-
-        /// <summary>
-        /// Returns the set of non-delimited <see cref="TypeSyntax"/> nodes. Override
-        /// in order to provide a different set of Strategy specific nodes.
-        /// </summary>
-        /// <returns></returns>
-        protected abstract IEnumerable<SyntaxNodeOrToken> GetTypeArgumentSyntax();
-
         /// <summary>
         /// Gets the <see cref="SyntaxNodeOrToken"/> informing the Class Generic Type Argument
         /// List.
         /// </summary>
-        private IEnumerable<SyntaxNodeOrToken> TypeArgumentSyntax
-            => _typeArgumentSyntax ?? (_typeArgumentSyntax
-                   = GetTypeArgumentSyntax().CommaSeparated()
-               );
+        protected abstract IEnumerable<SyntaxNodeOrToken> TypeArgumentSyntax { get; }
 
         protected delegate ExpressionSyntax ConvertVariantToExpression(IVariant variant);
 
         // TODO: TBD: "value" potentially to be informed by the "default" field option (if any)...
-        private ClassDeclarationSyntax GetClassDeclaration()
+        protected override IEnumerable<MemberDeclarationSyntax> NameSpaceMembers
         {
-            IEnumerable<SyntaxTrivia> GetClassDeclarationLeadingTrivia()
-                => GetNormalFieldStatementOrdinalMetricsTriviaStrings(Descriptor).Select(Comment);
+            get
+            {
+                IEnumerable<SyntaxTrivia> GetClassDeclarationLeadingTrivia()
+                    => GetNormalFieldStatementOrdinalMetricsTriviaStrings(Descriptor).Select(Comment);
 
-            SyntaxTriviaList GetClassDeclarationTrailingTrivia() => TriviaList();
+                SyntaxTriviaList GetClassDeclarationTrailingTrivia() => TriviaList();
 
-            var classDecl = ClassDeclaration(Identifier(DescriptorFullClassName.Name))
-                .WithModifiers(TokenList(Token(PublicKeyword)))
-                .WithBaseList(BaseList(SingletonSeparatedList<BaseTypeSyntax>(
-                    SimpleBaseType(
-                        GenericName(Identifier(ParameterBaseClassIdentifier.Name))
+                var classDecl = ClassDeclaration(Identifier(DescriptorFullClassName.Name))
+                    .WithModifiers(TokenList(Token(PublicKeyword)))
+                    .WithBaseList(BaseList(SingletonSeparatedList<BaseTypeSyntax>(
+                        SimpleBaseType(GenericName(
+                                Identifier(ParameterBaseClassIdentifier.Name)
+                            )
                             .WithTypeArgumentList(TypeArgumentList(
-                                SeparatedList<TypeSyntax>(TypeArgumentSyntax)
+                                SeparatedList<TypeSyntax>(TypeArgumentSyntax.CommaSeparated())
                             ))
-                    )
-                )))
-                .WithMembers(List(
-                    GetClassMembers(DescriptorFullClassName))
+                        )
+                    )))
+                    .WithMembers(List(
+                        GetClassMembers(DescriptorFullClassName)
+                    ));
+
+                var classDeclWithTrivia = classDecl.WithLeadingTrivia(
+                    GetClassDeclarationLeadingTrivia()
                 );
 
-            var classDeclWithTrivia = classDecl.WithLeadingTrivia(
-                GetClassDeclarationLeadingTrivia()
-            );
-
-            return classDeclWithTrivia;
-
-            // TODO: TBD: add ctor implementations...
-            // TODO: TBD: with comprehension as to the parameter values...
+                yield return classDeclWithTrivia;
+            }
         }
-
-        /// <summary>
-        /// Returns the set of Name Space Member Declarations.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>The thought was that Using Directives appear as Name Space Members,
-        /// but, as it turns out, these are specified via a different mechanism.</remarks>
-        protected virtual IEnumerable<MemberDeclarationSyntax> GetNamespaceMemberDeclarations()
-        {
-            yield return GetClassDeclaration();
-        }
-
-        // TODO: TBD: this is where we connect the dots with the actual Descriptor...
-        protected override CompilationUnitSyntax GenerateCompilationUnit()
-            => CompilationUnit().WithMembers(List(GetRange(
-                    GenerateNameSpace(GetNamespaceMemberDeclarations)
-                )))
-                .NormalizeWhitespace();
     }
 }

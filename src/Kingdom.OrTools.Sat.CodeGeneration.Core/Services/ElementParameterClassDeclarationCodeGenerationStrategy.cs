@@ -34,9 +34,9 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
             Join($"{Dot}", DescriptorFieldType.Value.Select(x => x.Name))
         );
 
-        protected override IEnumerable<SyntaxNodeOrToken> GetTypeArgumentSyntax()
+        protected override IEnumerable<SyntaxNodeOrToken> TypeArgumentSyntax
         {
-            yield return DescriptorFieldTypeSyntax;
+            get { yield return DescriptorFieldTypeSyntax; }
         }
 
         private ExpressionSyntax ConvertElementTypeIdentifierPathToDefault(IVariant defaultFieldOption)
@@ -60,63 +60,60 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
             throw new ArgumentException($"Unable to discern variant value.", nameof(defaultFieldOption));
         }
 
-        protected override IEnumerable<ConstructorSpecification> GetCtorSpecifications()
+        protected override IEnumerable<ConstructorSpecification> CtorSpecifications
         {
+            get
             {
-                IEnumerable<SyntaxNodeOrToken> GetThisCtorInitializerArguments()
                 {
-                    // This works because we are dealing with a Struct.
-                    SyntaxNodeOrToken? GetConvertedDefault(IVariant defaultOption)
-                        => defaultOption == null
-                            ? null
-                            : Argument(ConvertElementTypeIdentifierPathToDefault(defaultOption));
+                    IEnumerable<SyntaxNodeOrToken> GetThisCtorInitializerArguments()
+                    {
+                        // This works because we are dealing with a Struct.
+                        SyntaxNodeOrToken? GetConvertedDefault(IVariant defaultOption)
+                            => defaultOption == null
+                                ? null
+                                : Argument(ConvertElementTypeIdentifierPathToDefault(defaultOption));
 
-                    SyntaxNodeOrToken GetDefaultExpression() => Argument(DefaultExpression(
-                        IdentifierName(DescriptorFieldType.Value.Last().Name)
-                    ));
+                        SyntaxNodeOrToken GetDefaultExpression() => Argument(DefaultExpression(
+                            IdentifierName(DescriptorFieldType.Value.Last().Name)
+                        ));
 
-                    // TODO: TBD: this bit may well be refactored to base class anticipating subsequent variants of the service...
-                    return GetRange(GetConvertedDefault(DefaultFieldOptionOrDefault) ?? GetDefaultExpression());
+                        // TODO: TBD: this bit may well be refactored to base class anticipating subsequent variants of the service...
+                        return GetRange(GetConvertedDefault(DefaultFieldOptionOrDefault) ?? GetDefaultExpression());
+                    }
+
+                    yield return new ConstructorSpecification
+                    {
+                        InitializerKeyword = ThisConstructorInitializer,
+                        InitializerArguments = GetThisCtorInitializerArguments()
+                    };
                 }
 
-                yield return new ConstructorSpecification
                 {
-                    InitializerKeyword = ThisConstructorInitializer,
-                    InitializerArguments = GetThisCtorInitializerArguments()
-                };
-            }
+                    const string value = nameof(value);
 
-            {
-                const string value = nameof(value);
-
-                IEnumerable<SyntaxNodeOrToken> GetValueCtorParameters()
-                {
-                    yield return Parameter(Identifier(value)).WithType(DescriptorFieldTypeSyntax);
+                    // TODO: as such, can probably refactor these to private scope...
+                    yield return new ConstructorSpecification
+                    {
+                        InitializerKeyword = BaseConstructorInitializer,
+                        Parameters = GetRange<SyntaxNodeOrToken>(
+                            Parameter(Identifier(value))
+                                .WithType(DescriptorFieldTypeSyntax)
+                        ),
+                        InitializerArguments = GetRange<SyntaxNodeOrToken>(
+                            Argument(IdentifierName(value))
+                            , Argument(DescriptorOrdinalExpressionSyntax)
+                        )
+                    };
                 }
-
-                IEnumerable<SyntaxNodeOrToken> GetValueCtorInitializerArguments()
-                {
-                    yield return Argument(IdentifierName(value));
-                    yield return Argument(DescriptorOrdinalExpressionSyntax);
-                }
-
-                // TODO: as such, can probably refactor these to private scope...
-                yield return new ConstructorSpecification
-                {
-                    InitializerKeyword = BaseConstructorInitializer,
-                    Parameters = GetValueCtorParameters(),
-                    InitializerArguments = GetValueCtorInitializerArguments()
-                };
             }
         }
 
-        protected override IEnumerable<UsingDirectiveSyntax> GetInnerUsingDirectives()
-        {
-            yield return UsingDirective(DescriptorFieldTypeSyntax)
-                .WithStaticKeyword(Token(StaticKeyword));
-        }
+        protected override IEnumerable<UsingDirectiveSyntax> InnerUsingDirectives => GetRange(
+            UsingDirective(DescriptorFieldTypeSyntax)
+                .WithStaticKeyword(Token(StaticKeyword))
+        );
 
         public static implicit operator CompilationUnitSyntax(ElementParameterClassDeclarationCodeGenerationStrategy strategy)
-            => strategy.GenerateCompilationUnit();
+            => strategy.CompilationUnit;
     }
 }

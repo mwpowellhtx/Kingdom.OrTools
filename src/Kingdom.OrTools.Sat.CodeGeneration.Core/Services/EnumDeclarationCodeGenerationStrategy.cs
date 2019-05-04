@@ -43,69 +43,59 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
         /// </summary>
         internal ICollection<EnumFieldDescriptor> Fields => _fields ?? (_fields = new List<EnumFieldDescriptor>());
 
-        private IEnumerable<SyntaxNodeOrToken> _memberSyntax;
-
         /// <summary>
         /// Returns the Generated <see cref="EnumMemberDeclarationSyntax"/> sans delimiters.
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<SyntaxNodeOrToken> GetMemberSyntax()
+        private IEnumerable<SyntaxNodeOrToken> EnumStatementMembers
         {
-            AttributeSyntax GetAttribute(Identifier identifier)
+            get
             {
-                // ReSharper disable once InconsistentNaming
-                const string ParameterMemberName = nameof(ParameterMemberName);
-                return Attribute(IdentifierName(ParameterMemberName))
-                    .WithArgumentList(AttributeArgumentList(
-                        SingletonSeparatedList(AttributeArgument(
-                            LiteralExpression(StringLiteralExpression, Literal(identifier.Name))
-                        ))
-                    ));
-            }
+                AttributeSyntax GetAttribute(Identifier identifier)
+                {
+                    // ReSharper disable once InconsistentNaming
+                    const string ParameterMemberName = nameof(ParameterMemberName);
+                    return Attribute(IdentifierName(ParameterMemberName))
+                        .WithArgumentList(AttributeArgumentList(
+                            SingletonSeparatedList(AttributeArgument(
+                                LiteralExpression(StringLiteralExpression, Literal(identifier.Name))
+                            ))
+                        ));
+                }
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var x in Fields.ToArray())
-            {
-                var replaced = GetReplacedIdentifier(x.Name);
+                // ReSharper disable once LoopCanBeConvertedToQuery
+                foreach (var x in Fields.ToArray())
+                {
+                    var replaced = GetReplacedIdentifier(x.Name);
 
-                yield return EnumMemberDeclaration(replaced.Name)
-                    .WithAttributeLists(SingletonList(
-                        AttributeList(SingletonSeparatedList(
-                            GetAttribute(x.Name)
+                    yield return EnumMemberDeclaration(replaced.Name)
+                        .WithAttributeLists(SingletonList(
+                            AttributeList(SingletonSeparatedList(
+                                GetAttribute(x.Name)
+                            ))
                         ))
-                    ))
-                    .WithEqualsValue(EqualsValueClause(
-                            LiteralExpression(NumericLiteralExpression, Literal(x.Ordinal))
-                        )
-                    );
+                        .WithEqualsValue(EqualsValueClause(
+                                LiteralExpression(NumericLiteralExpression, Literal(x.Ordinal))
+                            )
+                        );
+                }
             }
         }
 
-        private IEnumerable<SyntaxNodeOrToken> MemberSyntax => _memberSyntax ?? (_memberSyntax = GetMemberSyntax());
-
-        protected override CompilationUnitSyntax GenerateCompilationUnit()
-        {
-            IEnumerable<MemberDeclarationSyntax> GetEnumDeclarations()
-            {
-                yield return EnumDeclaration(Descriptor.Name.Name)
-                    .AddModifiers(Token(PublicKeyword))
-                    .WithBaseList(BaseList(
-                        SingletonSeparatedList<BaseTypeSyntax>(SimpleBaseType(
-                            PredefinedType(Token(LongKeyword))
-                        ))
+        protected override IEnumerable<MemberDeclarationSyntax> NameSpaceMembers => GetRange(
+            (MemberDeclarationSyntax) EnumDeclaration(Descriptor.Name.Name)
+                .AddModifiers(Token(PublicKeyword))
+                .WithBaseList(BaseList(
+                    SingletonSeparatedList<BaseTypeSyntax>(SimpleBaseType(
+                        PredefinedType(Token(LongKeyword))
                     ))
-                    .WithMembers(SeparatedList<EnumMemberDeclarationSyntax>(
-                        MemberSyntax.CommaSeparated()
-                    ));
-            }
-
-            return CompilationUnit().WithMembers(List(GetRange(
-                    GenerateNameSpace(GetEnumDeclarations))
                 ))
-                .NormalizeWhitespace();
-        }
+                .WithMembers(SeparatedList<EnumMemberDeclarationSyntax>(
+                    EnumStatementMembers.CommaSeparated()
+                ))
+        );
 
         public static implicit operator CompilationUnitSyntax(EnumDeclarationCodeGenerationStrategy strategy)
-            => strategy.GenerateCompilationUnit();
+            => strategy.CompilationUnit;
     }
 }

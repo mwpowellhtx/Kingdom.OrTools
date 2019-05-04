@@ -55,9 +55,9 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 {String, StringKeyword}
             };
 
-        protected override IEnumerable<SyntaxNodeOrToken> GetTypeArgumentSyntax()
+        protected override IEnumerable<SyntaxNodeOrToken> TypeArgumentSyntax
         {
-            yield return PredefinedType(Token(VariantTypeSyntaxKindMap[DescriptorFieldType.Value]));
+            get { yield return PredefinedType(Token(VariantTypeSyntaxKindMap[DescriptorFieldType.Value])); }
         }
 
         private static ExpressionSyntax ConvertBooleanVariantToExpression(IVariant variant)
@@ -77,7 +77,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 return MemberAccessExpression(
                     SimpleMemberAccessExpression
                     , PredefinedType(Token(FloatKeyword))
-                    , IdentifierName(nameof(float.PositiveInfinity))
+                    , IdentifierName($"float.{nameof(float.PositiveInfinity)}")
                 );
             }
 
@@ -86,7 +86,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 return MemberAccessExpression(
                     SimpleMemberAccessExpression
                     , PredefinedType(Token(FloatKeyword))
-                    , IdentifierName(nameof(float.NegativeInfinity))
+                    , IdentifierName($"float.{nameof(float.NegativeInfinity)}")
                 );
             }
 
@@ -95,7 +95,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 return MemberAccessExpression(
                     SimpleMemberAccessExpression
                     , PredefinedType(Token(FloatKeyword))
-                    , IdentifierName(nameof(float.NaN))
+                    , IdentifierName($"float.{nameof(float.NaN)}")
                 );
             }
 
@@ -117,7 +117,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 return MemberAccessExpression(
                     SimpleMemberAccessExpression
                     , PredefinedType(Token(DoubleKeyword))
-                    , IdentifierName(nameof(double.PositiveInfinity))
+                    , IdentifierName($"double.{nameof(double.PositiveInfinity)}")
                 );
             }
 
@@ -126,7 +126,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 return MemberAccessExpression(
                     SimpleMemberAccessExpression
                     , PredefinedType(Token(DoubleKeyword))
-                    , IdentifierName(nameof(double.NegativeInfinity))
+                    , IdentifierName($"double.{nameof(double.NegativeInfinity)}")
                 );
             }
 
@@ -135,7 +135,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 return MemberAccessExpression(
                     SimpleMemberAccessExpression
                     , PredefinedType(Token(DoubleKeyword))
-                    , IdentifierName(nameof(double.NaN))
+                    , IdentifierName($"double.{nameof(double.NaN)}")
                 );
             }
 
@@ -185,64 +185,63 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 {String, ConvertStringVariantToExpression}
             };
 
-        private TypeSyntax _ctorParameterTypeSyntax;
+        /// <summary>
+        /// Factory Gets a new Predefined Type based upon the
+        /// <see cref="ParameterClassDeclarationCodeGenerationStrategyBase{TVariantType,TFieldType}.DescriptorFieldType"/>.
+        /// </summary>
+        /// <see cref="VariantTypeSyntaxKindMap"/>
+        private TypeSyntax CtorParameterTypeSyntax => PredefinedType(
+            Token(VariantTypeSyntaxKindMap[DescriptorFieldType.Value])
+        );
 
-        private TypeSyntax CtorParameterTypeSyntax
-            => _ctorParameterTypeSyntax ?? (_ctorParameterTypeSyntax
-                   = PredefinedType(Token(VariantTypeSyntaxKindMap[DescriptorFieldType.Value]))
-               );
-
-        private IEnumerable<ConstructorSpecification> _ctorSpecifications;
-
-        protected override IEnumerable<ConstructorSpecification> GetCtorSpecifications()
+        protected override IEnumerable<ConstructorSpecification> CtorSpecifications
         {
+            get
             {
-                IEnumerable<SyntaxNodeOrToken> GetThisCtorInitializerArguments()
                 {
-                    // This works because we are dealing with a Struct.
-                    SyntaxNodeOrToken? GetConvertedDefault(IVariant defaultOption)
-                        => defaultOption == null
-                            ? null
-                            : Argument(DefaultValueConverters[DescriptorFieldType.Value].Invoke(defaultOption));
+                    IEnumerable<SyntaxNodeOrToken> GetThisCtorInitializerArguments()
+                    {
+                        // This works because we are dealing with a Struct.
+                        SyntaxNodeOrToken? GetConvertedDefault(IVariant defaultOption)
+                            => defaultOption == null
+                                ? null
+                                : Argument(DefaultValueConverters[DescriptorFieldType.Value].Invoke(defaultOption));
 
-                    SyntaxNodeOrToken GetDefaultExpression() => Argument(DefaultExpression(CtorParameterTypeSyntax));
+                        SyntaxNodeOrToken GetDefaultExpression() =>
+                            Argument(DefaultExpression(CtorParameterTypeSyntax));
 
-                    // TODO: TBD: this bit may well be refactored to base class anticipating subsequent variants of the service...
-                    return GetRange(GetConvertedDefault(DefaultFieldOptionOrDefault) ?? GetDefaultExpression());
+                        // TODO: TBD: this bit may well be refactored to base class anticipating subsequent variants of the service...
+                        return GetRange(GetConvertedDefault(DefaultFieldOptionOrDefault) ?? GetDefaultExpression());
+                    }
+
+                    yield return new ConstructorSpecification
+                    {
+                        InitializerKeyword = ThisConstructorInitializer,
+                        InitializerArguments = GetThisCtorInitializerArguments()
+                    };
                 }
 
-                yield return new ConstructorSpecification
                 {
-                    InitializerKeyword = ThisConstructorInitializer,
-                    InitializerArguments = GetThisCtorInitializerArguments()
-                };
-            }
+                    const string value = nameof(value);
 
-            {
-                const string value = nameof(value);
-
-                IEnumerable<SyntaxNodeOrToken> GetValueCtorParameters()
-                {
-                    yield return Parameter(Identifier(value)).WithType(CtorParameterTypeSyntax);
+                    // TODO: as such, can probably refactor these to private scope...
+                    yield return new ConstructorSpecification
+                    {
+                        InitializerKeyword = BaseConstructorInitializer,
+                        Parameters = GetRange<SyntaxNodeOrToken>(
+                            Parameter(Identifier(value))
+                                .WithType(CtorParameterTypeSyntax)
+                        ),
+                        InitializerArguments = GetRange<SyntaxNodeOrToken>(
+                            Argument(IdentifierName(value))
+                            , Argument(DescriptorOrdinalExpressionSyntax)
+                        )
+                    };
                 }
-
-                IEnumerable<SyntaxNodeOrToken> GetValueCtorInitializerArguments()
-                {
-                    yield return Argument(IdentifierName(value));
-                    yield return Argument(DescriptorOrdinalExpressionSyntax);
-                }
-
-                // TODO: as such, can probably refactor these to private scope...
-                yield return new ConstructorSpecification
-                {
-                    InitializerKeyword = BaseConstructorInitializer,
-                    Parameters = GetValueCtorParameters(),
-                    InitializerArguments = GetValueCtorInitializerArguments()
-                };
             }
         }
 
         public static implicit operator CompilationUnitSyntax(ProtoTypeParameterClassDeclarationCodeGenerationStrategy strategy)
-            => strategy.GenerateCompilationUnit();
+            => strategy.CompilationUnit;
     }
 }

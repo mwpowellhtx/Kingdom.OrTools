@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 
 namespace Kingdom.OrTools.Sat.CodeGeneration
 {
@@ -202,28 +203,27 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 , a.Name.Split(UnderScore).Select(ToCamelCase))));
         }
 
-        protected virtual IEnumerable<UsingDirectiveSyntax> GetInnerUsingDirectives()
+        protected virtual IEnumerable<UsingDirectiveSyntax> InnerUsingDirectives
         {
-            yield break;
+            get { yield break; }
         }
 
-        protected MemberDeclarationSyntax GenerateNameSpace(Func<IEnumerable<MemberDeclarationSyntax>> generateMembers)
+        protected virtual IEnumerable<MemberDeclarationSyntax> NameSpaceMembers
         {
-            // Invoking SyntaxFactory, things are basically named $"{nameof(MethodName)}Syntax".
-            var nameSpaceDecl = NamespaceDeclaration(GetQualifiedIdentifierPathName(ReplacedPackagePath));
+            get { yield break; }
+        }
 
-            // ReSharper disable PossibleMultipleEnumeration
-            var innerUsingDirectives = GetInnerUsingDirectives();
-            if (innerUsingDirectives.Any())
+        private MemberDeclarationSyntax CompilationUnitNameSpace
+        {
+            get
             {
-                nameSpaceDecl = nameSpaceDecl.AddUsings(innerUsingDirectives.ToArray());
-            }
-            // ReSharper restore PossibleMultipleEnumeration
+                // Invoking SyntaxFactory, things are basically named $"{nameof(MethodName)}Syntax".
+                var nsDecl = NamespaceDeclaration(GetQualifiedIdentifierPathName(ReplacedPackagePath));
 
-            // ReSharper disable PossibleMultipleEnumeration
-            var members = generateMembers();
-            return members.Any() ? nameSpaceDecl.WithMembers(List(members)) : nameSpaceDecl;
-            // ReSharper restore PossibleMultipleEnumeration
+                nsDecl = AddElements(nsDecl, InnerUsingDirectives, (x, e) => x.AddUsings(e.ToArray()));
+
+                return AddElements(nsDecl, NameSpaceMembers, (x, e) => x.WithMembers(List(e)));
+            }
         }
 
         protected static NameSyntax GetQualifiedIdentifierPathName(IdentifierPath path)
@@ -238,6 +238,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                         // A single one is simply the Identifier Name.
                         result = IdentifierName(path[i].Name);
                         break;
+
                     default:
                         // Beyond that is a Qualified Identifier Name, folding in the prior path elements.
                         result = QualifiedName(result, IdentifierName(path[i].Name));
@@ -290,9 +291,43 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
             => GetReplacedIdentifierPath(getPath());
 
         /// <summary>
+        /// Override in order to specify the Outer <see cref="UsingDirectiveSyntax"/> instances.
+        /// </summary>
+        protected virtual IEnumerable<UsingDirectiveSyntax> OuterUsingDirectives
+        {
+            get { yield break; }
+        }
+
+        // TODO: TBD: could potentially even refactor this to an internal extension method... i.e. this TParent parent...
+        // ReSharper disable PossibleMultipleEnumeration
+        protected static TParent AddElements<TParent, T>(TParent parent, IEnumerable<T> elements
+            , Func<TParent, IEnumerable<T>, TParent> add)
+            => elements.Any() ? add(parent, elements) : parent;
+        // ReSharper restore PossibleMultipleEnumeration
+
+        /// <summary>
+        /// Override in order to generate the <see cref="CompilationUnitSyntax"/> Members.
+        /// </summary>
+        private IEnumerable<MemberDeclarationSyntax> CompilationUnitMembers
+        {
+            get { yield return CompilationUnitNameSpace; }
+        }
+
+        /// <summary>
         /// Returns a Generated <see cref="CompilationUnitSyntax"/>.
         /// </summary>
         /// <returns></returns>
-        protected abstract CompilationUnitSyntax GenerateCompilationUnit();
+        protected CompilationUnitSyntax CompilationUnit
+        {
+            get
+            {
+                var result = CompilationUnit();
+
+                result = AddElements(result, OuterUsingDirectives, (x, e) => x.AddUsings(e.ToArray()));
+                result = AddElements(result, CompilationUnitMembers, (x, e) => x.AddMembers(e.ToArray()));
+
+                return result.NormalizeWhitespace();
+            }
+        }
     }
 }
