@@ -3,6 +3,11 @@
     internal static class Characters
     {
         /// <summary>
+        /// &apos;,&apos;
+        /// </summary>
+        public const char Comma = ',';
+
+        /// <summary>
         /// &apos;.&apos;
         /// </summary>
         public const char Dot = '.';
