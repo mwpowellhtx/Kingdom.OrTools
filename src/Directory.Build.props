@@ -19,10 +19,23 @@
 
   <PropertyGroup>
     <RootNamespace>Kingdom.OrTools</RootNamespace>
-    <GoogleOrToolsVersion>7.0.6546</GoogleOrToolsVersion>
-    <GoogleProtobufVersion>3.7.0</GoogleProtobufVersion>
-    <CodeGenerationRoslynVersion>0.5.13</CodeGenerationRoslynVersion>
-    <MicrosoftCodeAnalysisCSharp>2.10.0</MicrosoftCodeAnalysisCSharp>
+    <!-- We can probably most likely track the Google version numbers according to their
+     Major.Minor only and not worry about the Build or Patch numbers themselves. Additionally,
+     except in places where we must adopt the Protobuf dependency directly, we could otherwise
+     leave that out as well, as this depedency tracks seamlessly with the OrTools, or its runtime
+     surrogate, dependencies. -->
+    <GoogleProtobufVersion>3.8</GoogleProtobufVersion>
+    <!-- Well, I thought we could get away with the Major.Minor here, but we kind of do need to
+    know the full version in order to know the precise path of the Protocol Buffer specification
+    files in which to embed. The danger here is that this is a Greater Than Or Equal To (>=),
+    right? So we may need to be more precise in our dependencies, but we will start here, and
+    cross future bridges should they arise when they arise. -->
+    <GoogleOrToolsVersion>7.1.6720</GoogleOrToolsVersion>
+    <CodeGenerationRoslynVersion>[1.0.1,2)</CodeGenerationRoslynVersion>
+    <CodeGenerationRoslynAttributesVersion>[1.0.1,2)</CodeGenerationRoslynAttributesVersion>
+    <MicrosoftCodeAnalysisCSharp>[2.10.0,3)</MicrosoftCodeAnalysisCSharp>
+    <KingdomProtobufAntlrVersion>1.0.12</KingdomProtobufAntlrVersion>
+    <ValidationVersion>[2.4.22,3)</ValidationVersion>
   </PropertyGroup>
 
   <ItemGroup>
