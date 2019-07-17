@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Kingdom.OrTools.Sat.CodeGeneration
 {
     using Collections.Variants;
     using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Protobuf;
+    using ICompilationUnitDictionary = IDictionary<Guid, Microsoft.CodeAnalysis.CSharp.Syntax.CompilationUnitSyntax>;
 
     /*
      CompilationUnit()
@@ -180,6 +182,12 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
     /// <inheritdoc />
     internal class CodeGenerationProtoDescriptorVisitor : CodeGenerationProtoDescriptorVisitorBase
     {
+        /// <summary>
+        /// Gets a New <see cref="Guid"/>.
+        /// </summary>
+        /// <returns></returns>
+        private static Guid NewGuid() => Guid.NewGuid();
+
         private PackageStatement PackageStatement { get; set; }
 
         protected override void EnterPackageStatement(PackageStatement statement)
@@ -235,6 +243,11 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
             Stack.TryReduce((ref EnumDeclarationCodeGenerationStrategy a, EnumFieldDescriptor b) => a.Fields.Add(b));
         }
 
+        /// <summary>
+        /// Gets the Count of Enums.
+        /// </summary>
+        internal int EnumCount { get; private set; }
+
         protected override void EnterEnumStatement(EnumStatement statement)
         {
             Stack.PushBack(
@@ -244,20 +257,36 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
         protected override void ExitEnumStatement(EnumStatement statement)
         {
-            Stack.TryReduce((ref IDictionary<Guid, CompilationUnitSyntax> a, EnumDeclarationCodeGenerationStrategy b) =>
-                a.Add(Guid.NewGuid(), b)
+            void Reduce(ICompilationUnitDictionary dictionary, CompilationUnitSyntax compilationUnit)
+            {
+                EnumCount++;
+                dictionary.Add(NewGuid(), compilationUnit);
+            }
+
+            Stack.TryReduce(
+                (ref ICompilationUnitDictionary a, EnumDeclarationCodeGenerationStrategy b) => Reduce(a, b)
             );
         }
 
         //IEnumerable<CompilationUnitSyntax> CompilationUnits => Stack.
 
-        private IDictionary<Guid, CompilationUnitSyntax> _compilationUnits;
+        private ICompilationUnitDictionary _compilationUnits;
 
-        internal IDictionary<Guid, CompilationUnitSyntax> CompilationUnits
+        internal ICompilationUnitDictionary CompilationUnits
             => _compilationUnits ?? (_compilationUnits
                    // ReSharper disable once RedundantEmptyObjectOrCollectionInitializer
                    = new Dictionary<Guid, CompilationUnitSyntax> { }
                );
+
+        /// <summary>
+        /// Gets the Count of Classes.
+        /// </summary>
+        internal int ClassCount { get; private set; }
+
+        // ReSharper disable once RedundantEmptyObjectOrCollectionInitializer
+        private IList<long> PrivateParameterNumbers { get; } = new List<long> { };
+
+        public IReadOnlyCollection<long> ParameterNumbers => new ReadOnlyCollection<long>(PrivateParameterNumbers);
 
         protected override void EnterNormalFieldStatement(NormalFieldStatement statement)
         {
@@ -316,28 +345,36 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
         protected override void ExitNormalFieldStatement(NormalFieldStatement statement)
         {
-            Guid NewGuid() => Guid.NewGuid();
+            void Reduce(ICompilationUnitDictionary dictionary, CompilationUnitSyntax compilationUnit)
+            {
+                ClassCount++;
+                PrivateParameterNumbers.Add(statement.Number);
+                dictionary.Add(NewGuid(), compilationUnit);
+            }
 
             Stack.TryReduce(
-                (ref IDictionary<Guid, CompilationUnitSyntax> a
-                    , ProtoTypeParameterClassDeclarationCodeGenerationStrategy b) => a.Add(NewGuid(), b)
+                (ref ICompilationUnitDictionary a, ProtoTypeParameterClassDeclarationCodeGenerationStrategy b) => Reduce(a, b)
             );
 
             Stack.TryReduce(
-                (ref IDictionary<Guid, CompilationUnitSyntax> a
-                    , ElementParameterClassDeclarationCodeGenerationStrategy b) => a.Add(NewGuid(), b)
+                (ref ICompilationUnitDictionary a, ElementParameterClassDeclarationCodeGenerationStrategy b) => Reduce(a, b)
             );
 
             Stack.TryReduce(
-                (ref IDictionary<Guid, CompilationUnitSyntax> a
-                    , RestartAlgorithmsClassDeclarationCodeGenerationStrategy b) => a.Add(NewGuid(), b)
+                (ref ICompilationUnitDictionary a, RestartAlgorithmsClassDeclarationCodeGenerationStrategy b) => Reduce(a, b)
             );
 
             Stack.TryReduce(
-                (ref IDictionary<Guid, CompilationUnitSyntax> a
-                    , DefaultRestartAlgorithmsClassDeclarationCodeGenerationStrategy b) => a.Add(NewGuid(), b)
+                (ref ICompilationUnitDictionary a, DefaultRestartAlgorithmsClassDeclarationCodeGenerationStrategy b) => Reduce(a, b)
             );
         }
+
+        /// <summary>
+        /// Gets the TotalCount.
+        /// </summary>
+        /// <see cref="EnumCount"/>
+        /// <see cref="ClassCount"/>
+        internal int TotalCount => EnumCount + ClassCount;
 
         public override void Visit(ProtoDescriptor descriptor)
         {
