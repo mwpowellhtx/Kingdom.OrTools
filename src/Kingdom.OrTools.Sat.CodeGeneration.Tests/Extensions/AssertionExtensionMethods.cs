@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Kingdom.OrTools.Sat.CodeGeneration
 {
     using Xunit;
-    
+
     internal static class AssertionExtensionMethods
     {
         public static bool AssertTrue(this bool x)

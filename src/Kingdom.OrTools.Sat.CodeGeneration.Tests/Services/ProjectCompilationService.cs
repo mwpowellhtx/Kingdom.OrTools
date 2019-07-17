@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 
 namespace Kingdom.OrTools.Sat.CodeGeneration
@@ -10,19 +9,34 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
     using Xunit;
     using Xunit.Abstractions;
     using static Microsoft.CodeAnalysis.LocationKind;
+    using static Ranges;
 
-    public abstract class CodeGenerationVerificationTestFixtureBase : TestFixtureBase
+    public class ProjectCompilationService
     {
-        protected CodeGenerationVerificationTestFixtureBase(ITestOutputHelper outputHelper)
-            : base(outputHelper)
+        // ReSharper disable once RedundantEmptyObjectOrCollectionInitializer
+        internal static ProjectCompilationService Instance => new ProjectCompilationService { };
+
+        /// <summary>
+        /// Private Constructor.
+        /// </summary>
+        private ProjectCompilationService()
         {
         }
 
-        protected static MetadataReference GetMetadataReference<T>() => MetadataReference.CreateFromFile(
+        private ITestOutputHelper _outputHelper;
+
+        /// <summary>
+        /// Gets or Sets the OutputHelper.
+        /// </summary>
+        internal ITestOutputHelper OutputHelper
+        {
+            get => _outputHelper;
+            set => _outputHelper = value.AssertNotNull();
+        }
+
+        internal static MetadataReference GetMetadataReference<T>() => MetadataReference.CreateFromFile(
             typeof(T).Assembly.Location
         );
-
-        protected delegate IEnumerable<MetadataReference> MetadataReferencesFactory();
 
         private static void Report(Diagnostic diagnostic, ITestOutputHelper outputHelper)
         {
@@ -37,8 +51,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
         private void Report(Diagnostic diagnostic) => Report(diagnostic, OutputHelper);
 
-        protected virtual void VerifyProjectCompilation(FileInfo projectPathInfo
-            , OutputKind outputKind, MetadataReferencesFactory metadataReferencesFactory)
+        internal virtual void Verify(FileInfo projectPathInfo, OutputKind outputKind, MetadataReferencesFactory metadataReferencesFactory)
         {
             projectPathInfo.Exists.AssertTrue();
 
@@ -52,9 +65,8 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 }
 
                 var metadataReferences = metadataReferencesFactory().Select(x => x.AssertNotNull()).ToArray();
-                Assert.NotNull(metadataReferences);
-
-                if (metadataReferences.Any())
+                
+                if (metadataReferences.AssertNotNull().Any())
                 {
                     project = project.AddMetadataReferences(metadataReferences).AssertNotNull();
                 }
@@ -65,7 +77,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 {
                     var result = compilation.Emit(stream).AssertNotNull();
                     result.Diagnostics.ToList().ForEach(Report);
-                    Assert.True(result.Success);
+                    result.AssertTrue(x => x.Success);
                 }
             }
         }
