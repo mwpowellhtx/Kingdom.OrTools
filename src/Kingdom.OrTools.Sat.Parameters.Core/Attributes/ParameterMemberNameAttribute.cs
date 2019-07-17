@@ -7,9 +7,6 @@ namespace Kingdom.OrTools.Sat.Parameters
     {
         public string MemberName { get; }
 
-        public ParameterMemberNameAttribute(string memberName)
-        {
-            MemberName = memberName;
-        }
+        public ParameterMemberNameAttribute(string memberName) => MemberName = memberName;
     }
 }
