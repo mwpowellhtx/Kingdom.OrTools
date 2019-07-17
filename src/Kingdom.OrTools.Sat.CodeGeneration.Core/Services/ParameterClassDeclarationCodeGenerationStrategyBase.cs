@@ -213,7 +213,19 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
                 SyntaxTriviaList GetClassDeclarationTrailingTrivia() => TriviaList();
 
+                // ReSharper disable once InconsistentNaming
+                const string ParameterName = nameof(ParameterName);
+
+                var parameterNameAttribute = Attribute(IdentifierName(ParameterName))
+                    .WithArgumentList(AttributeArgumentList(SingletonSeparatedList(
+                        AttributeArgument(
+                            LiteralExpression(StringLiteralExpression
+                                , Literal(Descriptor.Name.Name))
+                        )
+                    )));
+
                 var classDecl = ClassDeclaration(Identifier(DescriptorFullClassName.Name))
+                    .WithAttributeLists(SingletonList(AttributeList(SingletonSeparatedList(parameterNameAttribute))))
                     .WithModifiers(TokenList(Token(PublicKeyword)))
                     .WithBaseList(BaseList(SingletonSeparatedList<BaseTypeSyntax>(
                         SimpleBaseType(GenericName(
