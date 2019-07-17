@@ -9,7 +9,7 @@ namespace Kingdom.OrTools.Sat
     using Microsoft.CodeAnalysis;
     using Validation;
 
-    public class CpSatParametersGenerator : AssemblyCodeGenerator
+    public class CpSatParametersAssemblyCodeGenerator : AssemblyCodeGenerator
     {
         // ReSharper disable once RedundantEmptyObjectOrCollectionInitializer
         /// <summary>
@@ -18,7 +18,7 @@ namespace Kingdom.OrTools.Sat
         private SatParameterCodeGeneratorService Service { get; } = new SatParameterCodeGeneratorService { };
 
         /// <inheritdoc />
-        public CpSatParametersGenerator(AttributeData attributeData)
+        public CpSatParametersAssemblyCodeGenerator(AttributeData attributeData)
             : base(attributeData)
         {
         }
