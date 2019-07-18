@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Kingdom.OrTools.Sat.Parameters
@@ -64,6 +65,18 @@ namespace Kingdom.OrTools.Sat.Parameters
             string RenderNegativeInfinitySignage() => IsNegativeInfinity(value) ? $"{Minus}" : "";
             return IsInfinity(value) ? $"{RenderNegativeInfinitySignage()}{inf}" : IsNaN(value) ? $"{nan}" : $"{value:R}";
         }
+
+        // ReSharper disable PossibleMultipleEnumeration
+        /// <summary>
+        /// Filters the <paramref name="values"/> thereby precluding an Empty Range.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="values"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        internal static IEnumerable<T> FilterValues<T>(IEnumerable<T> values, T defaultValue = default)
+            => values.Any() ? values : new [] {defaultValue};
+        // ReSharper restore PossibleMultipleEnumeration
 
         /// <summary>
         /// Returns a Nominal set of Parameter Value Rendering Callbacks.
