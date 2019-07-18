@@ -8,6 +8,7 @@ namespace Kingdom.OrTools.Sat.Parameters
     using Xunit;
     using Xunit.Abstractions;
     using static String;
+    using static ParameterValueRenderingOptions;
 
     public abstract class ParameterTestFixtureBase : TestFixtureBase
     {
@@ -20,17 +21,13 @@ namespace Kingdom.OrTools.Sat.Parameters
             => parameter.AssertNotNull()
                 .AssertEqual(valueType.AssertNotNull(), x => x.ValueType)
                 .AssertEqual(expectedValue, x => x.Value)
-                .ToString().AssertEqual(
-                    rendered.AssertNotNull().AssertNotEmpty()
-                );
+                .ToString().AssertEqual(rendered);
 
         private static void VerifyParameter(IParameter<double> parameter, double expectedValue, int precision, Type valueType, string rendered)
             => parameter.AssertNotNull()
                 .AssertEqual(valueType.AssertNotNull(), x => x.ValueType)
                 .AssertEqual(expectedValue, precision, x => x.Value)
-                .ToString().AssertEqual(
-                    rendered.AssertNotNull().AssertNotEmpty()
-                );
+                .ToString().AssertEqual(rendered);
 
         // ReSharper disable PossibleMultipleEnumeration
         private static void VerifyRepeatedParameter<T>(IRepeatedParameter<T> parameter, IEnumerable<T> expectedValues, Type itemType, string rendered)
@@ -57,24 +54,21 @@ namespace Kingdom.OrTools.Sat.Parameters
         /// <param name="valueOrItemType"></param>
         /// <param name="value"></param>
         /// <param name="rendered"></param>
+        /// <param name="ordinal"></param>
         /// <param name="precision"></param>
         /// <exception cref="InvalidOperationException">Thrown when <paramref name="parameter"/>
         /// and <paramref name="value"/> cannot be reconciled.</exception>
         [Theory, ClassData(typeof(IndividualParameterTestCases))]
-        public void Each_Parameter_Renders_Correctly(IParameter parameter, Type valueOrItemType, object value, string rendered, int? precision)
+        public void Each_Parameter_Renders_Correctly(IParameter parameter, Type valueOrItemType, object value, string rendered, long ordinal, int? precision)
         {
             const int defaultPrecision = 0;
 
-            // Enumerate the Weakly Typed Values.
-            IEnumerable<object> Enumerate(IEnumerable values)
-            {
-                foreach (var x in values)
-                {
-                    yield return x;
-                }
-            }
+            valueOrItemType.AssertNotNull();
+            value.AssertNotNull();
+            ordinal.AssertTrue(x => x > 0L);
+            rendered.AssertNotNull().AssertNotEmpty();
 
-            switch (parameter)
+            switch (parameter.AssertNotNull().AssertEqual(ordinal, x => x.Ordinal))
             {
                 case IParameter<bool> boolParam when value is bool boolValue:
                     VerifyParameter(boolParam, boolValue, valueOrItemType, rendered);
@@ -101,27 +95,27 @@ namespace Kingdom.OrTools.Sat.Parameters
                     break;
 
                 case IRepeatedParameter<bool> boolParam when value is IEnumerable<bool> boolValues:
-                    VerifyRepeatedParameter(boolParam, boolValues, valueOrItemType, rendered);
+                    VerifyRepeatedParameter(boolParam, FilterValues(boolValues), valueOrItemType, rendered);
                     break;
 
                 case IRepeatedParameter<int> intParam when value is IEnumerable<int> intValues:
-                    VerifyRepeatedParameter(intParam, intValues, valueOrItemType, rendered);
+                    VerifyRepeatedParameter(intParam, FilterValues(intValues), valueOrItemType, rendered);
                     break;
 
                 case IRepeatedParameter<long> longParam when value is IEnumerable<long> longValues:
-                    VerifyRepeatedParameter(longParam, longValues, valueOrItemType, rendered);
+                    VerifyRepeatedParameter(longParam, FilterValues(longValues), valueOrItemType, rendered);
                     break;
 
                 case IRepeatedParameter<Month> monthParam when value is IEnumerable<Month> monthValues:
-                    VerifyRepeatedParameter(monthParam, monthValues, valueOrItemType, rendered);
+                    VerifyRepeatedParameter(monthParam, FilterValues(monthValues), valueOrItemType, rendered);
                     break;
 
                 case IRepeatedParameter<AnnotatedWeekday> weekdayParam when value is IEnumerable<AnnotatedWeekday> weekdayValues:
-                    VerifyRepeatedParameter(weekdayParam, weekdayValues, valueOrItemType, rendered);
+                    VerifyRepeatedParameter(weekdayParam, FilterValues(weekdayValues), valueOrItemType, rendered);
                     break;
 
                 case IRepeatedParameter<double> doubleParam when value is IEnumerable<double> doubleValues:
-                    VerifyRepeatedParameter(doubleParam, doubleValues, precision.AssertNotNull() ?? defaultPrecision, valueOrItemType, rendered);
+                    VerifyRepeatedParameter(doubleParam, FilterValues(doubleValues), precision.AssertNotNull() ?? defaultPrecision, valueOrItemType, rendered);
                     break;
 
                 default:
