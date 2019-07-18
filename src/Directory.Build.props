@@ -36,6 +36,7 @@
     <MicrosoftCodeAnalysisCSharp>[2.10.0,3)</MicrosoftCodeAnalysisCSharp>
     <KingdomProtobufAntlrVersion>1.0.12</KingdomProtobufAntlrVersion>
     <ValidationVersion>[2.4.22,3)</ValidationVersion>
+    <XunitVersion>2.4.1</XunitVersion>
   </PropertyGroup>
 
   <ItemGroup>
