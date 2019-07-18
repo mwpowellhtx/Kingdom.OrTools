@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsTool>true</IsTool>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.0.0.16517</Version>
+    <AssemblyVersion>1.0.0.16517</AssemblyVersion>
+    <FileVersion>1.0.0.16517</FileVersion>
+    <PackageVersion>1.0.0.16517</PackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.Sat</RootNamespace>
+  </PropertyGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <PackageReference Include="Code.Generation.Roslyn.Attributes" Version="$(CodeGenerationRoslynAttributesVersion)" />
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+</Project>

@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <IsTool>true</IsTool>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.0.0.16520</Version>
+    <AssemblyVersion>1.0.0.16520</AssemblyVersion>
+    <FileVersion>1.0.0.16520</FileVersion>
+    <PackageVersion>1.0.0.16520</PackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Kingdom.OrTools.Sat.CodeGeneration.csproj.DotSettings" />
+  </ItemGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <PackageReference Include="Code.Generation.Roslyn" Version="$(CodeGenerationRoslynVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharp)" />
+    <PackageReference Include="Validation" Version="$(ValidationVersion)" />
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kingdom.OrTools.Sat.CodeGeneration.Core\Kingdom.OrTools.Sat.CodeGeneration.Core.csproj" />
+  </ItemGroup>
+
+</Project>
