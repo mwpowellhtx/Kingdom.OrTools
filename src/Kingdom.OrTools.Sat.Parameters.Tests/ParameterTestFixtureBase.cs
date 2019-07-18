@@ -128,13 +128,13 @@ namespace Kingdom.OrTools.Sat.Parameters
                     if (value is IEnumerable enumerableValue)
                     {
                         var renderedValue = Join(", ", Enumerate(enumerableValue).Select(RenderValue));
-                        message = $"Repeated `{nameof(parameter)}´ ({valueOrItemType.FullName}) with"
+                        message = $"Repeated `{parameter.GetType().FullName}´ ({valueOrItemType.FullName}) with"
                                   + $" `{nameof(value)}´ [{renderedValue}] is an unexpected combination.";
                     }
 
                     string GetSingleParameterMessage()
                     {
-                        return $"Single `{nameof(parameter)}´ ({valueOrItemType.FullName}) with"
+                        return $"Single `{parameter.GetType().FullName}´ ({valueOrItemType.FullName}) with"
                                + $" `{nameof(value)}´ ({RenderValue(value)}) is an unexpected combination.";
                     }
 
