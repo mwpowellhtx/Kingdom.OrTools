@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Kingdom.OrTools.Sat.Parameters.Examples;
 
 namespace Kingdom.OrTools.Sat.Parameters
 {
@@ -77,7 +78,11 @@ namespace Kingdom.OrTools.Sat.Parameters
         {
             get
             {
+                const int defaultPrecision = 3;
+
                 string RenderDoubleValue(double x) => ParameterValueRenderingOptions.RenderDoubleValue(x);
+
+                string RenderRepeatedDouble(IEnumerable<double> bits) => Join(",", FilterValues(bits).Select(RenderDoubleValue));
 
                 string RenderBoolean(bool x) => $"{x}".ToLower();
 
@@ -158,26 +163,24 @@ namespace Kingdom.OrTools.Sat.Parameters
                         yield return GetParameterTestCase(x, y => new AnnotatedWeekdayParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedWeekdayParameter, AnnotatedWeekday>(RenderAnnotatedEnumValue, annotated_weekday)).ToArray();
                     }
 
-                    const int precision = 3;
+                    yield return GetParameterTestCase(default, _ => new DoubleParameter(), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), defaultPrecision).ToArray();
+                    yield return GetParameterTestCase(default, _ => new AnnotatedDoubleParameter(), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), defaultPrecision).ToArray();
 
-                    yield return GetParameterTestCase(default, _ => new DoubleParameter(), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), precision).ToArray();
-                    yield return GetParameterTestCase(default, _ => new AnnotatedDoubleParameter(), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), precision).ToArray();
+                    yield return GetParameterTestCase(NegativeInfinity, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), defaultPrecision).ToArray();
+                    yield return GetParameterTestCase(PositiveInfinity, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), defaultPrecision).ToArray();
+                    yield return GetParameterTestCase(NaN, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), defaultPrecision).ToArray();
 
-                    yield return GetParameterTestCase(NegativeInfinity, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), precision).ToArray();
-                    yield return GetParameterTestCase(PositiveInfinity, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), precision).ToArray();
-                    yield return GetParameterTestCase(NaN, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), precision).ToArray();
-
-                    yield return GetParameterTestCase(NegativeInfinity, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), precision).ToArray();
-                    yield return GetParameterTestCase(PositiveInfinity, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), precision).ToArray();
-                    yield return GetParameterTestCase(NaN, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), precision).ToArray();
+                    yield return GetParameterTestCase(NegativeInfinity, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), defaultPrecision).ToArray();
+                    yield return GetParameterTestCase(PositiveInfinity, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), defaultPrecision).ToArray();
+                    yield return GetParameterTestCase(NaN, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), defaultPrecision).ToArray();
 
                     foreach (var x in GetRange<double>(1, 2))
                     {
-                        yield return GetParameterTestCase(x, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), precision).ToArray();
-                        yield return GetParameterTestCase(-x, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), precision).ToArray();
+                        yield return GetParameterTestCase(x, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), defaultPrecision).ToArray();
+                        yield return GetParameterTestCase(-x, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), defaultPrecision).ToArray();
 
-                        yield return GetParameterTestCase(x, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), precision).ToArray();
-                        yield return GetParameterTestCase(-x, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), precision).ToArray();
+                        yield return GetParameterTestCase(x, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), defaultPrecision).ToArray();
+                        yield return GetParameterTestCase(-x, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), defaultPrecision).ToArray();
                     }
                 }
 
@@ -223,7 +226,13 @@ namespace Kingdom.OrTools.Sat.Parameters
                         yield return GetRepeatedParameterTestCase(weekdayValues.Take(i).ToArray(), (x, y) => new AnnotatedWeekdayRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<AnnotatedWeekdayRepeatedParameter, AnnotatedWeekday>(RenderAnnotatedEnumValues, annotated_weekday_repeated)).ToArray();
                     }
 
-                    // TODO: TBD: next is to itemize the litany of Double cases...
+                    var doubleValues = GetRange(1, 2, NegativeInfinity, PositiveInfinity, NaN).ToArray();
+
+                    for (var i = 0; i <= doubleValues.Length; ++i)
+                    {
+                        yield return GetRepeatedParameterTestCase(doubleValues.Take(i).ToArray(), (x, y) => new DoubleRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<DoubleRepeatedParameter, double>(RenderRepeatedDouble), defaultPrecision).ToArray();
+                        yield return GetRepeatedParameterTestCase(doubleValues.Take(i).ToArray(), (x, y) => new AnnotatedDoubleRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<AnnotatedDoubleRepeatedParameter, double>(RenderRepeatedDouble, annotated_double_repeated), defaultPrecision).ToArray();
+                    }
                 }
 
                 return _privateCases ?? (_privateCases = GetAllSingularParameters().Concat(GetAllRepeatedParameters()).ToArray());
