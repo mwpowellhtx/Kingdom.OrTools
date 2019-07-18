@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Kingdom.OrTools.Sat.Parameters.Examples
+namespace Kingdom.OrTools.Sat.Parameters
 {
     using static Ordinals;
 
