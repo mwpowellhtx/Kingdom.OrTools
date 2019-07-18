@@ -11,10 +11,10 @@
     <PackageTags>Google; Operations; Research; Tools; SAT; CP; CSP; constraint; satisfaction; problem; solver; parameter; parameters; Variant; IVariant</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
-    <Version>1.0.0.16</Version>
-    <AssemblyVersion>1.0.0.16</AssemblyVersion>
-    <FileVersion>1.0.0.16</FileVersion>
-    <PackageVersion>1.0.0.16</PackageVersion>
+    <Version>1.0.0.18</Version>
+    <AssemblyVersion>1.0.0.18</AssemblyVersion>
+    <FileVersion>1.0.0.18</FileVersion>
+    <PackageVersion>1.0.0.18</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
