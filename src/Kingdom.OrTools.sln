@@ -27,6 +27,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{5EDB9086-DACF-4D1D-A3F6-91C826684B38}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
+		NuGet.Config = NuGet.Config
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility", "Kingdom.OrTools.LinearSolver.Samples.Feasibility\Kingdom.OrTools.LinearSolver.Samples.Feasibility.csproj", "{B055EC6C-994A-48F5-B41B-1473775FE5F4}"
@@ -53,7 +54,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.CodeGen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.CodeGeneration.Tests", "Kingdom.OrTools.Sat.CodeGeneration.Tests\Kingdom.OrTools.Sat.CodeGeneration.Tests.csproj", "{4D3E14F5-9323-4DFE-9B80-884804D40C7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.Sat.Parameters.Core", "Kingdom.OrTools.Sat.Parameters.Core\Kingdom.OrTools.Sat.Parameters.Core.csproj", "{FB7309B0-EC56-4242-99C4-AA791DA57574}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.Parameters.Core", "Kingdom.OrTools.Sat.Parameters.Core\Kingdom.OrTools.Sat.Parameters.Core.csproj", "{FB7309B0-EC56-4242-99C4-AA791DA57574}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.Sat.Parameters.Tests", "Kingdom.OrTools.Sat.Parameters.Tests\Kingdom.OrTools.Sat.Parameters.Tests.csproj", "{B8109A68-75AF-4946-A595-42146F74AC68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -120,6 +123,10 @@ Global
 		{FB7309B0-EC56-4242-99C4-AA791DA57574}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB7309B0-EC56-4242-99C4-AA791DA57574}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB7309B0-EC56-4242-99C4-AA791DA57574}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8109A68-75AF-4946-A595-42146F74AC68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8109A68-75AF-4946-A595-42146F74AC68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8109A68-75AF-4946-A595-42146F74AC68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8109A68-75AF-4946-A595-42146F74AC68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -142,6 +149,7 @@ Global
 		{8C5ADA33-3E34-4CA4-9657-7E6B2FDFD82E} = {C9DF96D3-E7EA-4D58-B038-E46EE2646108}
 		{4D3E14F5-9323-4DFE-9B80-884804D40C7F} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
 		{FB7309B0-EC56-4242-99C4-AA791DA57574} = {327DE516-77D1-42D4-8DCE-484E40AD3885}
+		{B8109A68-75AF-4946-A595-42146F74AC68} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7966AFF7-6884-4957-984E-1CC9AFE4FDF2}
