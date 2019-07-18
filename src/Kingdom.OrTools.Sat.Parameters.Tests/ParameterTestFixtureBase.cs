@@ -122,17 +122,23 @@ namespace Kingdom.OrTools.Sat.Parameters
 
                     string message = null;
 
-                    // ReSharper disable once InvertIf
+                    // Borderline repeating ourselves here, but it is not terrible.
+                    string RenderValue(object x) => x is double y ? $"{y:R}" : $"{x}";
+
                     if (value is IEnumerable enumerableValue)
                     {
-                        var renderedValue = Join(", ", Enumerate(enumerableValue).Select(x => $"{x}"));
+                        var renderedValue = Join(", ", Enumerate(enumerableValue).Select(RenderValue));
                         message = $"Repeated `{nameof(parameter)}´ ({valueOrItemType.FullName}) with"
                                   + $" `{nameof(value)}´ [{renderedValue}] is an unexpected combination.";
                     }
 
-                    throw new InvalidOperationException(
-                        message ?? $"Single `{nameof(parameter)}´ ({valueOrItemType.FullName}) with"
-                        + $" `{nameof(value)}´ ({value}) is an unexpected combination.");
+                    string GetSingleParameterMessage()
+                    {
+                        return $"Single `{nameof(parameter)}´ ({valueOrItemType.FullName}) with"
+                               + $" `{nameof(value)}´ ({RenderValue(value)}) is an unexpected combination.";
+                    }
+
+                    throw new InvalidOperationException(message ?? GetSingleParameterMessage());
             }
         }
 
