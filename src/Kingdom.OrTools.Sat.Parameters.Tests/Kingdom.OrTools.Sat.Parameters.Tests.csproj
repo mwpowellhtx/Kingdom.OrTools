@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
-    <Version>1.0.0.61</Version>
-    <AssemblyVersion>1.0.0.61</AssemblyVersion>
-    <FileVersion>1.0.0.61</FileVersion>
+    <Version>1.0.0.64</Version>
+    <AssemblyVersion>1.0.0.64</AssemblyVersion>
+    <FileVersion>1.0.0.64</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
