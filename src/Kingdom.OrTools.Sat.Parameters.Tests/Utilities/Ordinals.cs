@@ -11,5 +11,11 @@
         /// Otherwise, this is basically an unused part of the API framework scaffold. It is more
         /// an artifact of the Protocol Buffer Message Items than anything else.</remarks>
         internal static long InternalOrdinal => ++_ordinal;
+
+        /// <summary>
+        /// Gets the CurrentOrdinal value.
+        /// </summary>
+        /// <see cref="InternalOrdinal"/>
+        internal static long CurrentOrdinal => _ordinal;
     }
 }
