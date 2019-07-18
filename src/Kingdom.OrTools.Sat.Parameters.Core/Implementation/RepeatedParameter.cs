@@ -11,9 +11,13 @@ namespace Kingdom.OrTools.Sat.Parameters
     // TODO: TBD: or at minimum, *IN ADDITION TO* being a Parameter of type ICollection<T>, it is also a Collection of type T.
     /// <inheritdoc cref="Parameter{T}" />
     /// <typeparam name="T"></typeparam>
+    /// <see cref="IRepeatedParameter{T}"/>
     /// <see cref="ICollection{T}"/>
     public abstract class RepeatedParameter<T> : Parameter<ICollection<T>>, IRepeatedParameter<T>
     {
+        /// <inheritdoc />
+        public Type ItemType { get; } = typeof(T);
+
         /// <summary>
         /// Gets or Sets the Value.
         /// In this case we want to preclude the possibility of there being a Null value.
@@ -24,13 +28,12 @@ namespace Kingdom.OrTools.Sat.Parameters
         public override ICollection<T> Value
         {
             get => base.Value;
-            set => base.Value = value ?? new T[] { }.ToList();
+            set => base.Value = (value ?? new T[] { }).ToList();
         }
 
         /// <inheritdoc />
         /// <param name="ordinal"></param>
-        protected RepeatedParameter(long ordinal)
-            : this(new T[] { }, ordinal)
+        protected RepeatedParameter(long ordinal) : this(new T[] { }, ordinal)
         {
         }
 
@@ -40,21 +43,21 @@ namespace Kingdom.OrTools.Sat.Parameters
         /// <see cref="IEnumerable{T}"/>
         /// <see cref="List{T}"/>
         /// <see cref="Enumerable.ToList{TSource}"/>
-        protected RepeatedParameter(IEnumerable<T> values, long ordinal)
-            : base(values.ToList(), ordinal)
+        protected RepeatedParameter(IEnumerable<T> values, long ordinal) : base(values.ToList(), ordinal)
         {
         }
 
         /// <inheritdoc />
-        protected override ConvertParameterToStringCallback<ICollection<T>> Convert
-            => x => Join($"{Comma}", x.Select(y => ConvertElement(y)));
-
-        /// <summary>
-        /// Similar to <see cref="Parameter{T}.Convert"/>, except applied across each of the
-        /// <see cref="ICollection{T}"/> Elements. Also similar, default performs a direct
-        /// String Interpolation of the <typeparamref name="T"/> type value.
-        /// </summary>
-        /// <see cref="Parameter{T}.Convert"/>
-        protected virtual ConvertParameterToStringCallback<T> ConvertElement => x => $"{x}";
+        /// <see cref="Value"/>
+        /// <see cref="ItemType"/>
+        /// <see cref="IParameterValueRenderingOptions"/>
+        /// <see cref="Parameter.ParameterName"/>
+        /// <see cref="Comma"/>
+        public override string ToString(IParameterValueRenderingOptions options)
+        {
+            // Here we need to leverage ItemType instead of ValueType.
+            string RenderRepeatedItems() => Join($"{Comma}", Value.Select(x => options[ItemType].Invoke(x)));
+            return $"{ParameterName}{Equal}{RenderRepeatedItems()}";
+        }
     }
 }
