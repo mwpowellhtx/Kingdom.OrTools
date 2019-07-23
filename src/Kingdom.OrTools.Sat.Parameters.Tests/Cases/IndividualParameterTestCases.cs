@@ -1,244 +1,189 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Kingdom.OrTools.Sat.Parameters.Examples;
 
 namespace Kingdom.OrTools.Sat.Parameters
 {
-    using static Double;
-    using static Names;
-    using static Ordinals;
-    using static String;
-    using static ParameterValueRenderingOptions;
-    using static AnnotatedWeekday;
-
     internal class IndividualParameterTestCases : ParameterTestCasesBase
     {
-        private static Type VerifyTypeIsEnum<T>()
+        /// <summary>
+        /// Returns the <paramref name="descriptors"/> that are exclusively
+        /// <see cref="TestCaseDescriptor{T}"/> and not
+        /// <see cref="RepeatedTestCaseDescriptor{T}"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="descriptors"></param>
+        /// <param name="precision"></param>
+        /// <returns></returns>
+        private static IEnumerable<object[]> GetDescriptorTestCases<T>(IEnumerable<TestCaseDescriptor> descriptors, int? precision = null)
+            where T : IComparable
         {
-            var type = typeof(T);
-            if (!type.IsEnum)
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var descriptor in descriptors.OfType<TestCaseDescriptor<T>>())
             {
-                throw new InvalidOperationException($"Type `{type.FullName}´ is not an enum.");
+                TestCaseDescriptor d = descriptor;
+                yield return GetRange(d.Instance, d.ValueType, d.Value, d.Rendered, d.Instance.Ordinal, precision).ToArray();
             }
-
-            return type;
         }
 
-        private static IEnumerable<T> GetEnumValues<T>()
-            where T : struct
+        /// <summary>
+        /// Returns the <paramref name="descriptors"/> that are exclusively
+        /// <see cref="RepeatedTestCaseDescriptor{T}"/> and not
+        /// <see cref="TestCaseDescriptor{T}"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="descriptors"></param>
+        /// <param name="precision"></param>
+        /// <returns></returns>
+        private static IEnumerable<object[]> GetRepeatedDescriptorTestCases<T>(IEnumerable<TestCaseDescriptor> descriptors, int? precision = null)
+            where T : IComparable
         {
-            foreach (T x in Enum.GetValues(VerifyTypeIsEnum<T>()))
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var descriptor in descriptors.OfType<RepeatedTestCaseDescriptor<T>>())
             {
-                yield return x;
+                var d = descriptor;
+                yield return GetRange(d.Instance, d.ItemType, (object)d.Value, d.Rendered, d.Instance.Ordinal, precision).ToArray();
             }
         }
-
-        private delegate IParameter<T> CreateParameterCallback<T>(T value);
-
-        private delegate IRepeatedParameter<T> CreateRepeatedParameterCallback<T>(T value, T[] others);
-
-        // ReSharper disable UnusedTypeParameter
-        private delegate string RenderParameterValueCallback<TParameter, in T>(T value)
-            where TParameter : IParameter<T>;
-
-        private delegate string RenderRepeatedParameterValueCallback<TParameter, in T>(IEnumerable<T> values)
-            where TParameter : IRepeatedParameter<T>;
-        // ReSharper restore UnusedTypeParameter
-
-        private static RenderParameterValueCallback<TParameter, T> GetDefaultRenderParameterValueCallback<TParameter, T>(Func<T, string> render = null, string parameterName = null)
-            where TParameter : IParameter<T>
-            => x => $"{parameterName ?? typeof(TParameter).Name}={(render ?? (y => $"{y}")).Invoke(x)}";
-
-        private static RenderRepeatedParameterValueCallback<TParameter, T> GetDefaultRenderRepeatedParameterValueCallback<TParameter, T>(Func<IEnumerable<T>, string> render = null, string parameterName = null)
-            where TParameter : IRepeatedParameter<T>
-            => x =>
-            {
-                string RenderBits(IEnumerable<T> bits) => Join(",", FilterValues(bits).Select(y => $"{y}"));
-                return $"{parameterName ?? typeof(TParameter).Name}={(render ?? RenderBits).Invoke(x)}";
-            };
-
-        private static IEnumerable<object> GetParameterTestCase<TParameter, T>(T value, CreateParameterCallback<T> create
-            , RenderParameterValueCallback<TParameter, T> render, int? precision = null)
-            where TParameter : IParameter<T>
-            => GetRange<object>(create(value)
-                , typeof(T), value, render(value), CurrentOrdinal, precision).ToArray();
 
         // ReSharper disable PossibleMultipleEnumeration
-        private static IEnumerable<object> GetRepeatedParameterTestCase<TParameter, T>(IEnumerable<T> values, CreateRepeatedParameterCallback<T> create
-            , RenderRepeatedParameterValueCallback<TParameter, T> render, int? precision = null)
-            where TParameter : IRepeatedParameter<T>, new()
-            => GetRange<object>(values.Any() ? create(values.First(), values.Skip(1).ToArray()) : new TParameter()
-                , typeof(T), values, render(values), CurrentOrdinal, precision).ToArray();
+        /// <summary>
+        /// Returns all those <paramref name="descriptors"/> that are exclusively
+        /// <see cref="TestCaseDescriptor{T}"/> of the form <typeparamref name="T1"/>,
+        /// <typeparamref name="T2"/>, <typeparamref name="T3"/>, <typeparamref name="T4"/>,
+        /// and <typeparamref name="T5"/>.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <typeparam name="T5"></typeparam>
+        /// <param name="descriptors"></param>
+        /// <returns></returns>
+        /// <see cref="GetDescriptorTestCases{T}"/>
+        private static IEnumerable<object[]> GetAllDescriptorTestCases<T1, T2, T3, T4, T5>(IEnumerable<TestCaseDescriptor> descriptors)
+            where T1 : IComparable
+            where T2 : IComparable
+            where T3 : IComparable
+            where T4 : IComparable
+            where T5 : IComparable
+        {
+            foreach (var tc in GetDescriptorTestCases<T1>(descriptors))
+            {
+                yield return tc;
+            }
+
+            foreach (var tc in GetDescriptorTestCases<T2>(descriptors))
+            {
+                yield return tc;
+            }
+
+            foreach (var tc in GetDescriptorTestCases<T3>(descriptors))
+            {
+                yield return tc;
+            }
+
+            foreach (var tc in GetDescriptorTestCases<T4>(descriptors))
+            {
+                yield return tc;
+            }
+
+            foreach (var tc in GetDescriptorTestCases<T5>(descriptors))
+            {
+                yield return tc;
+            }
+        }
+        // ReSharper restore PossibleMultipleEnumeration
+
+        // ReSharper disable PossibleMultipleEnumeration
+
+        /// <summary>
+        /// Returns all those <paramref name="descriptors"/> that are exclusively
+        /// <see cref="RepeatedTestCaseDescriptor{T}"/> of the form <typeparamref name="T1"/>,
+        /// <typeparamref name="T2"/>, <typeparamref name="T3"/>, <typeparamref name="T4"/>,
+        /// and <typeparamref name="T5"/>.
+        /// </summary>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <typeparam name="T3"></typeparam>
+        /// <typeparam name="T4"></typeparam>
+        /// <typeparam name="T5"></typeparam>
+        /// <param name="descriptors"></param>
+        /// <returns></returns>
+        /// <see cref="GetRepeatedDescriptorTestCases{T}"/>
+        private static IEnumerable<object[]> GetAllRepeatedDescriptorTestCases<T1, T2, T3, T4, T5>(IEnumerable<TestCaseDescriptor> descriptors)
+            where T1 : IComparable
+            where T2 : IComparable
+            where T3 : IComparable
+            where T4 : IComparable
+            where T5 : IComparable
+        {
+            foreach (var tc in GetRepeatedDescriptorTestCases<T1>(descriptors))
+            {
+                yield return tc;
+            }
+
+            foreach (var tc in GetRepeatedDescriptorTestCases<T2>(descriptors))
+            {
+                yield return tc;
+            }
+
+            foreach (var tc in GetRepeatedDescriptorTestCases<T3>(descriptors))
+            {
+                yield return tc;
+            }
+
+            foreach (var tc in GetRepeatedDescriptorTestCases<T4>(descriptors))
+            {
+                yield return tc;
+            }
+
+            foreach (var tc in GetRepeatedDescriptorTestCases<T5>(descriptors))
+            {
+                yield return tc;
+            }
+        }
         // ReSharper restore PossibleMultipleEnumeration
 
         private static IEnumerable<object[]> _privateCases;
 
-        private static IEnumerable<object[]> PrivateCases
+        protected override IEnumerable<object[]> Cases
         {
             get
             {
                 const int defaultPrecision = 3;
 
-                string RenderDoubleValue(double x) => ParameterValueRenderingOptions.RenderDoubleValue(x);
-
-                string RenderRepeatedDouble(IEnumerable<double> bits) => Join(",", FilterValues(bits).Select(RenderDoubleValue));
-
-                string RenderBoolean(bool x) => $"{x}".ToLower();
-
-                string RenderRepeatedBoolean(IEnumerable<bool> bits) => Join(",", FilterValues(bits).Select(RenderBoolean));
-
-                // We do it this way because we are not here to use the code under test to inform the test case.
-                string RenderAnnotatedWeekday(AnnotatedWeekday x)
+                // ReSharper disable PossibleMultipleEnumeration
+                IEnumerable<object[]> GetAll(IEnumerable<TestCaseDescriptor> descriptors)
                 {
-                    // ReSharper disable once SwitchStatementMissingSomeCases
-                    switch (x)
+                    // Does not really matter the order of the generic arguments but for consistency sake throughout.
+                    foreach (var tc in GetAllDescriptorTestCases<bool, int, long, Month, AnnotatedWeekday>(descriptors))
                     {
-                        case Monday: return MONDAY;
-                        case Tuesday: return TUESDAY;
-                        case Wednesday: return WEDNESDAY;
-                        case Thursday: return THURSDAY;
-                        case Friday: return FRIDAY;
+                        yield return tc;
                     }
 
-                    throw new InvalidOperationException($"Unexpected value `{x}´.");
+                    // With Double generic arguments being the odd man out due to Precision requirements.
+                    foreach (var tc in GetDescriptorTestCases<double>(descriptors, defaultPrecision))
+                    {
+                        yield return tc;
+                    }
+
+                    // Ditto Singular Descriptor Test Cases, rinse and repeat for Repeated, pardon the pun.
+                    foreach (var tc in GetAllRepeatedDescriptorTestCases<bool, int, long, Month, AnnotatedWeekday>(descriptors))
+                    {
+                        yield return tc;
+                    }
+
+                    foreach (var tc in GetRepeatedDescriptorTestCases<double>(descriptors, defaultPrecision))
+                    {
+                        yield return tc;
+                    }
                 }
-
-                string RenderAnnotatedEnumValue<T>(T x) => x is AnnotatedWeekday y ? RenderAnnotatedWeekday(y) : $"{x}";
-
-                // ReSharper disable PossibleMultipleEnumeration
-                string RenderAnnotatedEnumValues<T>(IEnumerable<T> x) => Join(",", FilterValues(x).Select(RenderAnnotatedEnumValue));
                 // ReSharper restore PossibleMultipleEnumeration
 
-                IEnumerable<object[]> GetAllSingularParameters()
-                {
-                    // Default Boolean is False, correct...
-                    yield return GetParameterTestCase(default, _ => new BooleanParameter(), GetDefaultRenderParameterValueCallback<BooleanParameter, bool>(RenderBoolean)).ToArray();
-                    yield return GetParameterTestCase(true, y => new BooleanParameter(y), GetDefaultRenderParameterValueCallback<BooleanParameter, bool>(RenderBoolean)).ToArray();
-
-                    yield return GetParameterTestCase(default, _ => new AnnotatedBooleanParameter(), GetDefaultRenderParameterValueCallback<AnnotatedBooleanParameter, bool>(RenderBoolean, annotated_boolean)).ToArray();
-                    yield return GetParameterTestCase(true, y => new AnnotatedBooleanParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedBooleanParameter, bool>(RenderBoolean, annotated_boolean)).ToArray();
-
-                    yield return GetParameterTestCase(default, _ => new IntegerParameter(), GetDefaultRenderParameterValueCallback<IntegerParameter, int>()).ToArray();
-                    yield return GetParameterTestCase(default, _ => new AnnotatedIntegerParameter(), GetDefaultRenderParameterValueCallback<AnnotatedIntegerParameter, int>(null, annotated_integer)).ToArray();
-
-                    foreach (var x in GetRange(1, 2))
-                    {
-                        yield return GetParameterTestCase(x, y => new IntegerParameter(y), GetDefaultRenderParameterValueCallback<IntegerParameter, int>()).ToArray();
-                        yield return GetParameterTestCase(-x, y => new IntegerParameter(y), GetDefaultRenderParameterValueCallback<IntegerParameter, int>()).ToArray();
-
-                        yield return GetParameterTestCase(x, y => new AnnotatedIntegerParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedIntegerParameter, int>(null, annotated_integer)).ToArray();
-                        yield return GetParameterTestCase(-x, y => new AnnotatedIntegerParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedIntegerParameter, int>(null, annotated_integer)).ToArray();
-                    }
-
-                    yield return GetParameterTestCase(default, _ => new LongParameter(), GetDefaultRenderParameterValueCallback<LongParameter, long>()).ToArray();
-                    yield return GetParameterTestCase(default, _ => new AnnotatedLongParameter(), GetDefaultRenderParameterValueCallback<AnnotatedLongParameter, long>(null, annotated_long)).ToArray();
-
-                    foreach (var x in GetRange<long>(1, 2))
-                    {
-                        yield return GetParameterTestCase(x, y => new LongParameter(y), GetDefaultRenderParameterValueCallback<LongParameter, long>()).ToArray();
-                        yield return GetParameterTestCase(-x, y => new LongParameter(y), GetDefaultRenderParameterValueCallback<LongParameter, long>()).ToArray();
-
-                        yield return GetParameterTestCase(x, y => new AnnotatedLongParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedLongParameter, long>(null, annotated_long)).ToArray();
-                        yield return GetParameterTestCase(-x, y => new AnnotatedLongParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedLongParameter, long>(null, annotated_long)).ToArray();
-                    }
-
-                    yield return GetParameterTestCase(default, _ => new MonthParameter(), GetDefaultRenderParameterValueCallback<MonthParameter, Month>(RenderAnnotatedEnumValue)).ToArray();
-                    yield return GetParameterTestCase(default, _ => new AnnotatedMonthParameter(), GetDefaultRenderParameterValueCallback<AnnotatedMonthParameter, Month>(RenderAnnotatedEnumValue, annotated_month)).ToArray();
-
-                    // Ostensibly Skipping the Default Value.
-                    foreach (var x in GetEnumValues<Month>().Skip(1))
-                    {
-                        yield return GetParameterTestCase(x, y => new MonthParameter(y), GetDefaultRenderParameterValueCallback<MonthParameter, Month>(RenderAnnotatedEnumValue)).ToArray();
-                        yield return GetParameterTestCase(x, y => new AnnotatedMonthParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedMonthParameter, Month>(RenderAnnotatedEnumValue, annotated_month)).ToArray();
-                    }
-
-                    yield return GetParameterTestCase(default, _ => new WeekdayParameter(), GetDefaultRenderParameterValueCallback<WeekdayParameter, AnnotatedWeekday>(RenderAnnotatedEnumValue)).ToArray();
-                    yield return GetParameterTestCase(default, _ => new AnnotatedWeekdayParameter(), GetDefaultRenderParameterValueCallback<AnnotatedWeekdayParameter, AnnotatedWeekday>(RenderAnnotatedEnumValue, annotated_weekday)).ToArray();
-
-                    // Ditto Enumerated Default Values...
-                    foreach (var x in GetEnumValues<AnnotatedWeekday>().Skip(1))
-                    {
-                        yield return GetParameterTestCase(x, y => new WeekdayParameter(y), GetDefaultRenderParameterValueCallback<WeekdayParameter, AnnotatedWeekday>(RenderAnnotatedEnumValue)).ToArray();
-                        yield return GetParameterTestCase(x, y => new AnnotatedWeekdayParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedWeekdayParameter, AnnotatedWeekday>(RenderAnnotatedEnumValue, annotated_weekday)).ToArray();
-                    }
-
-                    yield return GetParameterTestCase(default, _ => new DoubleParameter(), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), defaultPrecision).ToArray();
-                    yield return GetParameterTestCase(default, _ => new AnnotatedDoubleParameter(), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), defaultPrecision).ToArray();
-
-                    yield return GetParameterTestCase(NegativeInfinity, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), defaultPrecision).ToArray();
-                    yield return GetParameterTestCase(PositiveInfinity, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), defaultPrecision).ToArray();
-                    yield return GetParameterTestCase(NaN, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), defaultPrecision).ToArray();
-
-                    yield return GetParameterTestCase(NegativeInfinity, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), defaultPrecision).ToArray();
-                    yield return GetParameterTestCase(PositiveInfinity, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), defaultPrecision).ToArray();
-                    yield return GetParameterTestCase(NaN, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), defaultPrecision).ToArray();
-
-                    foreach (var x in GetRange<double>(1, 2))
-                    {
-                        yield return GetParameterTestCase(x, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), defaultPrecision).ToArray();
-                        yield return GetParameterTestCase(-x, y => new DoubleParameter(y), GetDefaultRenderParameterValueCallback<DoubleParameter, double>(RenderDoubleValue), defaultPrecision).ToArray();
-
-                        yield return GetParameterTestCase(x, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), defaultPrecision).ToArray();
-                        yield return GetParameterTestCase(-x, y => new AnnotatedDoubleParameter(y), GetDefaultRenderParameterValueCallback<AnnotatedDoubleParameter, double>(RenderDoubleValue, annotated_double), defaultPrecision).ToArray();
-                    }
-                }
-
-                IEnumerable<object[]> GetAllRepeatedParameters()
-                {
-                    var boolValues = GetRange(default, true).ToArray();
-
-                    for (var i = 0; i <= boolValues.Length; ++i)
-                    {
-                        yield return GetRepeatedParameterTestCase(boolValues.Take(i).ToArray(), (x, y) => new BooleanRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<BooleanRepeatedParameter, bool>(RenderRepeatedBoolean)).ToArray();
-                        yield return GetRepeatedParameterTestCase(boolValues.Take(i).ToArray(), (x, y) => new AnnotatedBooleanRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<AnnotatedBooleanRepeatedParameter, bool>(RenderRepeatedBoolean, annotated_boolean_repeated)).ToArray();
-                    }
-
-                    var intValues = GetRange(1, 2, 3).ToArray();
-
-                    for (var i = 0; i <= intValues.Length; ++i)
-                    {
-                        yield return GetRepeatedParameterTestCase(intValues.Take(i).ToArray(), (x, y) => new IntegerRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<IntegerRepeatedParameter, int>()).ToArray();
-                        yield return GetRepeatedParameterTestCase(intValues.Take(i).ToArray(), (x, y) => new AnnotatedIntegerRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<AnnotatedIntegerRepeatedParameter, int>(parameterName: annotated_integer_repeated)).ToArray();
-                    }
-
-                    var longValues = GetRange<long>(1, 2, 3).ToArray();
-
-                    for (var i = 0; i <= longValues.Length; ++i)
-                    {
-                        yield return GetRepeatedParameterTestCase(longValues.Take(i).ToArray(), (x, y) => new LongRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<LongRepeatedParameter, long>()).ToArray();
-                        yield return GetRepeatedParameterTestCase(longValues.Take(i).ToArray(), (x, y) => new AnnotatedLongRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<AnnotatedLongRepeatedParameter, long>(parameterName: annotated_long_repeated)).ToArray();
-                    }
-
-                    var monthValues = GetEnumValues<Month>().ToArray();
-
-                    for (var i = 0; i <= monthValues.Length; ++i)
-                    {
-                        yield return GetRepeatedParameterTestCase(monthValues.Take(i).ToArray(), (x, y) => new MonthRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<MonthRepeatedParameter, Month>(RenderAnnotatedEnumValues)).ToArray();
-                        yield return GetRepeatedParameterTestCase(monthValues.Take(i).ToArray(), (x, y) => new AnnotatedMonthRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<AnnotatedMonthRepeatedParameter, Month>(RenderAnnotatedEnumValues, annotated_month_repeated)).ToArray();
-                    }
-
-                    var weekdayValues = GetEnumValues<AnnotatedWeekday>().ToArray();
-
-                    for (var i = 0; i <= weekdayValues.Length; ++i)
-                    {
-                        yield return GetRepeatedParameterTestCase(weekdayValues.Take(i).ToArray(), (x, y) => new WeekdayRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<WeekdayRepeatedParameter, AnnotatedWeekday>(RenderAnnotatedEnumValues)).ToArray();
-                        yield return GetRepeatedParameterTestCase(weekdayValues.Take(i).ToArray(), (x, y) => new AnnotatedWeekdayRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<AnnotatedWeekdayRepeatedParameter, AnnotatedWeekday>(RenderAnnotatedEnumValues, annotated_weekday_repeated)).ToArray();
-                    }
-
-                    var doubleValues = GetRange(1, 2, NegativeInfinity, PositiveInfinity, NaN).ToArray();
-
-                    for (var i = 0; i <= doubleValues.Length; ++i)
-                    {
-                        yield return GetRepeatedParameterTestCase(doubleValues.Take(i).ToArray(), (x, y) => new DoubleRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<DoubleRepeatedParameter, double>(RenderRepeatedDouble), defaultPrecision).ToArray();
-                        yield return GetRepeatedParameterTestCase(doubleValues.Take(i).ToArray(), (x, y) => new AnnotatedDoubleRepeatedParameter(x, y), GetDefaultRenderRepeatedParameterValueCallback<AnnotatedDoubleRepeatedParameter, double>(RenderRepeatedDouble, annotated_double_repeated), defaultPrecision).ToArray();
-                    }
-                }
-
-                return _privateCases ?? (_privateCases = GetAllSingularParameters().Concat(GetAllRepeatedParameters()).ToArray());
+                // We think this is a bit cleaner now that we depend upon a statically defined Descriptors in the base class.
+                return _privateCases ?? (_privateCases = GetAll(Descriptors).ToArray());
             }
         }
-
-        protected override IEnumerable<object[]> Cases => PrivateCases;
     }
 }
