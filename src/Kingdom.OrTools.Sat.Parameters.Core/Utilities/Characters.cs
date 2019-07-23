@@ -19,10 +19,5 @@
         /// &apos;=&apos;
         /// </summary>
         public const char Equal = '=';
-
-        /// <summary>
-        /// &apos;-&apos;
-        /// </summary>
-        public const char Minus = '-';
     }
 }
