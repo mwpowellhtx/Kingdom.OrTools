@@ -6,7 +6,6 @@ using System.Reflection;
 
 namespace Kingdom.OrTools.Sat.Parameters
 {
-    using static Characters;
     using static Double;
     using static Rendered;
     using RenderParameterValueCallbackDictionary = Dictionary<Type, RenderParameterValueCallback>;
@@ -62,8 +61,19 @@ namespace Kingdom.OrTools.Sat.Parameters
         /// <returns></returns>
         internal static string RenderDoubleValue(double value)
         {
-            string RenderNegativeInfinitySignage() => IsNegativeInfinity(value) ? $"{Minus}" : "";
-            return IsInfinity(value) ? $"{RenderNegativeInfinitySignage()}{inf}" : IsNaN(value) ? $"{nan}" : $"{value:R}";
+            string RenderNegativeInfinity()
+                => IsNegativeInfinity(value)
+                    ? $"{value}".Substring(0, 4).ToLower()
+                    : null;
+
+            string RenderPositiveInfinityOrNaN()
+                => IsPositiveInfinity(value) || IsNaN(value)
+                    ? $"{value}".Substring(0, 3).ToLower()
+                    : null;
+
+            string RenderRoundTrip() => $"{value:R}";
+
+            return RenderNegativeInfinity() ?? RenderPositiveInfinityOrNaN() ?? RenderRoundTrip();
         }
 
         // ReSharper disable PossibleMultipleEnumeration
