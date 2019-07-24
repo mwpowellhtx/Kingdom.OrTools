@@ -5,6 +5,9 @@ using System.Linq;
 namespace Kingdom.OrTools.Sat
 {
     using Google.OrTools.Sat;
+    using Parameters;
+    using static Parameters.Characters;
+    using static String;
     using static CpSolverStatus;
     using SolverStatus = Google.OrTools.Sat.CpSolverStatus;
 
@@ -46,12 +49,17 @@ namespace Kingdom.OrTools.Sat
             get { yield break; }
         }
 
+        /// <inheritdoc />
+        public virtual IParameterCollection Parameters { get; } = new ParameterCollection();
+
         /// <summary>
-        /// Override to specify the Parameters <see cref="string"/>
-        /// <see cref="Google.OrTools.Sat.CpSolver.StringParameters"/>.
+        /// Furnishes a <see cref="string"/> representation of the <see cref="Parameters"/>
+        /// <see cref="IParameter"/> <see cref="ICollection{T}"/>. Override in the event there
+        /// is any further work you want to accomplish using the represented parameters.
         /// </summary>
+        /// <see cref="Space"/>
         /// <see cref="Google.OrTools.Sat.CpSolver.StringParameters"/>
-        protected virtual string ParametersString => string.Empty;
+        protected virtual string ParametersString => $"{Parameters}";
 
         /// <summary>
         /// 
@@ -81,7 +89,13 @@ namespace Kingdom.OrTools.Sat
         /// <returns></returns>
         protected virtual Tuple<CpSolver, CpModel> PrepareProblemSolver()
         {
-            Solver = new CpSolver {StringParameters = ParametersString};
+            {
+                var stringParameters = ParametersString;
+                // Only relay the StringParameters when we actually have them.
+                Solver = IsNullOrEmpty(stringParameters)
+                    ? new CpSolver()
+                    : new CpSolver {StringParameters = stringParameters};
+            }
 
             /* Truly there is nothing to convey to any Monitors, Search Agents, etc, for the Sat
              * approach. Once they are New created or Added, they are registered with the Model

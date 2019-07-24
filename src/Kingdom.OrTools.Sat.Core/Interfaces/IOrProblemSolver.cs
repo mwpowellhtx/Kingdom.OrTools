@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace Kingdom.OrTools.Sat
 {
     using Google.OrTools.Sat;
+    using Parameters;
 
     /// <summary>
     /// Provides a problem solving interface for adaptation.
@@ -11,6 +12,11 @@ namespace Kingdom.OrTools.Sat
     /// <inheritdoc />
     public interface IOrProblemSolver : IProblemSolver<CpSolver, CpModel>
     {
+        /// <summary>
+        /// Gets the <see cref="IParameterCollection"/> Parameters instance.
+        /// </summary>
+        IParameterCollection Parameters { get; }
+
         /// <summary>
         /// Gets the Expected Results.
         /// </summary>
