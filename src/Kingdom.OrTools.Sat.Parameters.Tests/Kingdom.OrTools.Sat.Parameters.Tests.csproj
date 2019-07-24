@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
-    <Version>1.0.0.161</Version>
-    <AssemblyVersion>1.0.0.161</AssemblyVersion>
-    <FileVersion>1.0.0.161</FileVersion>
+    <Version>1.0.0.163</Version>
+    <AssemblyVersion>1.0.0.163</AssemblyVersion>
+    <FileVersion>1.0.0.163</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kingdom.OrTools.Sat.Parameters.Core\Kingdom.OrTools.Sat.Parameters.Core.csproj" />
+    <ProjectReference Include="..\Kingdom.OrTools.Sat.Parameters\Kingdom.OrTools.Sat.Parameters.csproj" />
   </ItemGroup>
 
   <!-- ReSharper disable UnknownProperty -->

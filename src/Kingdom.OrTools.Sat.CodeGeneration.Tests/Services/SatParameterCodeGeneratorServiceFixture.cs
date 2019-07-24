@@ -66,7 +66,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
             if (!File.Exists(projectPath))
             {
-                const string parametersCoreProjectName = "Kingdom.OrTools.Sat.Parameters.Core";
+                const string parametersCoreProjectName = "Kingdom.OrTools.Sat.Parameters";
 
                 // Which paths are based on the output directory relative paths.
                 GenerateCode(projectPath, () => Join(crLf

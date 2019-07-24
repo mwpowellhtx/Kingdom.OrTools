@@ -54,7 +54,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.CodeGen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.CodeGeneration.Tests", "Kingdom.OrTools.Sat.CodeGeneration.Tests\Kingdom.OrTools.Sat.CodeGeneration.Tests.csproj", "{4D3E14F5-9323-4DFE-9B80-884804D40C7F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.Parameters.Core", "Kingdom.OrTools.Sat.Parameters.Core\Kingdom.OrTools.Sat.Parameters.Core.csproj", "{FB7309B0-EC56-4242-99C4-AA791DA57574}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.Parameters", "Kingdom.OrTools.Sat.Parameters\Kingdom.OrTools.Sat.Parameters.csproj", "{FB7309B0-EC56-4242-99C4-AA791DA57574}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.Sat.Parameters.Tests", "Kingdom.OrTools.Sat.Parameters.Tests\Kingdom.OrTools.Sat.Parameters.Tests.csproj", "{B8109A68-75AF-4946-A595-42146F74AC68}"
 EndProject

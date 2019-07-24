@@ -11,10 +11,10 @@
     <PackageTags>Google; Operations; Research; Tools; wrapper; dispose; disposable; CLR; object; host; constraint; satisfaction; problem; solver; CP; CSP; variable; variables; int; integer; bool; boolean; solution</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Kingdom.OrTools.Sat</RootNamespace>
-    <Version>1.0.1.4368</Version>
-    <AssemblyVersion>1.0.1.4368</AssemblyVersion>
-    <FileVersion>1.0.1.4368</FileVersion>
-    <PackageVersion>1.0.1.4368</PackageVersion>
+    <Version>1.0.1.4378</Version>
+    <AssemblyVersion>1.0.1.4378</AssemblyVersion>
+    <FileVersion>1.0.1.4378</FileVersion>
+    <PackageVersion>1.0.1.4378</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
@@ -29,12 +29,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.Core\Kingdom.OrTools.Core.csproj" />
+    <ProjectReference Include="..\Kingdom.OrTools.Sat.Parameters\Kingdom.OrTools.Sat.Parameters.csproj" />
     <!-- TODO: TBD: anticipating future code generation aspects... -->
     <!-- <ProjectReference Include="..\Kingdom.OrTools.Sat.CodeGeneration.Attributes\Kingdom.OrTools.Sat.CodeGeneration.Attributes.csproj" /> -->
   </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="if exist &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot; del /f &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot;" />
-  </Target>
 
 </Project>
