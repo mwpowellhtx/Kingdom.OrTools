@@ -8,6 +8,11 @@
     <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <NoWarn Condition="'$(NoWarn)'!=''">$(NoWarn);NU1603</NoWarn>
+    <NoWarn Condition="'$(NoWarn)'==''">NU1603</NoWarn>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
     <WarningLevel>2</WarningLevel>
   </PropertyGroup>
