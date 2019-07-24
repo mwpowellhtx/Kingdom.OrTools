@@ -72,6 +72,12 @@ namespace Kingdom.OrTools.Sat.Parameters
         public override string ToString() => ToString(ParameterValueRenderingOptions.DefaultOptions);
 
         /// <inheritdoc />
-        public string ToString(IParameterValueRenderingOptions options) => Join($"{SemiColon}", this.Select(x => x.ToString(options)));
+        /// <see cref="Space"/>
+        /// <see cref="!:https://groups.google.com/forum/#!searchin/or-tools-discuss/sat$20parameter$20string%7Csort:date"/>
+        /// <see cref="!:https://groups.google.com/forum/#!searchin/or-tools-discuss/sat$20parameter$20string%7Csort:date/or-tools-discuss/X4Y_ZpKIUp8/kz-xiKSYEAAJ"/>
+        public string ToString(IParameterValueRenderingOptions options)
+            => Collection.Any()
+                ? Join($"{Space}", this.Select(x => x.ToString(options)))
+                : "";
     }
 }

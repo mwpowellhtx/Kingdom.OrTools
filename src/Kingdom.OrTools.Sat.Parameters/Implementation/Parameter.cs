@@ -55,7 +55,9 @@ namespace Kingdom.OrTools.Sat.Parameters
         /// <see cref="IParameterValueRenderingOptions"/>
         /// <see cref="RenderParameterValueCallback"/>
         /// <see cref="Equal"/>
+        /// <see cref="!:https://groups.google.com/forum/#!searchin/or-tools-discuss/sat$20parameter$20string%7Csort:date"/>
+        /// <see cref="!:https://groups.google.com/forum/#!searchin/or-tools-discuss/sat$20parameter$20string%7Csort:date/or-tools-discuss/X4Y_ZpKIUp8/kz-xiKSYEAAJ"/>
         public virtual string ToString(IParameterValueRenderingOptions options)
-            => $"{ParameterName}{Equal}{options[ValueType].Invoke(WeaklyTypedValue)}";
+            => $"{ParameterName}{Colon} {options[ValueType].Invoke(WeaklyTypedValue)}";
     }
 }

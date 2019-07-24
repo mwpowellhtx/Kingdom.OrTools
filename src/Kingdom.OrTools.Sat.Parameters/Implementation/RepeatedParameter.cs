@@ -53,11 +53,28 @@ namespace Kingdom.OrTools.Sat.Parameters
         /// <see cref="IParameterValueRenderingOptions"/>
         /// <see cref="Parameter.ParameterName"/>
         /// <see cref="Comma"/>
+        /// <see cref="LeftSquareBracket"/>
+        /// <see cref="RightSquareBracket"/>
+        /// <see cref="SquareBrackets"/>
+        /// <see cref="!:https://groups.google.com/forum/#!searchin/or-tools-discuss/sat$20parameter$20string%7Csort:date"/>
+        /// <see cref="!:https://groups.google.com/forum/#!searchin/or-tools-discuss/sat$20parameter$20string%7Csort:date/or-tools-discuss/X4Y_ZpKIUp8/kz-xiKSYEAAJ"/>
         public override string ToString(IParameterValueRenderingOptions options)
         {
             // Here we need to leverage ItemType instead of ValueType.
-            string RenderRepeatedItems() => Join($"{Comma}", Value.Select(x => options[ItemType].Invoke(x)));
-            return $"{ParameterName}{Equal}{RenderRepeatedItems()}";
+            string RenderRepeatedItems()
+            {
+                if (Value.Any())
+                {
+                    return Join(
+                        Join($"{Comma}", Value.Select(x => options[ItemType].Invoke(x)))
+                        , $"{LeftSquareBracket} ", $" {RightSquareBracket}"
+                    );
+                }
+
+                return SquareBrackets;
+            }
+
+            return $"{ParameterName}{Colon} {RenderRepeatedItems()}";
         }
     }
 }
