@@ -13,6 +13,10 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
     {
         private static Guid NewId => Guid.NewGuid();
 
+        /// <inheritdoc />
+        /// <see cref="SatParameterCodeGeneratorServiceFixture"/>
+        internal override Type ServiceType { get; } = typeof(SatParameterCodeGeneratorServiceFixture);
+
         private string GeneratorOutputDirectory { get; } = $"{NewId:N}";
 
         public event EventHandler<FileEventArgs> CodeGenerated;

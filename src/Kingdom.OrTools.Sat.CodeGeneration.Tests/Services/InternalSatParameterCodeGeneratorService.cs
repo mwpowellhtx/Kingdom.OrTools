@@ -14,13 +14,11 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
         internal bool GenerateProjectBits { get; set; }
 
         /// <inheritdoc />
+        /// <see cref="InternalSatParameterCodeGeneratorService"/>
         internal override Type ServiceType { get; } = typeof(InternalSatParameterCodeGeneratorService);
 
-        private Stream _satParametersProtocolBufferStream;
-
         /// <inheritdoc />
-        internal override Stream SatParametersProtocolBufferStream
-            => _satParametersProtocolBufferStream ?? (_satParametersProtocolBufferStream
-                   = ServiceType.Assembly.GetManifestResourceStream(ServiceType, ResourcePath));
+        internal override Stream SatParametersProtocolBufferStream => ServiceType.Assembly.GetManifestResourceStream(ServiceType, ResourcePath);
+
     }
 }

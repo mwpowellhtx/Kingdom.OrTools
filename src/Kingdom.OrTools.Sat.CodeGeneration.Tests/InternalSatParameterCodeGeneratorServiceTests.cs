@@ -2,7 +2,9 @@
 {
     using Xunit.Abstractions;
 
-    public class InternalSatParameterCodeGeneratorServiceTests : InternalSatParameterCodeGeneratorServiceTestFixtureBase<InternalSatParameterCodeGeneratorService>
+    public class InternalSatParameterCodeGeneratorServiceTests
+        : InternalSatParameterCodeGeneratorServiceTestFixtureBase<
+            SatParameterCodeGeneratorServiceFixture>
     {
         /// <summary>
         /// Default Constructor. We could probably let XUnit feed the
