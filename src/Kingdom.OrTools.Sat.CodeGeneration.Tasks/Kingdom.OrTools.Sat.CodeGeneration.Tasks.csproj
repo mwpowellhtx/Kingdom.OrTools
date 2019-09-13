@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>Kingdom.OrTools.Sat.CodeGeneration.BuildTime</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>The build-time development dependency that facilitates OrTools Constraint Programming Satisfaction build time code generation.</Description>
+    <PackageTags>dotnet;code;generation;Operational;Research;Tools;OR;CP;Constraint;Programming;SAT;Satisfaction;Roslyn;task;tasks;target;targets;version;clean;build;MSBuild;Microsoft;compile;generate;time;net;framework;netstandard;parameter;parameters</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.0.0.14308</Version>
+    <AssemblyVersion>1.0.0.14308</AssemblyVersion>
+    <FileVersion>1.0.0.14308</FileVersion>
+    <PackageVersion>1.0.0.14308</PackageVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Kingdom.OrTools.Sat.CodeGeneration.Tasks.csproj.DotSettings" />
+    <None Remove="build\$(PackageId).*" />
+    <Content Include="build\$(PackageId).*">
+      <Pack>true</Pack>
+      <PackagePath>build</PackagePath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <Import Project="..\packages\bumpassemblyversions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets" Condition="'$(TargetFrameworks)' != '' And Exists('..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets')" />
+  <!-- ReSharper restore UnknownProperty -->
+
+  <ImportGroup>
+    <Import Project="..\Licensing.props" />
+    <Import Project="..\Sat.Parameters.CodeGeneration.props" />
+  </ImportGroup>
+
+</Project>
