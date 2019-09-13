@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -6,15 +6,16 @@
     <Version>1.0.0.163</Version>
     <AssemblyVersion>1.0.0.163</AssemblyVersion>
     <FileVersion>1.0.0.163</FileVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
-    <PlatformTarget>x64</PlatformTarget>
+    <Configurations>Debug</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Kingdom.OrTools.Sat.Parameters.Tests.csproj.DotSettings" />
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.Sat.Parameters\Kingdom.OrTools.Sat.Parameters.csproj" />

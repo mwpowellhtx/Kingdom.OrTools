@@ -1,15 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.0.1.9684</Version>
-    <AssemblyVersion>1.0.1.9684</AssemblyVersion>
-    <FileVersion>1.0.1.9684</FileVersion>
+    <Version>1.0.1.9688</Version>
+    <AssemblyVersion>1.0.1.9688</AssemblyVersion>
+    <FileVersion>1.0.1.9688</FileVersion>
+    <Configurations>Debug</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.LinearSolver.Samples.Feasibility</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
     <PlatformTarget>x64</PlatformTarget>
-    <RootNamespace>Kingdom.OrTools.LinearSolver.Samples.Feasibility</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
