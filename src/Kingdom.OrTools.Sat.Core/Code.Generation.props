@@ -1,0 +1,9 @@
+<Project>
+
+  <Target Name="VerifyBitsBeforeCodeGeneration" AfterTargets="BeforeGenerateCodeFromAttributes" BeforeTargets="GenerateCodeFromAttributes">
+    <Message Text="Including @(CodeGenCompilationAdditionalReferencePaths->Count()) Additional Reference(s) ..." Importance="high" />
+    <Message Condition="@(ReferencePath->Count()) > 0" Text="Reference '@(ReferencePath->%(Identity))' ..." Importance="high" />
+    <Message Condition="@(CodeGenCompilationAdditionalReferencePaths->Count()) > 0" Text="Additional Reference '@(CodeGenCompilationAdditionalReferencePaths->%(Identity))' ..." Importance="high" />
+  </Target>
+
+</Project>
