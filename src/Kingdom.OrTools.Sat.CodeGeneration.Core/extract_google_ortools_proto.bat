@@ -1,5 +1,8 @@
 @echo off
 
+rem TODO: TBD: holding on to this batch command file for the time being until
+rem  the longer term approach has been further vetted.
+
 setlocal
 
 rem For purposes of our build pipeline, we will assume that the packaging is complete.

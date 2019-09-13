@@ -77,7 +77,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 return MemberAccessExpression(
                     SimpleMemberAccessExpression
                     , PredefinedType(Token(FloatKeyword))
-                    , IdentifierName($"float.{nameof(float.PositiveInfinity)}")
+                    , IdentifierName($"{nameof(float.PositiveInfinity)}")
                 );
             }
 
@@ -86,7 +86,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 return MemberAccessExpression(
                     SimpleMemberAccessExpression
                     , PredefinedType(Token(FloatKeyword))
-                    , IdentifierName($"float.{nameof(float.NegativeInfinity)}")
+                    , IdentifierName($"{nameof(float.NegativeInfinity)}")
                 );
             }
 
@@ -95,7 +95,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 return MemberAccessExpression(
                     SimpleMemberAccessExpression
                     , PredefinedType(Token(FloatKeyword))
-                    , IdentifierName($"float.{nameof(float.NaN)}")
+                    , IdentifierName($"{nameof(float.NaN)}")
                 );
             }
 
@@ -117,7 +117,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 return MemberAccessExpression(
                     SimpleMemberAccessExpression
                     , PredefinedType(Token(DoubleKeyword))
-                    , IdentifierName($"double.{nameof(double.PositiveInfinity)}")
+                    , IdentifierName($"{nameof(double.PositiveInfinity)}")
                 );
             }
 
@@ -126,7 +126,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 return MemberAccessExpression(
                     SimpleMemberAccessExpression
                     , PredefinedType(Token(DoubleKeyword))
-                    , IdentifierName($"double.{nameof(double.NegativeInfinity)}")
+                    , IdentifierName($"{nameof(double.NegativeInfinity)}")
                 );
             }
 
@@ -135,7 +135,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 return MemberAccessExpression(
                     SimpleMemberAccessExpression
                     , PredefinedType(Token(DoubleKeyword))
-                    , IdentifierName($"double.{nameof(double.NaN)}")
+                    , IdentifierName($"{nameof(double.NaN)}")
                 );
             }
 
