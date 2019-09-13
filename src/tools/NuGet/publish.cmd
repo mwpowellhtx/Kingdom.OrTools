@@ -42,7 +42,16 @@ set solver_projects=Kingdom.OrTools.Core
 set solver_projects=%solver_projects%%delim%Kingdom.OrTools.ConstraintSolver.Core
 set solver_projects=%solver_projects%%delim%Kingdom.OrTools.LinearSolver.Core
 set solver_projects=%solver_projects%%delim%Kingdom.OrTools.Sat.Core
-
+rem Setup All Code Generation Projects
+set all_cg_projects=Kingdom.OrTools.Sat.CodeGeneration
+set all_cg_projects=%all_cg_projects%%delim%Kingdom.OrTools.Sat.CodeGeneration.Core
+set all_cg_projects=%all_cg_projects%%delim%Kingdom.OrTools.Sat.CodeGeneration.Attributes
+rem Setup Code Generation Attributes Projects
+set cg_attrib_projects=Kingdom.OrTools.Sat.CodeGeneration.Attributes
+rem Setup Code Generation Projects
+set cg_projects=Kingdom.OrTools.Sat.CodeGeneration
+set cg_projects=%cg_projects%%delim%Kingdom.OrTools.Sat.CodeGeneration.Core
+rem TODO: TBD: add the next internally published bits into the project(s) mix...
 
 :parse_args
 
@@ -145,6 +154,27 @@ if "%1" == "--all" (
     goto :next_arg
 )
 
+:add_all_cg_projects
+if "%1" == "--all-cg" (
+    rem Prepare to publish All Code Generation Projects.
+    set projects=%all_cg_projects%
+    goto :next_arg
+)
+
+:add_cg_attrib_projects
+if "%1" == "--cg-attrib" (
+    rem Prepare to publish Code Generation Attribute Projects.
+    set projects=%cg_attrib_projects%
+    goto :next_arg
+)
+
+:add_cg_projects
+if "%1" == "--cg" (
+    rem Prepare to publish Code Generation Projects.
+    set projects=%cg_projects%
+    goto :next_arg
+)
+
 :add_project
 if "%1" == "--project" (
     rem Add a Project to the Projects list.
@@ -203,6 +233,8 @@ set nuget_push_opts=%nuget_push_opts% -Source %nuget_push_source%
 
 rem Do the main areas here.
 pushd ..\..
+
+rem echo projects = %projects%
 
 if not "%projects%" == "" (
     echo Processing '%config%' configuration for '%projects%' ...
