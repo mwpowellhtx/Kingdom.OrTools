@@ -1,9 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -11,10 +10,10 @@
     <PackageTags>Google; Operations; Research; Tools; SAT; CP; CSP; constraint; satisfaction; problem; solver; parameter; parameters; Variant; IVariant</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
-    <Version>1.0.0.25</Version>
-    <AssemblyVersion>1.0.0.25</AssemblyVersion>
-    <FileVersion>1.0.0.25</FileVersion>
-    <PackageVersion>1.0.0.25</PackageVersion>
+    <Version>1.0.0.168</Version>
+    <AssemblyVersion>1.0.0.168</AssemblyVersion>
+    <FileVersion>1.0.0.168</FileVersion>
+    <PackageVersion>1.0.0.168</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
@@ -51,5 +50,9 @@
       <_Parameter1>Kingdom.OrTools.Sat.Parameters.Tests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
+
+  <ImportGroup>
+    <Import Project="..\Licensing.props" />
+  </ImportGroup>
 
 </Project>
