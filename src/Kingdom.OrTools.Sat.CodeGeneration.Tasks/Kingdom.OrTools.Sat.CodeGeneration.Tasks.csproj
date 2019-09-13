@@ -14,10 +14,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.0.14308</Version>
-    <AssemblyVersion>1.0.0.14308</AssemblyVersion>
-    <FileVersion>1.0.0.14308</FileVersion>
-    <PackageVersion>1.0.0.14308</PackageVersion>
+    <Version>1.1.0.22765</Version>
+    <AssemblyVersion>1.1.0.22765</AssemblyVersion>
+    <FileVersion>1.1.0.22765</FileVersion>
+    <PackageVersion>1.1.0.22765</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>

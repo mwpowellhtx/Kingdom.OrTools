@@ -4,10 +4,10 @@
     <PackageType>DotNetCliTool</PackageType>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.0.0.17051</Version>
-    <AssemblyVersion>1.0.0.17051</AssemblyVersion>
-    <FileVersion>1.0.0.17051</FileVersion>
-    <PackageVersion>1.0.0.17051</PackageVersion>
+    <Version>1.1.0.22764</Version>
+    <AssemblyVersion>1.1.0.22764</AssemblyVersion>
+    <FileVersion>1.1.0.22764</FileVersion>
+    <PackageVersion>1.1.0.22764</PackageVersion>
   </PropertyGroup>
 
   <!-- ReSharper disable UnknownProperty -->
