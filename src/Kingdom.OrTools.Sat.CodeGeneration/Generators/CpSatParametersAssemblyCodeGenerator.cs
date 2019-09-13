@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Kingdom.OrTools.Sat
+namespace Kingdom.OrTools.Sat.CodeGeneration.Generators
 {
     using CodeGeneration;
     using Code.Generation.Roslyn;

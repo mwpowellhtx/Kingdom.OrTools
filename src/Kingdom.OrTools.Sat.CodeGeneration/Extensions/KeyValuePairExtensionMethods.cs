@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Kingdom.OrTools.Sat
+namespace Kingdom.OrTools.Sat.CodeGeneration.Generators
 {
     using Microsoft.CodeAnalysis.CSharp.Syntax;
 

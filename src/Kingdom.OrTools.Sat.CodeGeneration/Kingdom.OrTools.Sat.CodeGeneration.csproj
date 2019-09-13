@@ -1,31 +1,194 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- Ditto re: not `IsTool´ versus `PrivateAssets´. -->
   <PropertyGroup>
-    <IsTool>true</IsTool>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup>
+    <Description>Provides the Google.OrTools CP-SAT Parameter Code Generator for use with Code.Generation.Roslyn.</Description>
+    <!-- TODO: TBD: for starters... maybe we mine the Services or even Extensions for more, interesting keywords... -->
+    <PackageTags>kingdom; operational; research; tools; CP; constraint; programming; SAT; code; generation; Roslyn; CG; CGR; parameter; generator</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.0.16520</Version>
-    <AssemblyVersion>1.0.0.16520</AssemblyVersion>
-    <FileVersion>1.0.0.16520</FileVersion>
-    <PackageVersion>1.0.0.16520</PackageVersion>
+    <Version>1.0.0.16657</Version>
+    <AssemblyVersion>1.0.0.16657</AssemblyVersion>
+    <FileVersion>1.0.0.16657</FileVersion>
+    <PackageVersion>1.0.0.16657</PackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.Sat.CodeGeneration.Generators</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+    <DocumentationFile>bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Kingdom.OrTools.Sat.CodeGeneration.csproj.DotSettings" />
+    <None Remove=".gitignore" />
   </ItemGroup>
 
   <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
-    <PackageReference Include="Code.Generation.Roslyn" Version="$(CodeGenerationRoslynVersion)" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharp)" />
-    <PackageReference Include="Validation" Version="$(ValidationVersion)" />
+    <PackageReference Include="Code.Generation.Roslyn" Version="$(CodeGenerationRoslynVersions)" />
+    <!--<PackageReference Include="Code.Generation.Roslyn.BuildTime" Version="$(CodeGenerationRoslynBuildTimeVersions)" />-->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharpVersions)" />
+    <PackageReference Include="Validation" Version="$(ValidationVersions)" />
   </ItemGroup>
   <!-- ReSharper restore UnknownProperty -->
 
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.Sat.CodeGeneration.Core\Kingdom.OrTools.Sat.CodeGeneration.Core.csproj" />
   </ItemGroup>
+
+  <!-- ReSharper restore UnknownProperty -->
+  <PropertyGroup>
+    <Antlr4RuntimeDependency>Antlr4.Runtime</Antlr4RuntimeDependency>
+    <KingdomProtobufAntlrDependency>Kingdom.Protobuf.Antlr</KingdomProtobufAntlrDependency>
+    <KingdomProtobufDescriptorsDependency>Kingdom.Protobuf.Descriptors</KingdomProtobufDescriptorsDependency>
+    <KingdomCollectionsBidirectionalsDependency>Kingdom.Collections.Bidirectionals</KingdomCollectionsBidirectionalsDependency>
+    <KingdomCollectionsVariantsDependency>Kingdom.Collections.Variants</KingdomCollectionsVariantsDependency>
+    <KingdomCombinatoricsCombinatorialsDependency>Kingdom.Combinatorics.Combinatorials</KingdomCombinatoricsCombinatorialsDependency>
+    <KingdomOrToolsSatCodeGenerationCoreDependency>Kingdom.OrTools.Sat.CodeGeneration.Core</KingdomOrToolsSatCodeGenerationCoreDependency>
+    <AdditionalAssetPackagePath>lib\netstandard2.0</AdditionalAssetPackagePath>
+    <AssetsDirectoryPath>Assets\</AssetsDirectoryPath>
+  </PropertyGroup>
+
+  <!-- ReSharper disable UnknownProperty, UnknownItemGroup -->
+  <!-- TODO: TBD: this is a poor man's effort to ensure that dependencies are `resolved´ prior to invoking CG, ... -->
+  <!-- TODO: TBD: ... and/or packaging a `fat´ package for internal CG delivery during subsequent solution build configurations. -->
+  <Target Name="ResolveCodeGenerationAssemblyDependencies" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <PackageDependencyDirectory>..\packages\</PackageDependencyDirectory>
+      <Antlr4RuntimeLibraryPath>lib\netstandard1.1\</Antlr4RuntimeLibraryPath>
+      <Antlr4RuntimeVersion>4.6.6</Antlr4RuntimeVersion>
+      <KingdomProtobufAntlrVersion>1.0.13.16833</KingdomProtobufAntlrVersion>
+      <KingdomProtobufDescriptorsVersion>1.0.11.16833</KingdomProtobufDescriptorsVersion>
+      <KingdomCollectionsBidirectionalsVersion>1.1.4.17959</KingdomCollectionsBidirectionalsVersion>
+      <KingdomCollectionsVariantsVersion>1.1.0.26740</KingdomCollectionsVariantsVersion>
+      <!-- TODO: TBD: this version will probably `work´ ... `1.2.7.27709´, but there is a more recent `1.2.7.29189´ ... -->
+      <KingdomCombinatoricsCombinatorialsVersion>1.2.7.27709</KingdomCombinatoricsCombinatorialsVersion>
+      <KingdomProtobufLibraryPath>lib\netstandard2.0\</KingdomProtobufLibraryPath>
+      <KingdomCollectionsLibraryPath>lib\netstandard2.0\</KingdomCollectionsLibraryPath>
+      <KingdomCombinatoricsLibraryPath>lib\netstandard2.0\</KingdomCombinatoricsLibraryPath>
+    </PropertyGroup>
+    <ItemGroup>
+      <!-- TODO: TBD: also any PDB or XML files... -->
+      <!-- TODO: TBD: https://www.nuget.org/packages/Antlr4.Runtime/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(Antlr4RuntimeDependency)\$(Antlr4RuntimeVersion)\$(Antlr4RuntimeLibraryPath)$(Antlr4RuntimeDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Protobuf.Antlr/ -->
+      <!-- TODO: TBD: probably seeing `Property is not defined´ here, because we have a definition in Directory.Build.props already. -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomProtobufAntlrDependency)\$(KingdomProtobufAntlrVersion)\$(KingdomProtobufLibraryPath)$(KingdomProtobufAntlrDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Protobuf.Descriptors/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomProtobufDescriptorsDependency)\$(KingdomProtobufDescriptorsVersion)\$(KingdomProtobufLibraryPath)$(KingdomProtobufDescriptorsDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Collections.Bidirectionals/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomCollectionsBidirectionalsDependency)\$(KingdomCollectionsBidirectionalsVersion)\$(KingdomCollectionsLibraryPath)$(KingdomCollectionsBidirectionalsDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Collections.Variants/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomCollectionsVariantsDependency)\$(KingdomCollectionsVariantsVersion)\$(KingdomCollectionsLibraryPath)$(KingdomCollectionsVariantsDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Combinatorics.Combinatorials/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomCombinatoricsCombinatorialsDependency)\$(KingdomCombinatoricsCombinatorialsVersion)\$(KingdomCombinatoricsLibraryPath)$(KingdomCombinatoricsCombinatorialsDependency).*" />
+    </ItemGroup>
+    <Message Text="Resolving @(CodeGenerationDependencyToResolve-&gt;Count()) asset(s) to `$(AssetsDirectoryPath)´ directory..." Importance="high" />
+    <MakeDir Directories="$(AssetsDirectoryPath)" Condition="!Exists('$AssetsDirectoryPath')" />
+    <Copy SourceFiles="@(CodeGenerationDependencyToResolve)" DestinationFolder="$(AssetsDirectoryPath)" />
+  </Target>
+  <!-- ReSharper restore UnknownProperty, UnknownItemGroup -->
+
+  <ItemGroup>
+    <Folder Include="Assets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Expecting that the Assets will have already been Copied prior to the Packaging
+     steps, in fact, prior to Generating the `.nuspec´ NuGet Specification. -->
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(Antlr4RuntimeDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomProtobufAntlrDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomProtobufDescriptorsDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomCollectionsBidirectionalsDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomCollectionsVariantsDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomCombinatoricsCombinatorialsDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomOrToolsSatCodeGenerationCoreDependency).*" />
+    <None Include="@(AdditionalAssetsToPackage)">
+      <Pack>true</Pack>
+      <PackagePath>$(AdditionalAssetPackagePath)</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ImportGroup>
+    <Import Project="..\Licensing.props" />
+    <Import Project="..\Sat.Parameters.CodeGeneration.props" />
+  </ImportGroup>
+
+  <!--<Target Name="DistributePackageInternallyAfterPack" AfterTargets="Pack" Condition="'$(Configuration)' == 'ReleaseCodeGeneration'">
+    <PropertyGroup>
+      <NuGetPackageExtension>.nupkg</NuGetPackageExtension>
+      <InternalNuGetPackagePath>$(SolutionDir)tools\NuGet\packages</InternalNuGetPackagePath>
+      <ProjectOutputPath>$(ProjectDir)bin\$(Configuration)\</ProjectOutputPath>
+      <ActualPackageFileName>$(ProjectName).$(PackageVersion)$(NuGetPackageExtension)</ActualPackageFileName>
+    </PropertyGroup>
+
+    <Message Text="Copying package `$(ActualPackageFileName)´ for internal delivery from `$(ProjectOutputPath)´ to `$(InternalNuGetPackagePath)´." Importance="high" />
+    <MakeDir Directories="$(InternalNuGetPackagePath)" Condition="!Exists('$(InternalNuGetPackagePath)')" />
+    <Copy SourceFiles="$(ProjectOutputPath)$(ActualPackageFileName)" DestinationFolder="$(InternalNuGetPackagePath)" />
+  </Target>-->
+
+  <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if not exist &quot;$(SolutionDir)tools\NuGet\packages&quot; mkdir &quot;$(SolutionDir)tools\NuGet\packages&quot;&#xD;&#xA;if exist &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot; xcopy &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot; &quot;$(SolutionDir)tools\NuGet\packages&quot;" />
+  </Target>-->
+
+  <!--<Target Name="VerifyPackageDependenciesResolvedBeforeCodeGeneration" BeforeTargets="GenerateCodeFromAttributes">
+    <PropertyGroup>
+    </PropertyGroup>
+  </Target>-->
+
+  <!--<Target Name="ReportBeforeBuild" BeforeTargets="Build">
+    <PropertyGroup>
+      <DependencyReportCallerName>ReportBeforeBuild</DependencyReportCallerName>
+    </PropertyGroup>
+    <Message Text="$(DependencyReportCallerName): Dependencies file exists." Importance="high" Condition="Exists('bin\DebugCodeGeneration\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.deps.json')" />
+    <Message Text="$(DependencyReportCallerName): Dependencies file does not exist." Importance="high" Condition="!Exists('bin\DebugCodeGeneration\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.deps.json')" />
+  </Target>-->
+
+  <!--<Target Name="ReportBeforeResolveReferences" BeforeTargets="ResolveReferences">
+    <PropertyGroup>
+      <DependencyReportCallerName>ReportBeforeResolveReferences</DependencyReportCallerName>
+    </PropertyGroup>
+    <Message Text="$(DependencyReportCallerName): Dependencies file exists." Importance="high" Condition="Exists('bin\DebugCodeGeneration\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.deps.json')" />
+    <Message Text="$(DependencyReportCallerName): Dependencies file does not exist." Importance="high" Condition="!Exists('bin\DebugCodeGeneration\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.deps.json')" />
+  </Target>-->
+
+  <!--<Target Name="ReportBeforeResolveProjectReferences" BeforeTargets="ResolveProjectReferences">
+    <PropertyGroup>
+      <DependencyReportCallerName>ReportBeforeResolveProjectReferences</DependencyReportCallerName>
+    </PropertyGroup>
+    <Message Text="$(DependencyReportCallerName): Dependencies file exists." Importance="high" Condition="Exists('bin\DebugCodeGeneration\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.deps.json')" />
+    <Message Text="$(DependencyReportCallerName): Dependencies file does not exist." Importance="high" Condition="!Exists('bin\DebugCodeGeneration\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.deps.json')" />
+  </Target>-->
+
+  <!--<Target Name="ReportBeforeResolveAssemblyReferences" BeforeTargets="ResolveAssemblyReferences">
+    <PropertyGroup>
+      <DependencyReportCallerName>ReportBeforeResolveAssemblyReferences</DependencyReportCallerName>
+    </PropertyGroup>
+    <Message Text="$(DependencyReportCallerName): Dependencies file exists." Importance="high" Condition="Exists('bin\DebugCodeGeneration\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.deps.json')" />
+    <Message Text="$(DependencyReportCallerName): Dependencies file does not exist." Importance="high" Condition="!Exists('bin\DebugCodeGeneration\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.deps.json')" />
+  </Target>-->
+
+  <!--<Target Name="ReportBeforeAfterResolveReferences" BeforeTargets="AfterResolveReferences">
+    <PropertyGroup>
+      <DependencyReportCallerName>ReportBeforeAfterResolveReferences</DependencyReportCallerName>
+    </PropertyGroup>
+    <Message Text="$(DependencyReportCallerName): Dependencies file exists." Importance="high" Condition="Exists('bin\DebugCodeGeneration\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.deps.json')" />
+    <Message Text="$(DependencyReportCallerName): Dependencies file does not exist." Importance="high" Condition="!Exists('bin\DebugCodeGeneration\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.deps.json')" />
+  </Target>-->
+
+  <!--<Target Name="ReportBeforeGenerateNuspec" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <DependencyReportCallerName>ReportBeforeGenerateNuspec</DependencyReportCallerName>
+    </PropertyGroup>
+    <Message Text="$(DependencyReportCallerName): Dependencies file exists." Importance="high" Condition="Exists('bin\DebugCodeGeneration\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.deps.json')" />
+    <Message Text="$(DependencyReportCallerName): Dependencies file does not exist." Importance="high" Condition="!Exists('bin\DebugCodeGeneration\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.deps.json')" />
+  </Target>-->
 
 </Project>
