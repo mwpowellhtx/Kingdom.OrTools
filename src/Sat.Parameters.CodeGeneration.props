@@ -1,0 +1,19 @@
+<Project>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.Sat.CodeGeneration</RootNamespace>
+  </PropertyGroup>
+
+  <!-- We were changing the `PackageOutputPath´ for the Sat Parameters CG bits, but we are now reconsidering this approach.
+   This runs into problems when cleaning up the package delivery internals, especially for packages whose root names are similar.
+   Therefore, we are adjusting our disposition towards package delivery, instead of the single path, add the project paths. -->
+
+  <!-- ReSharper disable UnknownProperty -->
+  <!--<Target Name="PrepareInternalPackageDelivery" BeforeTargets="GenerateNuspec" Condition="'$(Configuration)' == 'Release'">-->
+    <!-- Should be happening BeforeTargets `Pack´, but that does not seem to be happening correctly. -->
+    <!--<Message Text="Preparing `$(PackageOutputPath)´ before GenerateNuspec targets..." Importance="high" />-->
+    <!--<MakeDir Directories="$(PackageOutputPath)" Condition="!Exists('$(PackageOutputPath)')" />-->
+  <!--</Target>-->
+  <!-- ReSharper restore UnknownProperty -->
+
+</Project>
