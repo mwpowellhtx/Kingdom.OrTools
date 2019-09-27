@@ -13,6 +13,12 @@
     <OrToolsSatParametersCodeGenOutputPath>$(IntermediateOutputPath)Parameters</OrToolsSatParametersCodeGenOutputPath>
     <OrToolsSatParametersSearchPattern>*$(OrToolsSatParametersGeneratedExtension)$(OrToolsSatParametersCSharpExtension)</OrToolsSatParametersSearchPattern>
     <OrToolsSatParametersGeneratedCodeSearchPath>$(OrToolsSatParametersCodeGenOutputPath)\$(OrToolsSatParametersSearchPattern)</OrToolsSatParametersGeneratedCodeSearchPath>
+    <!-- We should only ever see a Boolean `true´ or `false´ here, but we will allow 1 or 0 as well,
+     respectively. We will normalize the integer response to the Boolean form for use later on. -->
+    <DebugOrToolsSatParametersCodeGeneration Condition="'$(DebugOrToolsSatParametersCodeGeneration)' == '1'">true</DebugOrToolsSatParametersCodeGeneration>
+    <DebugOrToolsSatParametersCodeGeneration Condition="'$(DebugOrToolsSatParametersCodeGeneration)' == '0'">false</DebugOrToolsSatParametersCodeGeneration>
+    <!-- Debugging will assume in the negative default value. Declare `true´ when debugging is required. -->
+    <DebugOrToolsSatParametersCodeGeneration Condition="'$(DebugOrToolsSatParametersCodeGeneration)' == ''">false</DebugOrToolsSatParametersCodeGeneration>
   </PropertyGroup>
 
   <Target Name="ShowOrToolsSatParametersToolingVersion">
@@ -31,32 +37,13 @@
       <ActualGoogleOrToolsVersion>(n/a)</ActualGoogleOrToolsVersion>
       <OrToolsSatParametersToolingGoogleOrToolsVersionCommand>dotnet $(ParametersDotNetToolingPath) --or-tools-version</OrToolsSatParametersToolingGoogleOrToolsVersionCommand>
     </PropertyGroup>
-    <!-- TODO: TBD: still experiencing a similar sort of `unable to load assembly´ issues here, presumably on account of package no being `fat´ ... -->
-    <!-- TODO: TBD: or bare minimum not using a `System.Runtime.Loader´, which we know has issues and not likely to be `better´ ... -->
-    <!-- TODO: TBD: never mind fully resolved until forward paths into net core v3 ... -->
     <Exec Command="$(OrToolsSatParametersToolingGoogleOrToolsVersionCommand)" ConsoleToMSBuild="true" StandardOutputImportance="normal" ContinueOnError="true">
       <Output TaskParameter="ConsoleOutput" PropertyName="ActualGoogleOrToolsVersion" />
     </Exec>
-    <!-- TODO: TBD: let's say we do `fat package´ the CLI tooling... -->
-    <!-- TODO: TBD: ... we should have the packaging bits tucked away for internal use in a props or a targets somewhere in the solution ... -->
-    <!-- TODO: TBD: ... i.e. which was serving the Kingdom.OrTools.Sat.CodeGeneration fat packaging ... -->
-    <!-- TODO: TBD: ... if not, then we SHOULD have ... -->
-    <!-- TODO: TBD: ... additional bits we will require are any actual Google.OrTools bits that go along with it, including the actual run-time packaged assembly ... -->
     <Message Text="Depending upon `Google.OrTools´ $(ActualGoogleOrToolsVersion)" Importance="high" />
   </Target>
 
-  <Target Name="OnCleanOrToolsSatParametersGeneratedCode">
-    <Delete Files="$(OrToolsSatParametersGeneratedCodeSearchPath)" Condition="Exists('$(OrToolsSatParametersGeneratedCodeSearchPath)')" />
-  </Target>
-
-  <!-- TODO: TBD: also on the docket of considerations is whether to do more bookkeeping of the generated set, do some health checks, purging, etc. -->
-  <!-- TODO: TBD: or does the over-simplified, semi-naive clean-build approach work for us? there are strong pros to only re-generating when we absolutely need to do so... -->
-  <Target Name="CleanOrToolsSatParametersGeneratedCode" AfterTargets="Clean" DependsOnTargets="ShowOrToolsSatParametersToolingVersion;OnCleanOrToolsSatParametersGeneratedCode" />
-
-  <!-- TODO: TBD: we must `clean´ at this point because we are not doing any book keeping, purging, etc, at the moment. -->
-  <!-- TODO: TBD: it would be better for us if we did some internal tooling book keeping to preclude generating code when we do not need to. -->
-  <!-- TODO: TBD: and perhaps with a health check that reports back whether we should clean. -->
-  <Target Name="GenerateOrToolsSatParametersCode" AfterTargets="BeforeBuild" BeforeTargets="Build" DependsOnTargets="ShowOrToolsSatParametersToolingVersion;ExtrapolateActualGoogleOrToolsVersion;OnCleanOrToolsSatParametersGeneratedCode">
+  <Target Name="GenerateOrToolsSatParametersCode" AfterTargets="BeforeBuild" BeforeTargets="Build" DependsOnTargets="ShowOrToolsSatParametersToolingVersion;ExtrapolateActualGoogleOrToolsVersion">
     <PropertyGroup>
       <OrToolsParametersExitCodeUnknown>-1</OrToolsParametersExitCodeUnknown>
       <OrToolsParametersExitCodeNoError>0</OrToolsParametersExitCodeNoError>
@@ -70,7 +57,8 @@
       <OrToolsParametersGeneratedCodeRegistryFile>$(MSBuildProjectName)$(OrToolsSatParametersGeneratedExtension)$(OrToolsSatParametersJsonExtension)</OrToolsParametersGeneratedCodeRegistryFile>
       <_OrToolsParametersToolingExitCode>$(OrToolsParametersExitCodeUnknown)</_OrToolsParametersToolingExitCode>
       <OrToolsSatParametersCodeGenOutputPath>$(IntermediateOutputPath)Parameters</OrToolsSatParametersCodeGenOutputPath>
-      <OrToolsSatParametersGenerateCodeCommand>dotnet $(ParametersDotNetToolingPath) --out-dir &quot;$(OrToolsSatParametersCodeGenOutputPath)&quot; --registry-file $(OrToolsParametersGeneratedCodeRegistryFile)</OrToolsSatParametersGenerateCodeCommand>
+      <OrToolsSatParametersCodeGenerationDebugSwitch Condition="'$(DebugOrToolsSatParametersCodeGeneration)' == 'true'">--debug</OrToolsSatParametersCodeGenerationDebugSwitch>
+      <OrToolsSatParametersGenerateCodeCommand>dotnet $(ParametersDotNetToolingPath) $(OrToolsSatParametersCodeGenerationDebugSwitch) --out-dir &quot;$(OrToolsSatParametersCodeGenOutputPath)&quot; --registry-file $(OrToolsParametersGeneratedCodeRegistryFile)</OrToolsSatParametersGenerateCodeCommand>
     </PropertyGroup>
     <MakeDir Directories="$(OrToolsSatParametersCodeGenOutputPath)" Condition="!Exists('$(OrToolsSatParametersCodeGenOutputPath)')" />
     <Message Text="Running `$(OrToolsSatParametersGenerateCodeCommand)´ ..." Importance="high" />
@@ -84,32 +72,22 @@
       <_OrToolsSatParametersErrorMessage Condition="$(_OrToolsParametersToolingExitCode) == $(OrToolsParametersExitCodeMustSpecifyOutputDirectory)">$(ErrorMessageMustSpecifyOutputDirectory)</_OrToolsSatParametersErrorMessage>
       <_OrToolsSatParametersErrorMessage Condition="$(_OrToolsParametersToolingExitCode) == $(OrToolsParametersExitCodeMustSpecifyRegistryFileName)">$(ErrorMessageMustSpecifyRegistryFileName)</_OrToolsSatParametersErrorMessage>
     </PropertyGroup>
-    <!-- TODO: TBD: this one will probably work, otherwise check the message itself... -->
     <Message Text="$(_OrToolsSatParametersErrorMessage)" Importance="high" Condition="$(_OrToolsParametersToolingExitCode) != $(OrToolsParametersExitCodeNoError)" />
     <Message Text="$(_OrToolsParametersToolingConsoleOutput)" Importance="high" Condition="'$(_OrToolsParametersToolingConsoleOutput)' != ''" />
-    <!--<Message Text="$(_OrToolsSatParametersErrorMessage)" Importance="high" Condition="'$(_OrToolsSatParametersErrorMessage)' != ''" />-->
   </Target>
 
-  <!-- TODO: TBD: still a work in progress, very much taking shape how this should work... -->
-  <Target Name="CompileOrToolsGeneratedCode" DependsOnTargets="GenerateOrToolsSatParametersCode" AfterTargets="BeforeBuild" BeforeTargets="Build">
+  <Target Name="CompileOrToolsGeneratedCode" BeforeTargets="Build" DependsOnTargets="GenerateOrToolsSatParametersCode">
     <Message Text="Code generation error code was $(_OrToolsParametersToolingExitCode)." Importance="high" />
     <ItemGroup>
-      <_OrToolsSatParametersGeneratedCode Include="$(IntermediateOutputPath)Parameters\*.g.cs" Condition="$(_OrToolsParametersToolingExitCode) == $(OrToolsParametersExitCodeNoError)" />
+      <_OrToolsSatParametersGeneratedCode Include="$(OrToolsSatParametersGeneratedCodeSearchPath)" Condition="$(_OrToolsParametersToolingExitCode) == $(OrToolsParametersExitCodeNoError)" />
     </ItemGroup>
-    <Message Text="Generated code `$(ProjectDir)$(OrToolsSatParametersGeneratedCodeSearchPath)´ exists." Importance="high" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) > 0" />
-    <Message Text="Generated code `$(ProjectDir)$(OrToolsSatParametersGeneratedCodeSearchPath)´ does not exist." Importance="high" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) == 0" />
-    <!--<Message Text="Generated code `$(ProjectDir)$(OrToolsSatParametersGeneratedCodeSearchPath)´ exists." Importance="high" Condition="Exists('$(ProjectDir)$(OrToolsSatParametersGeneratedCodeSearchPath)')" />-->
-    <!--<Message Text="Generated code `$(ProjectDir)$(OrToolsSatParametersGeneratedCodeSearchPath)´ does not exist." Importance="high" Condition="!Exists('$(ProjectDir)$(OrToolsSatParametersGeneratedCodeSearchPath)')" />-->
+    <Message Text="Generated code `$(OrToolsSatParametersGeneratedCodeSearchPath)´ exists." Importance="high" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) > 0" />
+    <Message Text="Generated code `$(OrToolsSatParametersGeneratedCodeSearchPath)´ does not exist." Importance="high" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) == 0" />
     <ItemGroup>
-      <!--<Compile Include="$(OrToolsSatParametersGeneratedCodeSearchPath)" Condition="$(_OrToolsParametersToolingExitCode) == $(OrToolsParametersExitCodeNoError) And @(_OrToolsSatParametersGeneratedCode->Count()) > 0" />-->
-      <!--<Compile Include="@(_OrToolsSatParametersGeneratedCode)" />-->
-      <!--<Compile Include="$(OrToolsSatParametersGeneratedCodeSearchPath)" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) > 0" />-->
+      <Compile Include="@(_OrToolsSatParametersGeneratedCode)" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) > 0" />
+      <!-- Specify FileWrites in order for Clean targets to work properly. -->
+      <FileWrites Include="@(_OrToolsSatParametersGeneratedCode)" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) > 0" />
     </ItemGroup>
   </Target>
-
-  <ItemGroup>
-    <!--<Compile Include="$(OrToolsSatParametersGeneratedCodeSearchPath)" Condition="Exists('$(OrToolsSatParametersGeneratedCodeSearchPath)')" />-->
-    <Compile Include="$(OrToolsSatParametersGeneratedCodeSearchPath)" />
-  </ItemGroup>
 
 </Project>
