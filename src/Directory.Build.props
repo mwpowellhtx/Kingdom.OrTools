@@ -60,14 +60,13 @@
     <KingdomProtobufAntlrVersion>1.0.13.22961</KingdomProtobufAntlrVersion>
     <KingdomOrToolsSatCodeGenerationAttributesVersions>[1,2)</KingdomOrToolsSatCodeGenerationAttributesVersions>
     <KingdomOrToolsSatCodeGenerationAttributesVersion>1.0.0.16554</KingdomOrToolsSatCodeGenerationAttributesVersion>
-    <KingdomOrToolsSatCodeGenerationVersions>1-*</KingdomOrToolsSatCodeGenerationVersions>
-    <!--<KingdomOrToolsSatCodeGenerationVersions>[1-*,2-*)</KingdomOrToolsSatCodeGenerationVersions>-->
-    <KingdomOrToolsSatCodeGenerationVersion>1.0.0.16569</KingdomOrToolsSatCodeGenerationVersion>
-    <KingdomOrToolsSatCodeGenerationCoreVersions>[1,2)</KingdomOrToolsSatCodeGenerationCoreVersions>
-    <KingdomOrToolsSatCodeGenerationCoreVersion>1.0.0.16870</KingdomOrToolsSatCodeGenerationCoreVersion>
+    <KingdomOrToolsSatCodeGenerationVersions>1.1-*</KingdomOrToolsSatCodeGenerationVersions>
+    <KingdomOrToolsSatCodeGenerationVersion>1.1.0.22764</KingdomOrToolsSatCodeGenerationVersion>
+    <KingdomOrToolsSatCodeGenerationCoreVersions>[1.1,2)</KingdomOrToolsSatCodeGenerationCoreVersions>
+    <KingdomOrToolsSatCodeGenerationCoreVersion>1.1.0.22765</KingdomOrToolsSatCodeGenerationCoreVersion>
     <KingdomOrToolsSatCodeGenerationBuildTimeDependency>Kingdom.OrTools.Sat.CodeGeneration.BuildTime</KingdomOrToolsSatCodeGenerationBuildTimeDependency>
-    <KingdomOrToolsSatCodeGenerationBuildTimeVersions>[1,2)</KingdomOrToolsSatCodeGenerationBuildTimeVersions>
-    <KingdomOrToolsSatCodeGenerationBuildTimeVersion>1.0.0.14289</KingdomOrToolsSatCodeGenerationBuildTimeVersion>
+    <KingdomOrToolsSatCodeGenerationBuildTimeVersions>[1.1,2)</KingdomOrToolsSatCodeGenerationBuildTimeVersions>
+    <KingdomOrToolsSatCodeGenerationBuildTimeVersion>1.1.0.22767</KingdomOrToolsSatCodeGenerationBuildTimeVersion>
     <ValidationVersions>[2.4.22,3)</ValidationVersions>
     <ValidationVersion>2.4.22</ValidationVersion>
     <XunitVersions>[2.4.1,3)</XunitVersions>
