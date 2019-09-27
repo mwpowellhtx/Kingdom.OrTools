@@ -1,12 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RootNamespace>Kingdom.OrTools.Sat.CodeGeneration</RootNamespace>
     <Version>1.0.0.9</Version>
     <AssemblyVersion>1.0.0.9</AssemblyVersion>
     <FileVersion>1.0.0.9</FileVersion>
     <Configurations>Debug</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.Sat.CodeGeneration</RootNamespace>
   </PropertyGroup>
 
   <!-- ReSharper disable UnknownProperty -->
@@ -33,24 +36,25 @@
   </ItemGroup>
   <!-- ReSharper restore UnknownProperty -->
 
+  <ItemGroup>
+    <ProjectReference Include="..\Kingdom.OrTools.Sat.CodeGeneration.Core\Kingdom.OrTools.Sat.CodeGeneration.Core.csproj" />
+  </ItemGroup>
+
   <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
     <Folder Include="Resources\" />
     <!-- This can now depend upon the Embedded Protocol Buffer Content derived from
-     the NuGet Package sources. This happened circa Google.OrTools version 7.1.6720.
-     https://www.nuget.org/packages/Google.OrTools/7.1.6720
+     the NuGet Package sources. This happened circa Google.OrTools version 7.3.7083.
+     https://www.nuget.org/packages/Google.OrTools/7.3.7083
      Package the .proto files with the NuGet package / https://github.com/google/or-tools/issues/1190
      It is probably fine to leave the Package Dependency on a Greater Than Or Equal To (>=) track.
      As long as the Parameters do not change, then it is fine. Should they change at all, then we
      need to rebuild and redeploy this package, which is fine. Otherwise the migration path should
      be transparent. -->
-    <!-- TODO: TBD: can we leverage an Items/FileName approach at all? -->
-    <!-- TODO: TBD: i.e. ..\packages\google.ortools\**\content\sat\sat_parameters.proto (?) -->
-    <!-- TODO: TBD: the only problem being what we do with previous versions? -->
+    <!-- TODO: TBD: can we leverage an Items/FileName approach at all?
+     i.e. ..\packages\google.ortools\**\content\sat\sat_parameters.proto (?)
+     the only problem being what we do with previous versions? -->
     <EmbeddedResource Include="..\packages\google.ortools\$(GoogleOrToolsVersion)\content\sat\sat_parameters.proto" Link="Resources\sat_parameters.proto" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Kingdom.OrTools.Sat.CodeGeneration.Core\Kingdom.OrTools.Sat.CodeGeneration.Core.csproj" />
   </ItemGroup>
   <!-- ReSharper restore UnknownProperty -->
 
