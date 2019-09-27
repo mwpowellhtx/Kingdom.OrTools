@@ -5,7 +5,10 @@
     /// <summary>
     /// The Program class.
     /// </summary>
-    /// <remarks>There is no reason for this to be Non Static.</remarks>
+    /// <remarks>Evaluate whether there should be any tooling updates, never mind deeper into the
+    /// Protocol Buffer ANTLR parser concerns, based on whether the `sat_parameters.proto´ has
+    /// updated at all since the most recent baselines.</remarks>
+    /// <see cref="!:https://github.com/google/or-tools/blob/stable/ortools/sat/sat_parameters.proto"/>
     internal static class Program
     {
         private static int Main(string[] args)
