@@ -1,20 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- Ditto re: not `IsTool´ versus `PrivateAssets´. -->
   <PropertyGroup>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Functions as the bridge between the ANTLR based Protocol Buffer parser informing the Google.OrTools CP-SAT Parameter Code Generator.</Description>
+    <PackageTags>kingdom;operational;research;tools;OR;CP;constraint;programming;SAT;satisfaction;code;generation;Roslyn;CG;CGR;core</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>Functions as the bridge between the ANTLR based Protocol Buffer parser informing the Google.OrTools CP-SAT Parameter Code Generator.</Description>
-    <!-- TODO: TBD: for starters... maybe we mine the Services or even Extensions for more, interesting keywords... -->
-    <PackageTags>kingdom; operational; research; tools; CP; constraint; programming; SAT; code; generation; Roslyn; CG; CGR; core</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.1.0.22763</Version>
-    <AssemblyVersion>1.1.0.22763</AssemblyVersion>
-    <FileVersion>1.1.0.22763</FileVersion>
-    <PackageVersion>1.1.0.22763</PackageVersion>
+    <Version>1.1.0.22765</Version>
+    <AssemblyVersion>1.1.0.22765</AssemblyVersion>
+    <FileVersion>1.1.0.22765</FileVersion>
+    <PackageVersion>1.1.0.22765</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
@@ -35,18 +33,6 @@
   </ItemGroup>
   <!-- ReSharper restore UnknownProperty -->
 
-  <!-- TODO: TBD: should be able to drop anything to do with the `extract´ step altogether... -->
-  <!--<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="&quot;$(ProjectDir)extract_google_ortools_proto.bat&quot;" />
-  </Target>-->
-
-  <!-- TODO: TBD: ditto drop `extract´ in favor of utilizing the package... -->
-  <!--<ItemGroup>
-    <None Update="extract_google_ortools_proto.bat">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>-->
-
   <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -58,14 +44,14 @@
      As long as the Parameters do not change, then it is fine. Should they change at all, then we
      need to rebuild and redeploy this package, which is fine. Otherwise the migration path should
      be transparent. -->
-    <!-- TODO: TBD: part of the longer term approach, taking this intermediate tact... -->
-    <!-- TODO: TBD: longer range, we determine the actual path of the run-time and the API surface area... -->
-    <!-- TODO: TBD: ...and from there, we infer where the Protocol Buffer files actually are in terms of the delivered package. -->
-    <!-- TODO: TBD: meanwhile, keeping an embedded Resource that is at least informed at build time, which is perhaps all we need. -->
-    <!-- TODO: TBD: longer range it would potentially be better to track with the live package updates... -->
-    <!-- TODO: TBD: and even consider building a parameters package dynamically on the fly based on that package... -->
-    <!-- TODO: TBD: especially so that we are not rebuilding with every Google.OrTools package release... -->
-    <!-- TODO: TBD: this at least gets our foot through the door and we can consider more sophisticated longer range approaches... -->
+    <!-- TODO: TBD: part of the longer term approach, taking this intermediate tact...
+     longer range, we determine the actual path of the run-time and the API surface area...
+     ...and from there, we infer where the Protocol Buffer files actually are in terms of the delivered package.
+     meanwhile, keeping an embedded Resource that is at least informed at build time, which is perhaps all we need.
+     longer range it would potentially be better to track with the live package updates...
+     and even consider building a parameters package dynamically on the fly based on that package...
+     especially so that we are not rebuilding with every Google.OrTools package release...
+     this at least gets our foot through the door and we can consider more sophisticated longer range approaches... -->
     <EmbeddedResource Include="..\packages\$(GoogleOrToolsDependency)\$(GoogleOrToolsVersion)\content\sat\sat_parameters.proto" Link="Resources\sat_parameters.proto" />
   </ItemGroup>
   <!-- ReSharper restore UnknownProperty -->
@@ -78,7 +64,7 @@
     <Delete Files="$(GoogleOrToolsConstantsPath)" Condition="Exists('$(GoogleOrToolsConstantsPath)')" ContinueOnError="true" />
   </Target>
 
-  <Target Name="GenerateGoogleOrToolsConstants" BeforeTargets="Build" AfterTargets="CleanGoogleOrToolsConstants">
+  <Target Name="GenerateGoogleOrToolsConstants" BeforeTargets="Build" DependsOnTargets="CleanGoogleOrToolsConstants">
     <PropertyGroup>
       <!-- This one is a bit nuts, we go the long way round the encoded generated source
        code here. Particularly to arrive at language level encoded quotation marks. -->
