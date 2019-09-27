@@ -1,23 +1,6 @@
 <Project>
 
-  <!-- ReSharper disable UnknownProperty -->
-  <ItemGroup Condition="Exists('..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets')">
-    <!-- Remove any previous Packaging specifications anticipating CG specialized packaging versioning. -->
-    <!--<BumpVersionSpec Remove="InformationalVersion" />-->
-    <!--<BumpVersionSpec Remove="PackageVersion" />-->
-
-    <!-- TODO: TBD: may need to roll another BumpAssemblyVersions with better spec `update´ and/or `replacement´ comprehension... -->
-    <!-- TODO: TBD: should maintain the LAST when possible... -->
-    <!--<BumpVersionSpec CreateNew="true" Update="InformationalVersion" BuildProviderTemplate="Increment" ReleaseProviderTemplate="PreReleaseIncrement" ReleaseProviderTemplateLabel="fat" ReleaseProviderTemplateValueWidth="4" Condition="'$(Configuration)' == 'Release'" />-->
-    <!--<BumpVersionSpec CreateNew="true" Update="PackageVersion" BuildProviderTemplate="Increment" ReleaseProviderTemplate="PreReleaseIncrement" ReleaseProviderTemplateLabel="fat" ReleaseProviderTemplateValueWidth="4" Condition="'$(Configuration)' == 'Release'" />-->
-
-    <!--<BumpVersionSpec CreateNew="true" Include="InformationalVersion" BuildProviderTemplate="SecondsSinceMidnight" ReleaseProviderTemplate="PreReleaseIncrement" ReleaseProviderTemplateLabel="fat" ReleaseProviderTemplateValueWidth="4" Condition="'$(Configuration)' == 'Release'" />
-    <BumpVersionSpec Include="PackageVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />-->
-
-    <!--<BumpVersionSpec CreateNew="true" Include="InformationalVersion" BuildProviderTemplate="SecondsSinceMidnight" ReleaseProviderTemplate="PreReleaseIncrement" ReleaseProviderTemplateLabel="fat" ReleaseProviderTemplateValueWidth="4" Condition="'$(Configuration)' == 'Debug'" />-->
-    <!--<BumpVersionSpec CreateNew="true" Include="PackageVersion" BuildProviderTemplate="SecondsSinceMidnight" ReleaseProviderTemplate="PreReleaseIncrement" ReleaseProviderTemplateLabel="fat" ReleaseProviderTemplateValueWidth="4" Condition="'$(Configuration)' == 'Debug'" />-->
-  </ItemGroup>
-  <!-- ReSharper restore UnknownProperty -->
+  <!-- TODO: TBD: we may need to perform BumpAssemblyVersions versioning in this case, but for now, leaving it out. -->
 
   <PropertyGroup>
     <Antlr4RuntimeDependency>Antlr4.Runtime</Antlr4RuntimeDependency>
@@ -27,6 +10,9 @@
     <KingdomCollectionsVariantsDependency>Kingdom.Collections.Variants</KingdomCollectionsVariantsDependency>
     <KingdomCombinatoricsCombinatorialsDependency>Kingdom.Combinatorics.Combinatorials</KingdomCombinatoricsCombinatorialsDependency>
     <KingdomOrToolsSatCodeGenerationCoreDependency>Kingdom.OrTools.Sat.CodeGeneration.Core</KingdomOrToolsSatCodeGenerationCoreDependency>
+    <!-- TODO: TBD: we were considering this in terms of a CGR generators plugin approach. That
+     may yet work, but we think will depend on also moving forward into netcore3.0 territory,
+     which we are not quite there yet. -->
     <!--<GoogleOrToolsDependency>Google.OrTools</GoogleOrToolsDependency>-->
     <!--<GoogleOrToolsRuntimeDependency>Google.OrTools.runtime.win-x64</GoogleOrToolsRuntimeDependency>-->
     <AdditionalAssetPackagePath>lib\netcoreapp2.1</AdditionalAssetPackagePath>
