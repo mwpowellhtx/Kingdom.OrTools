@@ -1,23 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <!-- So these Attributes are not an `IsTool´, per se, but they can (SHOULD) be referenced as `PrivateAssets´. -->
   <PropertyGroup>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Provides a set of Attributes for use during Compilation which in turn signal that Code Generation should occur.</Description>
+    <PackageTags>code;generation;Roslyn;CG;CGR;dotnet;kingdom;operational;research;OR;tools;constraint;programming;CP;satisfaction;SAT;Google;support;protocol;buffer;protobuf;parameter;parameters;attribute;attributes</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>Provides a set of Attributes for use during Compilation which in turn signal that Code Generation should occur.</Description>
-    <PackageTags>code; generation; Roslyn; cgr; dotnet; kingdom; operational; research; tools; constraint; programming; CP; SAT; Google; support; protocol; buffer; parameter; parameters</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>1.1.0.22763</Version>
     <AssemblyVersion>1.1.0.22763</AssemblyVersion>
     <FileVersion>1.1.0.22763</FileVersion>
     <PackageVersion>1.1.0.22763</PackageVersion>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <RootNamespace>Kingdom.OrTools.Sat.CodeGeneration.Attributes</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
@@ -28,6 +24,13 @@
     <None Remove="Kingdom.OrTools.Sat.CodeGeneration.Attributes.csproj.DotSettings" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <!-- At the moment, the only thing that the CG properties are doing is defining
+     a RootNamespace, but since we have one here, then there is no need to include
+     those properties. -->
+    <RootNamespace>Kingdom.OrTools.Sat.CodeGeneration.Attributes</RootNamespace>
+  </PropertyGroup>
+
   <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
     <PackageReference Include="Code.Generation.Roslyn.Attributes" Version="$(CodeGenerationRoslynAttributesVersions)" />
@@ -36,7 +39,6 @@
 
   <ImportGroup>
     <Import Project="..\Licensing.props" />
-    <Import Project="..\Sat.Parameters.CodeGeneration.props" />
   </ImportGroup>
 
 </Project>
