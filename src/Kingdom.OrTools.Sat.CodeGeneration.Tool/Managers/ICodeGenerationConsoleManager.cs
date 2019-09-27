@@ -5,6 +5,11 @@
     internal interface ICodeGenerationConsoleManager : IConsoleManager
     {
         /// <summary>
+        /// Gets whether DebugMessages should be written.
+        /// </summary>
+        Switch DebugMessagesSwitch { get; }
+
+        /// <summary>
         /// Gets whether Version was requested.
         /// </summary>
         Switch VersionSwitch { get; }
@@ -13,11 +18,6 @@
         /// Gets whether `Google.OrTools´ Version was requested.
         /// </summary>
         Switch GoogleOrToolsVersionSwitch { get; }
-
-        /// <summary>
-        /// Gets whether Clean was requested.
-        /// </summary>
-        Switch CleanSwitch { get; }
 
         ///// <summary>
         ///// Gets the Google.OrTools SAT Parameters Protocol Buffer Specification Variable.

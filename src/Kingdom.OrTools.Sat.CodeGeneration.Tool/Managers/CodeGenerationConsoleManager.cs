@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Validation;
+using CompilationUnitSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.CompilationUnitSyntax;
 
 namespace Kingdom.OrTools.Sat.CodeGeneration
 {
     using Code.Generation.Roslyn;
     using Microsoft.CodeAnalysis;
     using NConsole.Options;
+    using Validation;
     using static CodeGenerationConsoleManager.Constants;
     using static SatParameterCodeGeneratorService;
     using static String;
@@ -41,24 +41,13 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
         // ReSharper restore InconsistentNaming
 
         /// <inheritdoc />
+        public Switch DebugMessagesSwitch { get; }
+
+        /// <inheritdoc />
         public Switch VersionSwitch { get; }
 
         /// <inheritdoc />
         public Switch GoogleOrToolsVersionSwitch { get; }
-
-        /// <inheritdoc />
-        public Switch CleanSwitch { get; }
-
-        /// <summary>
-        /// Gets whether Neither Showing <see cref="VersionSwitch"/> Nor
-        /// <see cref="CleanSwitch"/>.
-        /// </summary>
-        /// <see cref="VersionSwitch"/>
-        /// <see cref="CleanSwitch"/>
-        private bool NeitherShowingVersionNorCleaningCode => !(VersionSwitch || CleanSwitch);
-
-        ///// <inheritdoc />
-        //public Variable<string> GoogleOrToolsSatParametersProtocolBufferSpecVar { get; }
 
         /// <inheritdoc />
         public Variable<string> OutputDirectoryVar { get; }
@@ -69,9 +58,9 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
         internal static ICodeGenerationConsoleManager Instance => new CodeGenerationConsoleManager(Console.Out);
 
         /// <summary>
-        /// &quot;Kingdom OrTools Satisfaction Code Generation&quot;
+        /// &quot;Kingdom OrTools Constraint Programming Satisfaction Code Generation&quot;
         /// </summary>
-        private const string ConsoleManagerName = "Kingdom OrTools Satisfaction Code Generation";
+        private const string ConsoleManagerName = "Kingdom OrTools Constraint Programming Satisfaction Code Generation";
 
         /// <summary>
         /// 1
@@ -92,16 +81,12 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
         internal CodeGenerationConsoleManager(TextWriter writer, TextWriter errorWriter = null)
             : base(ConsoleManagerName, writer, DefaultHelpPrototype, DefaultHelpDescription, errorWriter)
         {
+            DebugMessagesSwitch = Options.AddSwitch("d|debug", "Debug messages should be written.");
+
+            // We do not need any Clean Switches after all. Instead, we factor Cleaning in terms of an MSBuild Target.
             VersionSwitch = Options.AddSwitch("v|version", "Shows the application version.");
 
             GoogleOrToolsVersionSwitch = Options.AddSwitch("or-tools-version", "Shows the Google.OrTools version.");
-
-            CleanSwitch = Options.AddSwitch("c|clean", "Cleans any previously generated code.");
-
-            //// ReSharper disable once StringLiteralTypo
-            //GoogleOrToolsSatParametersProtocolBufferSpecVar = Options.AddVariable<string>(
-            //    "proto-spec|protobuf-spec-path"
-            //    , "The Google.OrTools SAT Parameters Protocol Buffer specification path.");
 
             OutputDirectoryVar = Options.AddVariable<string>("output-directory|out-dir|od"
                 , "The Output Directory where generate code will land.");
@@ -115,24 +100,24 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 // TODO: TBD: somehow isolate how much more of an error there might have been, i.e. internally reported exception is sufficient?
                 {
                     MustSpecifyOutputDirectory,
-                    () => NeitherShowingVersionNorCleaningCode
+                    () => !VersionSwitch
                           && IsNullOrEmpty(OutputDirectoryVar),
-                    () => $"Must specify an Output Directory."
+                    () => "Must specify an Output Directory."
                 },
                 {
                     MustSpecifyRegistryFileName,
-                    () => NeitherShowingVersionNorCleaningCode
+                    () => !VersionSwitch
                           && !IsNullOrEmpty(OutputDirectoryVar)
                           && IsNullOrEmpty(GeneratedCodeRegistryFileVar),
-                    () => $"Must specify a Registry File Name."
+                    () => "Must specify a Registry File Name."
                 },
                 {
                     ErrorGeneratingCode,
-                    () => NeitherShowingVersionNorCleaningCode
+                    () => !VersionSwitch
                           && !(IsNullOrEmpty(OutputDirectoryVar)
                                || IsNullOrEmpty(GeneratedCodeRegistryFileVar))
                           && GenerateCode() == ErrorGeneratingCode,
-                    () => $"There was an error Generating the Code."
+                    () => "There was an error Generating the Code."
                 },
                 DefaultErrorLevel
             };
@@ -168,14 +153,17 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
                 var version = $"{GetAssemblyVersion()}";
                 var informational = GetAssemblyInformationalVersion();
+
                 return IsNullOrEmpty(informational) || StringEquals(informational, version)
                     ? version
                     : $"{version} ({informational})";
             }
 
-            // ReSharper disable once CommentTypo
-            /* There is `a lot going on´ behind this properly. Do not take this one lightly.
-             * Per the Google versioning strategy, only using three-parts. */
+            /* There is `a lot going on´ behind this properly. Do not take this one lightly. Per
+             * the Google version strategy, only using three-parts. The critical bit is that our
+             * Code Generation Targets are also leveraging these bits in order to inform where we
+             * find the Protocol Buffer `.proto´ specification. */
+
             string RenderGoogleOrToolsVersion() => $"{GoogleOrToolsVersion.ToString(3)}";
 
             int? result = null;
@@ -199,22 +187,6 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
             return result;
         }
 
-        private int? CleanGeneratedCode()
-        {
-            //// TODO: TBD: 
-            //// ReSharper disable once InvertIf
-            //if (Directory.Exists(OutputDirectoryVar))
-            //{
-            //    foreach (var x in Directory.EnumerateFiles(OutputDirectoryVar, $"*{g}{cs}", TopDirectoryOnly)
-            //        .Where(File.Exists))
-            //    {
-            //        File.Delete(x);
-            //    }
-            //}
-
-            return null;
-        }
-
         /// <summary>
         /// Loads the <paramref name="registry"/> and Purges Generated Code given
         /// <paramref name="serviceManager"/>.
@@ -224,7 +196,10 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
         private void LoadAndPurgeGeneratedCode(CodeGenerationServiceManager serviceManager
             , out OrToolsSatGeneratedSyntaxTreeRegistry registry)
         {
-            Writer.WriteLine("Loading and purging registry.");
+            if (DebugMessagesSwitch)
+            {
+                Writer.WriteLine("Loading and purging registry.");
+            }
 
             /* Should not need to re-load any ServiceManager Registries,
              * since this is done inherently by the SM itself. */
@@ -232,7 +207,11 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
             if (!registry.Any())
             {
-                Writer.WriteLine("There are no Registry entries.");
+                if (DebugMessagesSwitch)
+                {
+                    Writer.WriteLine("There are no Registry entries.");
+                }
+
                 return;
             }
 
@@ -257,7 +236,10 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
                 var should = anUpdateOccurred || WhetherSomeFilesAreMissing();
 
-                Writer.WriteLine($"Should{(should ? " " : " not ")}purge generated code.");
+                if (DebugMessagesSwitch)
+                {
+                    Writer.WriteLine($"Should{(should ? " " : " not ")}purge generated code.");
+                }
 
                 return should;
             }
@@ -319,13 +301,19 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                         continue;
                     }
 
-                    Writer.WriteLine($"Generated code inconsistencies discovered, purge required.");
+                    if (DebugMessagesSwitch)
+                    {
+                        Writer.WriteLine("Generated code inconsistencies discovered, purge required.");
+                    }
 
                     // Otherwise, break, we know the set to be Inconsistent, i.e. re-Generation required.
                     return true;
                 }
 
-                Writer.WriteLine($"Generated code found to be consistent, purge not required.");
+                if (DebugMessagesSwitch)
+                {
+                    Writer.WriteLine("Generated code found to be consistent, purge not required.");
+                }
 
                 // If everything checked out, All Consistent, then we are Clear to Bypass Code Generation.
                 return false;
@@ -367,7 +355,10 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
                 EnsureDirectoryExists(outputDirectory);
 
-                Writer.WriteLine($"Output Directory is `{outputDirectory}´, registry file name is `{generatedCodeRegistryFile}´.");
+                if (DebugMessagesSwitch)
+                {
+                    Writer.WriteLine($"Output Directory is `{outputDirectory}´, registry file name is `{generatedCodeRegistryFile}´.");
+                }
 
                 var serviceManager = new CodeGenerationServiceManager(outputDirectory, generatedCodeRegistryFile);
 
@@ -378,10 +369,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
                 registry.AssumesTrue(x => ReferenceEquals(x, serviceManager.Registry));
 
                 // ReSharper disable once RedundantEmptyObjectOrCollectionInitializer
-                var service = new SatParameterCodeGeneratorService
-                {
-                    //InternalResourcePath = GoogleOrToolsSatParametersProtocolBufferSpecVar
-                };
+                var service = new SatParameterCodeGeneratorService {};
 
                 var descriptor = service.Descriptor;
 
@@ -389,8 +377,13 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
                 var compilationUnits = service.CodeGenerationVisitor.CompilationUnits;
 
-                Writer.WriteLine($"There are {compilationUnits.Count} potential new compilation units as compared"
-                                 + $" to {registry.SelectMany(x => x.GeneratedAssetKeys).Count()} old ones.");
+                if (DebugMessagesSwitch)
+                {
+                    Writer.WriteLine(
+                        $"There are {compilationUnits.Count} potential new compilation units as compared"
+                        + $" to {registry.SelectMany(x => x.GeneratedAssetKeys).Count()} old ones."
+                    );
+                }
 
                 // TODO: TBD: this is what we are really talking about...
                 // TODO: TBD: we need to find an exact match, otherwise, we reject the current set and regenerate...
@@ -402,7 +395,13 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
                 if (TryEvaluateCompilationUnits(registry, renderedCompilationUnits))
                 {
-                    Writer.WriteLine($"Evaluation complete, there are {renderedCompilationUnits.Count} rendered compilation units.");
+                    if (DebugMessagesSwitch)
+                    {
+                        Writer.WriteLine(
+                            "Evaluation complete, there are"
+                            + $" {renderedCompilationUnits.Count} rendered compilation units."
+                        );
+                    }
 
                     var generatedDescriptor = GeneratedSyntaxTreeDescriptor.Create();
 
@@ -423,10 +422,22 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
 
                     registry.Add(generatedDescriptor);
 
-                    Writer.WriteLine($"Service Manager Registry instance is{(ReferenceEquals(serviceManager.Registry, registry) ? " " : " not ")}the same.");
+                    if (DebugMessagesSwitch)
+                    {
+                        Writer.WriteLine(
+                            "Service Manager Registry instance"
+                            + $" is{(ReferenceEquals(serviceManager.Registry, registry) ? " " : " not ")}the same."
+                        );
+                    }
 
-                    // TODO: TBD: do we need exposure of the SM Registry?
-                    Writer.WriteLine($"There are {generatedDescriptor.GeneratedAssetKeys.Count} generated items and {serviceManager.Registry.SelectMany(x => x.GeneratedAssetKeys).Count()} total entries to save.");
+                    if (DebugMessagesSwitch)
+                    {
+                        // TODO: TBD: do we need exposure of the SM Registry?
+                        Writer.WriteLine(
+                            $"There are {generatedDescriptor.GeneratedAssetKeys.Count} generated items and"
+                            + $" {serviceManager.Registry.SelectMany(x => x.GeneratedAssetKeys).Count()} total entries to save."
+                        );
+                    }
 
                     serviceManager.TrySave();
                 }
@@ -443,15 +454,18 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
         public override void Run(out int errorLevel)
         {
             // TODO: TBD: again, some of which could potentially be presented from the base class, i.e. bits concerning `Show Version´ ...
-            var versionShownOrCodeCleaned = ShowVersions() ?? CleanGeneratedCode();
+            int? shownVersion;
 
-            if (versionShownOrCodeCleaned != null)
+            switch (shownVersion = ShowVersions())
             {
-                errorLevel = versionShownOrCodeCleaned.Value;
-                return;
-            }
+                default:
+                    errorLevel = shownVersion.Value;
+                    return;
 
-            base.Run(out errorLevel);
+                case null:
+                    base.Run(out errorLevel);
+                    break;
+            }
         }
     }
 }
