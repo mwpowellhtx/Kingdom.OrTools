@@ -1,8 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RootNamespace>Kingdom.OrTools.Sat.CodeGeneration</RootNamespace>
     <Configurations>Debug</Configurations>
     <Version>1.0.0.242</Version>
     <AssemblyVersion>1.0.0.242</AssemblyVersion>
@@ -26,5 +25,9 @@
     </PackageReference>
   </ItemGroup>
   <!-- ReSharper restore UnknownProperty -->
+
+  <ImportGroup>
+    <Import Project="..\Sat.Parameters.CodeGeneration.props" />
+  </ImportGroup>
 
 </Project>
