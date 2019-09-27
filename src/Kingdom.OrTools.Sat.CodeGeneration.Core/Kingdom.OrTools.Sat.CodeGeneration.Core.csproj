@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <None Remove="Kingdom.OrTools.Sat.CodeGeneration.Core.csproj.DotSettings" />
+    <None Remove=".gitignore" />
   </ItemGroup>
 
   <!-- ReSharper disable UnknownProperty -->
