@@ -1,13 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <PackageType>DotNetCliTool</PackageType>
     <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.1.0.22764</Version>
-    <AssemblyVersion>1.1.0.22764</AssemblyVersion>
-    <FileVersion>1.1.0.22764</FileVersion>
-    <PackageVersion>1.1.0.22764</PackageVersion>
+    <Version>1.1.0.22766</Version>
+    <AssemblyVersion>1.1.0.22766</AssemblyVersion>
+    <FileVersion>1.1.0.22766</FileVersion>
+    <PackageVersion>1.1.0.22766</PackageVersion>
   </PropertyGroup>
 
   <!-- ReSharper disable UnknownProperty -->
@@ -18,8 +21,6 @@
     <PackageTags>dotnet;dot;net;CLI;command;line;interface;tool;tools;tooling;OR;Operational;Research;CP;Constraint;Programming;SAT;Satisfaction;parameter;parameters;CG;code;generation;version;output;directory</PackageTags>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <!-- TODO: TBD: the thought was that we would be integrating Google.OrTools, which is an x64 image, however, turns out this is inappropriate at the Tooling level. -->
-    <!--<Platform>x64</Platform>-->
   </PropertyGroup>
   <!-- ReSharper restore UnknownProperty -->
 
@@ -52,7 +53,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- TODO: TBD: may need to include this in the nuget packaging somehow (?) -->
     <!-- Tells the dotnet cli to allow the tool being run even if the run-time version does not match the target version. -->
     <Content Include="prefercliruntime" Pack="true" PackagePath="">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -60,9 +60,9 @@
   </ItemGroup>
 
   <ImportGroup>
-    <Import Project="..\Licensing.props" />
     <Import Project="..\Sat.Parameters.CodeGeneration.props" />
     <Import Project="..\Sat.Parameters.CodeGeneration.Fat.props" Condition="'$(Configuration)' == 'Release'" />
+    <Import Project="..\Licensing.props" />
   </ImportGroup>
 
   <ItemGroup>
