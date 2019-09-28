@@ -10,10 +10,10 @@
     <Description>Provides the core problem solver abstraction for use with Google OR-tools Constraint Solver and Linear Solver wrappers.</Description>
     <PackageTags>Google; Operations; Research; Tools; wrapper; disposable; CLR; object; host; problem; solver</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.17.1.4538</Version>
-    <AssemblyVersion>2.17.1.4538</AssemblyVersion>
-    <FileVersion>2.17.1.4538</FileVersion>
-    <PackageVersion>21.17.1.4538</PackageVersion>
+    <Version>1.17.1.4569</Version>
+    <AssemblyVersion>1.17.1.4569</AssemblyVersion>
+    <FileVersion>1.17.1.4569</FileVersion>
+    <PackageVersion>1.17.1.4569</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
