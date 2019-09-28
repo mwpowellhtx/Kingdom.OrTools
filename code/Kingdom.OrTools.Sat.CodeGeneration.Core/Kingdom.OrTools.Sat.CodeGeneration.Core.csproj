@@ -9,10 +9,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.1.0.22795</Version>
-    <AssemblyVersion>1.1.0.22795</AssemblyVersion>
-    <FileVersion>1.1.0.22795</FileVersion>
-    <PackageVersion>1.1.0.22795</PackageVersion>
+    <Version>1.2.0.15931</Version>
+    <AssemblyVersion>1.2.0.15931</AssemblyVersion>
+    <FileVersion>1.2.0.15931</FileVersion>
+    <PackageVersion>1.2.0.15931</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
@@ -96,7 +96,7 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
     <WriteLinesToFile File="$(GoogleOrToolsConstantsPath)" Lines="$(GoogleOrToolsConstantsCode)" Overwrite="true" ContinueOnError="true" Condition="!Exists('$(GoogleOrToolsConstantsPath)')" />
     <ItemGroup>
       <Compile Include="$(GoogleOrToolsConstantsPath)" />
-      <FilesToWrite Include="$(GoogleOrToolsConstantsPath)" />
+      <FilesWrites Include="$(GoogleOrToolsConstantsPath)" />
     </ItemGroup>
   </Target>
 

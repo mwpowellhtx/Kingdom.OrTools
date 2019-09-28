@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <PackageType>DotNetCliTool</PackageType>
@@ -7,10 +7,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.1.0.22776</Version>
-    <AssemblyVersion>1.1.0.22776</AssemblyVersion>
-    <FileVersion>1.1.0.22776</FileVersion>
-    <PackageVersion>1.1.0.22776</PackageVersion>
+    <Version>1.2.0.15933</Version>
+    <AssemblyVersion>1.2.0.15933</AssemblyVersion>
+    <FileVersion>1.2.0.15933</FileVersion>
+    <PackageVersion>1.2.0.15933</PackageVersion>
   </PropertyGroup>
 
   <!-- ReSharper disable UnknownProperty -->

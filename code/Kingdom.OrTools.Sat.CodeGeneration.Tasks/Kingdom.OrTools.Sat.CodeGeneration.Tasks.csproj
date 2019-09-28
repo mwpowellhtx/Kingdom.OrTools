@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -8,10 +8,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.1.0.22773</Version>
-    <AssemblyVersion>1.1.0.22773</AssemblyVersion>
-    <FileVersion>1.1.0.22773</FileVersion>
-    <PackageVersion>1.1.0.22773</PackageVersion>
+    <Version>1.2.0.15935</Version>
+    <AssemblyVersion>1.2.0.15935</AssemblyVersion>
+    <FileVersion>1.2.0.15935</FileVersion>
+    <PackageVersion>1.2.0.15935</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
