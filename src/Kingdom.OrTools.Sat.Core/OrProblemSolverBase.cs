@@ -78,7 +78,7 @@ namespace Kingdom.OrTools.Sat
         /// <returns></returns>
         protected bool TryResolve(CpSolver solver, CpModel source, TryResolveCallback callback)
         {
-            var result = callback(solver, source).FromSolver();
+            var result = callback.Invoke(solver, source).FromSolver();
             return ExpectedResults.Contains(result);
         }
 
@@ -89,13 +89,18 @@ namespace Kingdom.OrTools.Sat
         /// <returns></returns>
         protected virtual Tuple<CpSolver, CpModel> PrepareProblemSolver()
         {
+            IEnumerable<CpSolver> GetDefaultSolver(string stringParameters)
             {
-                var stringParameters = ParametersString;
+                stringParameters = stringParameters?.Trim() ?? Empty;
+
                 // Only relay the StringParameters when we actually have them.
-                Solver = IsNullOrEmpty(stringParameters)
-                    ? new CpSolver()
-                    : new CpSolver {StringParameters = stringParameters};
+                if (!IsNullOrEmpty(stringParameters))
+                {
+                    yield return new CpSolver {StringParameters = stringParameters};
+                }
             }
+
+            Solver = GetDefaultSolver(ParametersString).SingleOrDefault() ?? new CpSolver();
 
             /* Truly there is nothing to convey to any Monitors, Search Agents, etc, for the Sat
              * approach. Once they are New created or Added, they are registered with the Model
