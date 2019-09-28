@@ -8,3 +8,6 @@ packages/
 *.user
 *.suo
 *.Caches/
+
+# We do not need to commit the copied LICENSE itself.
+LICENSE.txt
