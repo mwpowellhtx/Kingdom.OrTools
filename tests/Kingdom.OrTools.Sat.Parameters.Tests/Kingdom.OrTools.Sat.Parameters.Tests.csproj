@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Version>1.0.0.158</Version>
+    <AssemblyVersion>1.0.0.158</AssemblyVersion>
+    <FileVersion>1.0.0.158</FileVersion>
+    <Configurations>Debug</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Kingdom.OrTools.Sat.Parameters.Tests.csproj.DotSettings" />
+  </ItemGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <PackageReference Include="xunit" Version="$(XunitVersion)" />
+    <PackageReference Include="xunit.analyzers" Version="$(XunitAnalyzersVersion)" />
+    <PackageReference Include="xunit.fluently.assert" Version="[1.3.1,2)" />
+    <PackageReference Include="xunit.fluently.assert.ioly" Version="[1.2,2]" />
+    <PackageReference Include="xunit.fluently.assert.exceptionally" Version="[1,2]" />
+    <PackageReference Include="xunit.fluently.theoretically" Version="[1,2]" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitVersion)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <PropertyGroup>
+    <!-- Must maintain a connection with the internal build pipeline.
+     Track these versions against the projects. -->
+    <KingdomOrToolsCoreVersion>1.17.1.4565</KingdomOrToolsCoreVersion>
+    <KingdomOrToolsSatParametersCoreVersion>1.0.0.194</KingdomOrToolsSatParametersCoreVersion>
+    <KingdomOrToolsSatCoreVersion>1.0.1.4606</KingdomOrToolsSatCoreVersion>
+    <KingdomOrToolsSatParametersVersion>1.0.0.3</KingdomOrToolsSatParametersVersion>
+  </PropertyGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
+    <PackageReference Include="Google.Protobuf" Version="$(GoogleProtobufVersion)" />
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <ItemGroup>
+    <!-- TODO: TBD: may not need the Sat reference itself after all for purposes of these tests... -->
+    <!-- TODO: TBD: that is, unless we want to demonstrate the full capability... -->
+    <!-- TODO: TBD: however, for Sat capability, i.e. Sudoku tests, we can do that in the root OrTools solution... -->
+    <!--<PackageReference Include="Kingdom.OrTools.Core" Version="$(KingdomOrToolsCoreVersion)" />-->
+    <PackageReference Include="Kingdom.OrTools.Sat.Parameters.Core" Version="$(KingdomOrToolsSatParametersCoreVersion)" />
+    <!--<PackageReference Include="Kingdom.OrTools.Sat.Core" Version="$(KingdomOrToolsSatCoreVersion)" />-->
+    <PackageReference Include="Kingdom.OrTools.Sat.Parameters" Version="$(KingdomOrToolsSatParametersVersion)" />
+  </ItemGroup>
+
+</Project>
