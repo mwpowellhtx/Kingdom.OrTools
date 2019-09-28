@@ -8,7 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{5EDB9086-DACF-4D1D-A3F6-91C826684B38}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
-		Licensing.props = Licensing.props
 		Sat.Parameters.CodeGeneration.Fat.props = Sat.Parameters.CodeGeneration.Fat.props
 		Sat.Parameters.CodeGeneration.props = Sat.Parameters.CodeGeneration.props
 	EndProjectSection
@@ -41,6 +40,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".parent", ".parent", "{8ADE8A25-3BAC-41E9-89AB-C8BAB2B7B48D}"
 	ProjectSection(SolutionItems) = preProject
 		..\Directory.Build.props = ..\Directory.Build.props
+		..\Licensing.props = ..\Licensing.props
 	EndProjectSection
 EndProject
 Global
