@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -11,10 +11,10 @@
     <PackageTags>Google; Operations; Research; Tools; SAT; CP; CSP; constraint; satisfaction; problem; solver; parameter; parameters; Variant; IVariant</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
-    <Version>1.0.0.168</Version>
-    <AssemblyVersion>1.0.0.168</AssemblyVersion>
-    <FileVersion>1.0.0.168</FileVersion>
-    <PackageVersion>1.0.0.168</PackageVersion>
+    <Version>1.0.0.5</Version>
+    <AssemblyVersion>1.0.0.5</AssemblyVersion>
+    <FileVersion>1.0.0.5</FileVersion>
+    <PackageVersion>1.0.0.5</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
@@ -23,30 +23,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Update="Implementation\Parameter.*.cs">
-      <DependentUpon>Parameter.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Interfaces\IParameter.*.cs">
-      <DependentUpon>IParameter.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Kingdom.OrTools.Sat.Parameters.csproj.DotSettings" />
+    <ProjectReference Include="..\Kingdom.OrTools.Sat.Parameters.Core\Kingdom.OrTools.Sat.Parameters.Core.csproj" />
   </ItemGroup>
 
   <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
-    <!-- TODO: TBD: why did we reference Variants? true, the Parameters pattern sort of looks like Variants, but only to a point... -->
-    <!--<PackageReference Include="Kingdom.Collections.Variants" Version="[1.1,2)" />-->
-    <PackageReference Include="Validation" Version="$(ValidationVersion)" />
+    <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" PrivateAssets="all" />
+    <PackageReference Include="$(KingdomOrToolsSatCodeGenerationBuildTimeDependency)" Version="$(KingdomOrToolsSatCodeGenerationBuildTimeVersions)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
   <!-- ReSharper restore UnknownProperty -->
 
   <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-      <_Parameter1>Kingdom.OrTools.Sat.Core</_Parameter1>
-    </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>Kingdom.OrTools.Sat.Parameters.Tests</_Parameter1>
     </AssemblyAttribute>
