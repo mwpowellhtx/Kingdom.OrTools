@@ -1,0 +1,95 @@
+<Project>
+
+  <PropertyGroup>
+    <Authors>Michael W. Powell</Authors>
+    <Company>Kingdom Software</Company>
+    <Product>Kingdom.OrTools</Product>
+    <Copyright>Copyright &#169; 2015-2019</Copyright>
+    <!--<Copyright>Copyright (c) 2015-2019</Copyright>-->
+    <LangVersion>7.3</LangVersion>
+    <NoWarn>$(NoWarn);NU1603</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+    <WarningLevel>2</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageProjectUrl>http://github.com/mwpowellhtx/Kingdom.OrTools</PackageProjectUrl>
+    <!--<PackageLicenseUrl>https://github.com/mwpowellhtx/Kingdom.OrTools/blob/master/LICENSE</PackageLicenseUrl>-->
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools</RootNamespace>
+    <BumpAssemblyVersionsVersion>1.4.0</BumpAssemblyVersionsVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- We can probably most likely track the Google version numbers according to their
+     Major.Minor only and not worry about the Build or Patch numbers themselves. Additionally,
+     except in places where we must adopt the Protobuf dependency directly, we could otherwise
+     leave that out as well, as this depedency tracks seamlessly with the OrTools, or its runtime
+     surrogate, dependencies. -->
+    <GoogleProtobufVersions>[3.9.1,4)</GoogleProtobufVersions>
+    <GoogleProtobufVersion>3.9.1</GoogleProtobufVersion>
+    <!-- Well, I thought we could get away with the Major.Minor here, but we kind of do need to
+    know the full version in order to know the precise path of the Protocol Buffer specification
+    files in which to embed. The danger here is that this is a Greater Than Or Equal To (>=),
+    right? So we may need to be more precise in our dependencies, but we will start here, and
+    cross future bridges should they arise when they arise. -->
+    <GoogleOrToolsDependency>Google.OrTools</GoogleOrToolsDependency>
+    <GoogleOrToolsVersions>[7.3,8)</GoogleOrToolsVersions>
+    <GoogleOrToolsVersion>7.3.7083</GoogleOrToolsVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <ValidationVersions>[2.4.22,3)</ValidationVersions>
+    <ValidationVersion>2.4.22</ValidationVersion>
+    <XunitVersions>[2.4.1,3)</XunitVersions>
+    <XunitVersion>2.4.1</XunitVersion>
+    <XunitAnalyzersVersion>0.10.0</XunitAnalyzersVersion>
+  </PropertyGroup>
+
+  <ImportGroup>
+    <!-- Pathing is always relative to the $(ProjectDir). -->
+    <Import Project="Licensing.props" />
+  </ImportGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BumpAssemblyVersions" Version="$(BumpAssemblyVersionsVersion)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('..\packages\BumpAssemblyVersions\$(BumpAssemblyVersionsVersion)\build\BumpAssemblyVersions.targets')">
+    <BumpVersionSpec Include="Version" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Release'" />
+    <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Release'" />
+    <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Release'" />
+    <BumpVersionSpec Include="PackageVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Release'" />
+
+    <!--<BumpVersionSpec Include="Version" MinorProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+    <BumpVersionSpec Include="AssemblyVersion" MinorProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+    <BumpVersionSpec Include="FileVersion" MinorProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
+    <BumpVersionSpec Include="PackageVersion" MinorProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />-->
+
+    <BumpVersionSpec Include="Version" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
+    <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
+    <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
+    <BumpVersionSpec Include="PackageVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
+  </ItemGroup>
+
+  <!-- TODO: TBD: it might be worth spending a little time coordinating with the BumpAssemblyVersions build targets...
+   i.e. See if we can delete the old package given the old `PackageVersion´, as contrasted with new `PackageVersion´
+   values... That is making a huge assumption that the values are in fact refreshed in the MSBuild engine at the moment
+   when we need them, before/after... -->
+
+  <!-- ReSharper disable UnknownProperty -->
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <!-- Depending on `PackageOutputPath´ is still the right thing to do, as is `PackageId´.
+     Where we run into difficulty is when we try to deliver into a single location, especially for similarly named packages. -->
+    <Exec Command="if exist &quot;$(PackageOutputPath)$(PackageId).*.nupkg&quot; del /f &quot;$(PackageOutputPath)$(PackageId).*.nupkg&quot;" />
+  </Target>
+  <!-- ReSharper restore UnknownProperty -->
+
+</Project>
