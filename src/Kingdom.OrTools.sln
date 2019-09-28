@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Samples.Sud
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.Samples.Tests", "Kingdom.OrTools.Sat.Samples.Tests\Kingdom.OrTools.Sat.Samples.Tests.csproj", "{28FC7B3E-A191-4040-86B3-B02C5AEFC77D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.Parameters", "Kingdom.OrTools.Sat.Parameters\Kingdom.OrTools.Sat.Parameters.csproj", "{FB7309B0-EC56-4242-99C4-AA791DA57574}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.Parameters.Core", "Kingdom.OrTools.Sat.Parameters.Core\Kingdom.OrTools.Sat.Parameters.Core.csproj", "{FB7309B0-EC56-4242-99C4-AA791DA57574}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.Parameters.Tests", "Kingdom.OrTools.Sat.Parameters.Tests\Kingdom.OrTools.Sat.Parameters.Tests.csproj", "{B8109A68-75AF-4946-A595-42146F74AC68}"
 EndProject
@@ -47,7 +47,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{37E95B
 		tools\NuGet\publish.cmd = tools\NuGet\publish.cmd
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.Tests", "Kingdom.OrTools.Sat.Tests\Kingdom.OrTools.Sat.Tests.csproj", "{45BE5455-72F8-41F7-B201-F1BF9C559CE8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.Sat.Parameters", "Kingdom.OrTools.Sat.Parameters\Kingdom.OrTools.Sat.Parameters.csproj", "{DADBF908-E5F8-44CE-AFF1-BBC7553EB805}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,7 +101,6 @@ Global
 		{28FC7B3E-A191-4040-86B3-B02C5AEFC77D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{28FC7B3E-A191-4040-86B3-B02C5AEFC77D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28FC7B3E-A191-4040-86B3-B02C5AEFC77D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{28FC7B3E-A191-4040-86B3-B02C5AEFC77D}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{FB7309B0-EC56-4242-99C4-AA791DA57574}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FB7309B0-EC56-4242-99C4-AA791DA57574}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB7309B0-EC56-4242-99C4-AA791DA57574}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -109,11 +108,10 @@ Global
 		{B8109A68-75AF-4946-A595-42146F74AC68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B8109A68-75AF-4946-A595-42146F74AC68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8109A68-75AF-4946-A595-42146F74AC68}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{B8109A68-75AF-4946-A595-42146F74AC68}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{45BE5455-72F8-41F7-B201-F1BF9C559CE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{45BE5455-72F8-41F7-B201-F1BF9C559CE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{45BE5455-72F8-41F7-B201-F1BF9C559CE8}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{45BE5455-72F8-41F7-B201-F1BF9C559CE8}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{DADBF908-E5F8-44CE-AFF1-BBC7553EB805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DADBF908-E5F8-44CE-AFF1-BBC7553EB805}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DADBF908-E5F8-44CE-AFF1-BBC7553EB805}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DADBF908-E5F8-44CE-AFF1-BBC7553EB805}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -133,7 +131,7 @@ Global
 		{28FC7B3E-A191-4040-86B3-B02C5AEFC77D} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
 		{FB7309B0-EC56-4242-99C4-AA791DA57574} = {327DE516-77D1-42D4-8DCE-484E40AD3885}
 		{B8109A68-75AF-4946-A595-42146F74AC68} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
-		{45BE5455-72F8-41F7-B201-F1BF9C559CE8} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
+		{DADBF908-E5F8-44CE-AFF1-BBC7553EB805} = {327DE516-77D1-42D4-8DCE-484E40AD3885}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7966AFF7-6884-4957-984E-1CC9AFE4FDF2}
