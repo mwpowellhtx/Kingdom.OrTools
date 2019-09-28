@@ -43,6 +43,15 @@
   </PropertyGroup>
 
   <PropertyGroup>
+    <MicrosoftBuildVersions>[15.9.20,16)</MicrosoftBuildVersions>
+    <MicrosoftBuildVersion>15.9.20</MicrosoftBuildVersion>
+    <MicrosoftCodeAnalysisVersions>[2.10.0,3)</MicrosoftCodeAnalysisVersions>
+    <MicrosoftCodeAnalysisVersion>2.10.0</MicrosoftCodeAnalysisVersion>
+    <MicrosoftCodeAnalysisCSharpVersions>[2.10.0,3)</MicrosoftCodeAnalysisCSharpVersions>
+    <MicrosoftCodeAnalysisCSharpVersion>2.10.0</MicrosoftCodeAnalysisCSharpVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <ValidationVersions>[2.4.22,3)</ValidationVersions>
     <ValidationVersion>2.4.22</ValidationVersion>
     <XunitVersions>[2.4.1,3)</XunitVersions>
