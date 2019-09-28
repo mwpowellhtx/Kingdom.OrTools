@@ -1,0 +1,141 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- TODO: TBD: We will leave this project and related works in for the time being, because we
+   really want for the Code Generation Generators to be the path forward, notwithstanding problems
+   loading in reference assemblies which serve the Generator plugin architecture. Assuming we are
+   able to solve that CGR problem, then this is the better path forward for us moving forward.
+   Short of that, we have taken an alternative tact by pursuing a fit-for-purpose internal CLI
+   tooling. That will work for the time being and get us over this hump, but longer term, we
+   really want for the CGR path to be the preferred strategy. -->
+
+  <!-- Ditto re: not `IsTool´ versus `PrivateAssets´. -->
+  <PropertyGroup>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Provides the Google.OrTools CP-SAT Parameter Code Generator for use with Code.Generation.Roslyn.</Description>
+    <PackageTags>kingdom;operational;research;tools;CP;constraint;programming;SAT;code;generation;Roslyn;CG;CGR;parameter;generator</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.1.0.22764</Version>
+    <AssemblyVersion>1.1.0.22764</AssemblyVersion>
+    <FileVersion>1.1.0.22764</FileVersion>
+    <PackageVersion>1.1.0.22764</PackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+    <DocumentationFile>bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Kingdom.OrTools.Sat.CodeGeneration.csproj.DotSettings" />
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.Sat.CodeGeneration.Generators</RootNamespace>
+  </PropertyGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <PackageReference Include="Code.Generation.Roslyn" Version="$(CodeGenerationRoslynVersions)" />
+    <!--<PackageReference Include="Code.Generation.Roslyn.BuildTime" Version="$(CodeGenerationRoslynBuildTimeVersions)" />-->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharpVersions)" />
+    <PackageReference Include="Validation" Version="$(ValidationVersions)" />
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kingdom.OrTools.Sat.CodeGeneration.Core\Kingdom.OrTools.Sat.CodeGeneration.Core.csproj" />
+  </ItemGroup>
+
+  <!-- TODO: TBD: re: the above desired future path, we were trying to deploy this CGR package
+   as a `fat´ package, that is, with requisite dependencies rolled into the same package, as
+   contrasted with the conventional package reference. However, even this was not working
+   properly. We think it is a problem with `System.Runtime.Loader´, but any paths forward with
+   this are more than likely more or less strongly coupled with netcore3.0 migration path.
+   Meaning anything we are doing in the netstandard2.0 or netcore2.1 would be obsolete. We
+   are not ready for that path forward just yet, so we are taking an alternate path forward
+   working around the issue. -->
+
+  <!-- ReSharper restore UnknownProperty -->
+  <PropertyGroup>
+    <Antlr4RuntimeDependency>Antlr4.Runtime</Antlr4RuntimeDependency>
+    <KingdomProtobufAntlrDependency>Kingdom.Protobuf.Antlr</KingdomProtobufAntlrDependency>
+    <KingdomProtobufDescriptorsDependency>Kingdom.Protobuf.Descriptors</KingdomProtobufDescriptorsDependency>
+    <KingdomCollectionsBidirectionalsDependency>Kingdom.Collections.Bidirectionals</KingdomCollectionsBidirectionalsDependency>
+    <KingdomCollectionsVariantsDependency>Kingdom.Collections.Variants</KingdomCollectionsVariantsDependency>
+    <KingdomCombinatoricsCombinatorialsDependency>Kingdom.Combinatorics.Combinatorials</KingdomCombinatoricsCombinatorialsDependency>
+    <KingdomOrToolsSatCodeGenerationCoreDependency>Kingdom.OrTools.Sat.CodeGeneration.Core</KingdomOrToolsSatCodeGenerationCoreDependency>
+    <AdditionalAssetPackagePath>lib\netstandard2.0</AdditionalAssetPackagePath>
+    <AssetsDirectoryPath>Assets\</AssetsDirectoryPath>
+  </PropertyGroup>
+
+  <!-- ReSharper disable UnknownProperty, UnknownItemGroup -->
+  <!-- TODO: TBD: this is a poor man's effort to ensure that dependencies are `resolved´ prior to invoking CG, ... -->
+  <!-- TODO: TBD: ... and/or packaging a `fat´ package for internal CG delivery during subsequent solution build configurations. -->
+  <Target Name="ResolveCodeGenerationAssemblyDependencies" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <PackageDependencyDirectory>..\packages\</PackageDependencyDirectory>
+      <Antlr4RuntimeLibraryPath>lib\netstandard1.1\</Antlr4RuntimeLibraryPath>
+      <Antlr4RuntimeVersion>4.6.6</Antlr4RuntimeVersion>
+      <KingdomProtobufAntlrVersion>1.0.13.16833</KingdomProtobufAntlrVersion>
+      <KingdomProtobufDescriptorsVersion>1.0.11.16833</KingdomProtobufDescriptorsVersion>
+      <KingdomCollectionsBidirectionalsVersion>1.1.4.17959</KingdomCollectionsBidirectionalsVersion>
+      <KingdomCollectionsVariantsVersion>1.1.0.26740</KingdomCollectionsVariantsVersion>
+      <!-- TODO: TBD: this version will probably `work´ ... `1.2.7.27709´, but there is a more recent `1.2.7.29189´ ... -->
+      <KingdomCombinatoricsCombinatorialsVersion>1.2.7.27709</KingdomCombinatoricsCombinatorialsVersion>
+      <KingdomProtobufLibraryPath>lib\netstandard2.0\</KingdomProtobufLibraryPath>
+      <KingdomCollectionsLibraryPath>lib\netstandard2.0\</KingdomCollectionsLibraryPath>
+      <KingdomCombinatoricsLibraryPath>lib\netstandard2.0\</KingdomCombinatoricsLibraryPath>
+    </PropertyGroup>
+    <ItemGroup>
+      <!-- TODO: TBD: also any PDB or XML files... -->
+      <!-- TODO: TBD: https://www.nuget.org/packages/Antlr4.Runtime/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(Antlr4RuntimeDependency)\$(Antlr4RuntimeVersion)\$(Antlr4RuntimeLibraryPath)$(Antlr4RuntimeDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Protobuf.Antlr/ -->
+      <!-- TODO: TBD: probably seeing `Property is not defined´ here, because we have a definition in Directory.Build.props already. -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomProtobufAntlrDependency)\$(KingdomProtobufAntlrVersion)\$(KingdomProtobufLibraryPath)$(KingdomProtobufAntlrDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Protobuf.Descriptors/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomProtobufDescriptorsDependency)\$(KingdomProtobufDescriptorsVersion)\$(KingdomProtobufLibraryPath)$(KingdomProtobufDescriptorsDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Collections.Bidirectionals/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomCollectionsBidirectionalsDependency)\$(KingdomCollectionsBidirectionalsVersion)\$(KingdomCollectionsLibraryPath)$(KingdomCollectionsBidirectionalsDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Collections.Variants/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomCollectionsVariantsDependency)\$(KingdomCollectionsVariantsVersion)\$(KingdomCollectionsLibraryPath)$(KingdomCollectionsVariantsDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Combinatorics.Combinatorials/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomCombinatoricsCombinatorialsDependency)\$(KingdomCombinatoricsCombinatorialsVersion)\$(KingdomCombinatoricsLibraryPath)$(KingdomCombinatoricsCombinatorialsDependency).*" />
+    </ItemGroup>
+    <Message Text="Resolving @(CodeGenerationDependencyToResolve-&gt;Count()) asset(s) to `$(AssetsDirectoryPath)´ directory..." Importance="high" />
+    <MakeDir Directories="$(AssetsDirectoryPath)" Condition="!Exists('$AssetsDirectoryPath')" />
+    <Copy SourceFiles="@(CodeGenerationDependencyToResolve)" DestinationFolder="$(AssetsDirectoryPath)" />
+  </Target>
+  <!-- ReSharper restore UnknownProperty, UnknownItemGroup -->
+
+  <ItemGroup>
+    <Folder Include="Assets\" />
+  </ItemGroup>
+
+  <!-- ReSharper disable UnknownProperty, UnknownItemGroup -->
+  <ItemGroup>
+    <!-- Expecting that the Assets will have already been Copied prior to the Packaging
+     steps, in fact, prior to Generating the `.nuspec´ NuGet Specification. -->
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(Antlr4RuntimeDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomProtobufAntlrDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomProtobufDescriptorsDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomCollectionsBidirectionalsDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomCollectionsVariantsDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomCombinatoricsCombinatorialsDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomOrToolsSatCodeGenerationCoreDependency).*" />
+    <None Include="@(AdditionalAssetsToPackage)">
+      <Pack>true</Pack>
+      <PackagePath>$(AdditionalAssetPackagePath)</PackagePath>
+    </None>
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty, UnknownItemGroup -->
+
+  <ImportGroup>
+    <Import Project="..\Sat.Parameters.CodeGeneration.props" />
+  </ImportGroup>
+
+</Project>
