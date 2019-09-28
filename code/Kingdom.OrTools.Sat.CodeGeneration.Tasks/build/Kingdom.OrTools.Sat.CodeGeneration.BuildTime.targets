@@ -43,7 +43,7 @@
     <Message Text="Depending upon `Google.OrTools´ $(ActualGoogleOrToolsVersion)" Importance="high" />
   </Target>
 
-  <Target Name="GenerateOrToolsSatParametersCode" AfterTargets="BeforeBuild" BeforeTargets="Build" DependsOnTargets="ShowOrToolsSatParametersToolingVersion;ExtrapolateActualGoogleOrToolsVersion">
+  <Target Name="GenerateOrToolsSatParametersCode" DependsOnTargets="ShowOrToolsSatParametersToolingVersion;ExtrapolateActualGoogleOrToolsVersion">
     <PropertyGroup>
       <OrToolsParametersExitCodeUnknown>-1</OrToolsParametersExitCodeUnknown>
       <OrToolsParametersExitCodeNoError>0</OrToolsParametersExitCodeNoError>
@@ -76,17 +76,20 @@
     <Message Text="$(_OrToolsParametersToolingConsoleOutput)" Importance="high" Condition="'$(_OrToolsParametersToolingConsoleOutput)' != ''" />
   </Target>
 
-  <Target Name="CompileOrToolsGeneratedCode" BeforeTargets="Build" DependsOnTargets="GenerateOrToolsSatParametersCode">
-    <Message Text="Code generation error code was $(_OrToolsParametersToolingExitCode)." Importance="high" />
+  <!-- TODO: TBD: The `PrepareForBuild´ target is closer, we think, but yields several invocations of our targets. -->
+  <!-- TODO: TBD: And while, before `BeforeBuild´ "works" (advisedly), we are not convinced there is not a more precise event with which we ought to be coordinating. -->
+  <Target Name="CompileOrToolsGeneratedCode" BeforeTargets="BeforeBuild" DependsOnTargets="GenerateOrToolsSatParametersCode">
+    <Message Text="Code generation error code was $(_OrToolsParametersToolingExitCode)." Importance="high" Condition="'$(DebugOrToolsSatParametersCodeGeneration)' == 'true'" />
     <ItemGroup>
       <_OrToolsSatParametersGeneratedCode Include="$(OrToolsSatParametersGeneratedCodeSearchPath)" Condition="$(_OrToolsParametersToolingExitCode) == $(OrToolsParametersExitCodeNoError)" />
     </ItemGroup>
-    <Message Text="Generated code `$(OrToolsSatParametersGeneratedCodeSearchPath)´ exists." Importance="high" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) > 0" />
-    <Message Text="Generated code `$(OrToolsSatParametersGeneratedCodeSearchPath)´ does not exist." Importance="high" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) == 0" />
+    <Message Text="Generated code `$(OrToolsSatParametersGeneratedCodeSearchPath)´ exists (@(_OrToolsSatParametersGeneratedCode->Count()) files)." Importance="high" Condition="'$(DebugOrToolsSatParametersCodeGeneration)' == 'true' And @(_OrToolsSatParametersGeneratedCode->Count()) > 0" />
+    <Message Text="Generated code `$(OrToolsSatParametersGeneratedCodeSearchPath)´ does not exist." Importance="high" Condition="'$(DebugOrToolsSatParametersCodeGeneration)' == 'true' And @(_OrToolsSatParametersGeneratedCode->Count()) == 0" />
+    <Message Text="Compiling %(_OrToolsSatParametersGeneratedCode.Identity) ..." Importance="high" Condition="'$(DebugOrToolsSatParametersCodeGeneration)' == 'true' And @(_OrToolsSatParametersGeneratedCode->Count()) > 0" />
     <ItemGroup>
-      <Compile Include="@(_OrToolsSatParametersGeneratedCode)" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) > 0" />
+      <Compile Include="%(_OrToolsSatParametersGeneratedCode.Identity)" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) > 0" />
       <!-- Specify FileWrites in order for Clean targets to work properly. -->
-      <FileWrites Include="@(_OrToolsSatParametersGeneratedCode)" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) > 0" />
+      <FileWrites Include="%(_OrToolsSatParametersGeneratedCode.Identity)" Condition="@(_OrToolsSatParametersGeneratedCode->Count()) > 0" />
     </ItemGroup>
   </Target>
 
