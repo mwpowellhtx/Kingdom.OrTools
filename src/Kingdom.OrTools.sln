@@ -20,7 +20,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{5EDB9086-DACF-4D1D-A3F6-91C826684B38}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
-		Licensing.props = Licensing.props
+		NuGet.Config = NuGet.Config
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.LinearSolver.Samples.Feasibility", "Kingdom.OrTools.LinearSolver.Samples.Feasibility\Kingdom.OrTools.LinearSolver.Samples.Feasibility.csproj", "{B055EC6C-994A-48F5-B41B-1473775FE5F4}"
@@ -47,7 +47,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{37E95B
 		tools\NuGet\publish.cmd = tools\NuGet\publish.cmd
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kingdom.OrTools.Sat.Parameters", "Kingdom.OrTools.Sat.Parameters\Kingdom.OrTools.Sat.Parameters.csproj", "{DADBF908-E5F8-44CE-AFF1-BBC7553EB805}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.Parameters", "Kingdom.OrTools.Sat.Parameters\Kingdom.OrTools.Sat.Parameters.csproj", "{DADBF908-E5F8-44CE-AFF1-BBC7553EB805}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".parent", ".parent", "{FFF962A4-3C6F-4A44-87C9-FDA34B3BCF3B}"
+	ProjectSection(SolutionItems) = preProject
+		..\Directory.Build.props = ..\Directory.Build.props
+		..\Licensing.props = ..\Licensing.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -132,6 +138,7 @@ Global
 		{FB7309B0-EC56-4242-99C4-AA791DA57574} = {327DE516-77D1-42D4-8DCE-484E40AD3885}
 		{B8109A68-75AF-4946-A595-42146F74AC68} = {141E2837-1247-4E33-B5A0-64D0ECCBFDBA}
 		{DADBF908-E5F8-44CE-AFF1-BBC7553EB805} = {327DE516-77D1-42D4-8DCE-484E40AD3885}
+		{FFF962A4-3C6F-4A44-87C9-FDA34B3BCF3B} = {5EDB9086-DACF-4D1D-A3F6-91C826684B38}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7966AFF7-6884-4957-984E-1CC9AFE4FDF2}
