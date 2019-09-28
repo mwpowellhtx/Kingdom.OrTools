@@ -36,7 +36,7 @@ namespace Kingdom.OrTools.Sat.Parameters
             Instance = instance;
             ItemType = typeof(T);
             ValueType = typeof(ICollection<T>);
-            Rendered = $"{parameterName}{Equal}{RenderRepeatedValues(instance?.Value?.ToArray())}";
+            Rendered = $"{parameterName}{Colon} {RenderRepeatedValues(instance?.Value?.ToArray())}";
         }
 
         /// <summary>
@@ -45,9 +45,9 @@ namespace Kingdom.OrTools.Sat.Parameters
         /// <param name="values"></param>
         /// <returns></returns>
         private static string RenderRepeatedValues(IEnumerable<T> values)
-            => Join($"{Comma}"
+            => Join(Join($"{Comma} "
                 , (values ?? Array.Empty<T>()).Select(x => (object) x).Select(RenderValue)
-            );
+            ), LeftSquareBracket, RightSquareBracket);
     }
 
     /// <inheritdoc />

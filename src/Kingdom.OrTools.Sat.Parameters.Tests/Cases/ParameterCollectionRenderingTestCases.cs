@@ -20,6 +20,9 @@ namespace Kingdom.OrTools.Sat.Parameters
                 {
                     IEnumerable<TestCaseDescriptor> descriptors = Descriptors.ToArray();
 
+                    /* Seven is a nominal slice here, which yields for a narrow enough slice,
+                     * without generating an excessive number of test cases at the same time. */
+
                     while (descriptors.TrySliceOverCollection(7, out var slice, out descriptors))
                     {
                         var parameters = slice.Select(p => p.Instance).ToArray();
@@ -27,7 +30,7 @@ namespace Kingdom.OrTools.Sat.Parameters
                         yield return GetRange<object>(
                             new ParameterCollection(slice.Select(p => p.Instance))
                             , parameters
-                            , Join($"{SemiColon}", slice.Select(p => p.Rendered))
+                            , Join($"{SemiColon} ", slice.Select(p => p.Rendered))
                         ).ToArray();
                     }
                 }

@@ -234,7 +234,7 @@ namespace Kingdom.OrTools.Sat.Parameters
         {
             Instance = instance;
             // TODO: TBD: Descriptor Rendering must include the Parameter as well, i.e. "parameter_name=rendered_value"
-            Rendered = $"{parameterName}{Equal}{RenderInstanceValue(instance)}";
+            Rendered = $"{parameterName}{Colon} {RenderInstanceValue(instance)}";
         }
 
         /// <inheritdoc />
