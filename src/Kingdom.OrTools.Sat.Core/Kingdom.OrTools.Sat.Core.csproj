@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -8,12 +8,12 @@
 
   <PropertyGroup>
     <Description>Provides a convenient, easy to use wrapper for Constraint Satisfaction Programming based on the Google OR-tools.</Description>
-    <PackageTags>Google; Operations; Research; Tools; wrapper; dispose; disposable; CLR; object; host; constraint; satisfaction; problem; solver; CP; CSP; variable; variables; int; integer; bool; boolean; solution</PackageTags>
+    <PackageTags>Google;Operations;Research;Tools;wrapper;dispose;disposable;CLR;object;host;constraint;satisfaction;problem;solver;CP;CSP;variable;variables;int;integer;bool;boolean;solution</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.1.4540</Version>
-    <AssemblyVersion>1.0.1.4540</AssemblyVersion>
-    <FileVersion>1.0.1.4540</FileVersion>
-    <PackageVersion>1.0.1.4540</PackageVersion>
+    <Version>1.0.1.4610</Version>
+    <AssemblyVersion>1.0.1.4610</AssemblyVersion>
+    <FileVersion>1.0.1.4610</FileVersion>
+    <PackageVersion>1.0.1.4610</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -31,83 +31,13 @@
 
   <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
-    <!--<PackageReference Include="Code.Generation.Roslyn.BuildTime" Version="$(CodeGenerationRoslynBuildTimeVersions)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>-->
     <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
-    <PackageReference Include="$(KingdomOrToolsSatCodeGenerationBuildTimeDependency)" Version="$(KingdomOrToolsSatCodeGenerationBuildTimeVersions)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <!--<PackageReference Include="Kingdom.OrTools.Sat.CodeGeneration.Core" Version="$(KingdomOrToolsSatCodeGenerationCoreVersions)" PrivateAssets="all" />-->
-    <!--<PackageReference Include="Kingdom.OrTools.Sat.CodeGeneration.Attributes" Version="$(KingdomOrToolsSatCodeGenerationAttributesVersions)" PrivateAssets="all" />-->
-    <!--<PackageReference Include="Kingdom.OrTools.Sat.CodeGeneration" Version="$(KingdomOrToolsSatCodeGenerationVersions)" PrivateAssets="all" />-->
-    <!-- TODO: TBD: do not need these, we think, assuming we can wire in the CGR bits properly... -->
-    <!--<PackageReference Include="Code.Generation.Roslyn.BuildTime" Version="$(CodeGenerationRoslynBuildTimeVersion)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>-->
-    <!--<PackageReference Include="Kingdom.Protobuf.Antlr" Version="$(KingdomProtobufAntlrVersion)" PrivateAssets="all" />-->
-    <!--<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharp)" PrivateAssets="all" />-->
   </ItemGroup>
   <!-- ReSharper restore UnknownProperty -->
 
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.Core\Kingdom.OrTools.Core.csproj" />
-    <ProjectReference Include="..\Kingdom.OrTools.Sat.Parameters\Kingdom.OrTools.Sat.Parameters.csproj" />
-    <!--<ProjectReference Include="..\Kingdom.OrTools.Sat.CodeGeneration.Attributes\Kingdom.OrTools.Sat.CodeGeneration.Attributes.csproj">
-      <Project>{eaf8c06d-bdae-4a80-8b7c-4e9906232b7f}</Project>
-      <Name>Kingdom.OrTools.Sat.CodeGeneration.Attributes</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <OutputItemType>Content</OutputItemType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Targets>Build;DebugSymbolsProjectOutputGroup</Targets>
-    </ProjectReference>-->
-    <!--<ProjectReference Include="..\Kingdom.OrTools.Sat.CodeGeneration\Kingdom.OrTools.Sat.CodeGeneration.csproj">
-      <Project>{45b080d6-9e41-4adc-88e8-7e6299cdebe7}</Project>
-      <Name>Kingdom.OrTools.Sat.CodeGeneration</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <OutputItemType>Content</OutputItemType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Targets>Build;DebugSymbolsProjectOutputGroup</Targets>
-    </ProjectReference>-->
-    <!--<ProjectReference Include="..\Kingdom.OrTools.Sat.CodeGeneration.Core\Kingdom.OrTools.Sat.CodeGeneration.Core.csproj">
-      <Project>{8c5ada33-3e34-4ca4-9657-7e6b2fdfd82e}</Project>
-      <Name>Kingdom.OrTools.Sat.CodeGeneration.Core</Name>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <OutputItemType>Content</OutputItemType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Targets>Build;DebugSymbolsProjectOutputGroup</Targets>
-    </ProjectReference>-->
-  </ItemGroup>
-
-  <!-- TODO: TBD: which, we may still need these bits wired in to CGR ... -->
-  <!--<Target Name="BeforeGenerateCodeFromAttributes" BeforeTargets="PrepareToGenerateCodeFromAttributes">
-    <ItemGroup>
-      --><!-- TODO: TBD: CGR: this is not an especially well named property, or there must be another way to do this... --><!--
-      <CodeGenCompilationAdditionalReferencePaths Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.dll" />
-      <CodeGenCompilationAdditionalReferencePaths Include="$(MSBuildProjectDirectory)\bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.Core.dll" />
-    </ItemGroup>
-  </Target>-->
-
-  <!-- TODO: TBD: after PrepareCodeGenCleanTargets, before Clean -->
-  <!-- TODO: TBD: GenerateCodeFromAttributes -->
-  <!--<Target Name=""></Target>-->
-
-  <!-- ReSharper disable UnknownProperty -->
-  <ImportGroup>
-    <!--<Import Project="Code.Generation.props" />-->
-    <Import Project="..\packages\$(KingdomOrToolsSatCodeGenerationBuildTimeDependency)\$(KingdomOrToolsSatCodeGenerationBuildTimeVersion)\build\$(KingdomOrToolsSatCodeGenerationBuildTimeDependency).props" Condition="Exists('..\packages\$(KingdomOrToolsSatCodeGenerationBuildTimeDependency)\$(KingdomOrToolsSatCodeGenerationBuildTimeVersion)\build\$(KingdomOrToolsSatCodeGenerationBuildTimeDependency).*')" />
-    <Import Project="..\packages\$(KingdomOrToolsSatCodeGenerationBuildTimeDependency)\$(KingdomOrToolsSatCodeGenerationBuildTimeVersion)\build\$(KingdomOrToolsSatCodeGenerationBuildTimeDependency).targets" Condition="Exists('..\packages\$(KingdomOrToolsSatCodeGenerationBuildTimeDependency)\$(KingdomOrToolsSatCodeGenerationBuildTimeVersion)\build\$(KingdomOrToolsSatCodeGenerationBuildTimeDependency).*')" />
-  </ImportGroup>
-  <!-- ReSharper restore UnknownProperty -->
-
-  <!--<Import Project="Verify.Bits.props" />-->
-
-  <!-- TODO: TBD: this SHOULD be happening from the CG targets, but for whatever reason it is not ... -->
-  <ItemGroup>
-    <!--<Compile Include="$(IntermediateOutputPath)Parameters\*.g.cs" Condition="Exists('$(IntermediateOutputPath)Parameters\*.g.cs)')" />-->
+    <ProjectReference Include="..\Kingdom.OrTools.Sat.Parameters.Core\Kingdom.OrTools.Sat.Parameters.Core.csproj" />
   </ItemGroup>
 
   <ImportGroup>
