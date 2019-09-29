@@ -1,27 +1,27 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>3.0.2.9703</Version>
-    <AssemblyVersion>3.0.2.9703</AssemblyVersion>
-    <FileVersion>3.0.2.9703</FileVersion>
+    <Version>3.1.0.9704</Version>
+    <AssemblyVersion>3.1.0.9704</AssemblyVersion>
+    <FileVersion>3.1.0.9704</FileVersion>
     <Configurations>Debug</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup>
     <RootNamespace>Kingdom.OrTools.LinearSolver.Samples.Feasibility</RootNamespace>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
+  <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
-    <!-- ReSharper disable once UnknownProperty -->
     <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
-    <!-- ReSharper disable once UnknownProperty -->
     <PackageReference Include="Google.Protobuf" Version="$(GoogleProtobufVersion)" />
   </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
 
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.LinearSolver.Core\Kingdom.OrTools.LinearSolver.Core.csproj" />

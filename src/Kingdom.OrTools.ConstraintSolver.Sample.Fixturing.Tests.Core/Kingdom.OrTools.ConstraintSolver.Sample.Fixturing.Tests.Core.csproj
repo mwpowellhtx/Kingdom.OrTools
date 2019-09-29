@@ -2,34 +2,38 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.0.2.8316</Version>
+    <Version>1.1.0.8316</Version>
     <AssemblyVersion>1.0.2.8316</AssemblyVersion>
     <FileVersion>1.0.2.8316</FileVersion>
     <Configurations>Debug</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
     <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <RootNamespace>Kingdom.Constraints.Sample.Fixturing.Tests</RootNamespace>
   </PropertyGroup>
 
+  <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
-    <!-- ReSharper disable once UnknownProperty -->
     <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
-    <!-- ReSharper disable once UnknownProperty -->
     <PackageReference Include="Google.Protobuf" Version="$(GoogleProtobufVersion)" />
+    <!-- TODO: TBD: capture `Newtonsoft.Json´ version at a `Directory.Build.props´ level... -->
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.analyzers" Version="0.10.0" />
-    <PackageReference Include="xunit.runner.console" Version="2.4.1">
+    <PackageReference Include="xunit" Version="$(XunitVersion)" />
+    <PackageReference Include="xunit.analyzers" Version="$(XunitAnalyzersVersion)" />
+    <PackageReference Include="xunit.runner.console" Version="$(XunitVersion)">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+    <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitVersion)">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
 
   <ItemGroup>
     <None Remove="ExportedSolverModel.dat" />

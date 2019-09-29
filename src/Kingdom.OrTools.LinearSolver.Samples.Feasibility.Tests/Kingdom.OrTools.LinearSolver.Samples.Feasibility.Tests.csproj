@@ -1,36 +1,38 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.0.1.9688</Version>
-    <AssemblyVersion>1.0.1.9688</AssemblyVersion>
-    <FileVersion>1.0.1.9688</FileVersion>
+    <Version>1.1.0.9689</Version>
+    <AssemblyVersion>1.1.0.9689</AssemblyVersion>
+    <FileVersion>1.1.0.9689</FileVersion>
     <Configurations>Debug</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup>
     <RootNamespace>Kingdom.OrTools.LinearSolver.Samples.Feasibility</RootNamespace>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.console" Version="2.4.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.LinearSolver.Core\Kingdom.OrTools.LinearSolver.Core.csproj" />
     <ProjectReference Include="..\Kingdom.OrTools.LinearSolver.Samples.Feasibility\Kingdom.OrTools.LinearSolver.Samples.Feasibility.csproj" />
   </ItemGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <PackageReference Include="xunit" Version="$(XunitVersion)" />
+    <PackageReference Include="xunit.runner.console" Version="$(XunitVersion)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitVersion)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
 
 </Project>
