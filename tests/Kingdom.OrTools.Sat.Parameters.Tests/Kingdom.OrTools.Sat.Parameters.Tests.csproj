@@ -2,18 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.0.0.158</Version>
-    <AssemblyVersion>1.0.0.158</AssemblyVersion>
-    <FileVersion>1.0.0.158</FileVersion>
+    <Version>1.1.0.163</Version>
+    <AssemblyVersion>1.1.0.163</AssemblyVersion>
+    <FileVersion>1.1.0.163</FileVersion>
     <Configurations>Debug</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
     <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -35,15 +31,6 @@
   </ItemGroup>
   <!-- ReSharper restore UnknownProperty -->
 
-  <PropertyGroup>
-    <!-- Must maintain a connection with the internal build pipeline.
-     Track these versions against the projects. -->
-    <KingdomOrToolsCoreVersion>1.17.1.4565</KingdomOrToolsCoreVersion>
-    <KingdomOrToolsSatParametersCoreVersion>1.0.0.194</KingdomOrToolsSatParametersCoreVersion>
-    <KingdomOrToolsSatCoreVersion>1.0.1.4606</KingdomOrToolsSatCoreVersion>
-    <KingdomOrToolsSatParametersVersion>1.0.0.3</KingdomOrToolsSatParametersVersion>
-  </PropertyGroup>
-
   <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
     <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
@@ -52,13 +39,8 @@
   <!-- ReSharper restore UnknownProperty -->
 
   <ItemGroup>
-    <!-- TODO: TBD: may not need the Sat reference itself after all for purposes of these tests... -->
-    <!-- TODO: TBD: that is, unless we want to demonstrate the full capability... -->
-    <!-- TODO: TBD: however, for Sat capability, i.e. Sudoku tests, we can do that in the root OrTools solution... -->
-    <!--<PackageReference Include="Kingdom.OrTools.Core" Version="$(KingdomOrToolsCoreVersion)" />-->
-    <PackageReference Include="Kingdom.OrTools.Sat.Parameters.Core" Version="$(KingdomOrToolsSatParametersCoreVersion)" />
-    <!--<PackageReference Include="Kingdom.OrTools.Sat.Core" Version="$(KingdomOrToolsSatCoreVersion)" />-->
-    <PackageReference Include="Kingdom.OrTools.Sat.Parameters" Version="$(KingdomOrToolsSatParametersVersion)" />
+    <PackageReference Include="Kingdom.OrTools.Sat.Parameters.Core" Version="*" />
+    <PackageReference Include="Kingdom.OrTools.Sat.Parameters" Version="*" />
   </ItemGroup>
 
 </Project>
