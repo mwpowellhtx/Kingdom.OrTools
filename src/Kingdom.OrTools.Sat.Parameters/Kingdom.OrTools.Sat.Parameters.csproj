@@ -7,19 +7,29 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>Provides the basis for a first class experience specifying SAT-CP solver parameters.</Description>
-    <PackageTags>Google; Operations; Research; Tools; SAT; CP; CSP; constraint; satisfaction; problem; solver; parameter; parameters; Variant; IVariant</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
-    <Version>1.0.0.5</Version>
-    <AssemblyVersion>1.0.0.5</AssemblyVersion>
-    <FileVersion>1.0.0.5</FileVersion>
-    <PackageVersion>1.0.0.5</PackageVersion>
+    <Version>1.1.0.6667</Version>
+    <AssemblyVersion>1.1.0.6667</AssemblyVersion>
+    <FileVersion>1.1.0.6667</FileVersion>
+    <PackageVersion>1.1.0.6667</PackageVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+  <PropertyGroup>
+    <Description>Provides the basis for a first class experience specifying SAT-CP solver parameters.</Description>
+    <PackageTags>Google;Operations;Research;Tools;SAT;CP;CSP;constraint;satisfaction;problem;solver;parameter;parameters;Variant;IVariant</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
     <PlatformTarget>x64</PlatformTarget>
     <DocumentationFile>bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.Sat.Parameters.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DebugOrToolsSatParametersCodeGeneration Condition="'$(Configuration)' == 'Debug'">true</DebugOrToolsSatParametersCodeGeneration>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,7 +39,7 @@
   <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
     <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" PrivateAssets="all" />
-    <PackageReference Include="$(KingdomOrToolsSatCodeGenerationBuildTimeDependency)" Version="$(KingdomOrToolsSatCodeGenerationBuildTimeVersions)">
+    <PackageReference Include="$(KingdomOrToolsSatCodeGenerationBuildTimeDependency)" Version="$(KingdomOrToolsSatCodeGenerationBuildTimeVersion)">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -41,9 +51,5 @@
       <_Parameter1>Kingdom.OrTools.Sat.Parameters.Tests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-
-  <ImportGroup>
-    <Import Project="..\Licensing.props" />
-  </ImportGroup>
 
 </Project>

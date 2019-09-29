@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
@@ -7,27 +7,30 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <Description>Provides a convenient, easy to use wrapper for Constraint Satisfaction Programming based on the Google OR-tools.</Description>
-    <PackageTags>Google;Operations;Research;Tools;wrapper;dispose;disposable;CLR;object;host;constraint;satisfaction;problem;solver;CP;CSP;variable;variables;int;integer;bool;boolean;solution</PackageTags>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.1.4610</Version>
-    <AssemblyVersion>1.0.1.4610</AssemblyVersion>
-    <FileVersion>1.0.1.4610</FileVersion>
-    <PackageVersion>1.0.1.4610</PackageVersion>
+    <Version>1.1.1.6667</Version>
+    <AssemblyVersion>1.1.1.6667</AssemblyVersion>
+    <FileVersion>1.1.1.6667</FileVersion>
+    <PackageVersion>1.1.1.6667</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
-    <RootNamespace>Kingdom.OrTools.Sat</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
-    <PlatformTarget>x64</PlatformTarget>
-    <DocumentationFile>bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.Sat.Core.xml</DocumentationFile>
+    <Description>Provides a convenient, easy to use wrapper for Constraint Satisfaction Programming based on the Google OR-tools.</Description>
+    <PackageTags>Google;Operations;Research;Tools;wrapper;dispose;disposable;CLR;object;host;constraint;satisfaction;problem;solver;CP;CSP;variable;variables;int;integer;bool;boolean;solution</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Kingdom.OrTools.Sat.Core.csproj.DotSettings" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.Sat</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+    <DocumentationFile>bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.Sat.Core.xml</DocumentationFile>
+  </PropertyGroup>
 
   <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
@@ -39,9 +42,5 @@
     <ProjectReference Include="..\Kingdom.OrTools.Core\Kingdom.OrTools.Core.csproj" />
     <ProjectReference Include="..\Kingdom.OrTools.Sat.Parameters.Core\Kingdom.OrTools.Sat.Parameters.Core.csproj" />
   </ItemGroup>
-
-  <ImportGroup>
-    <Import Project="..\Licensing.props" />
-  </ImportGroup>
 
 </Project>
