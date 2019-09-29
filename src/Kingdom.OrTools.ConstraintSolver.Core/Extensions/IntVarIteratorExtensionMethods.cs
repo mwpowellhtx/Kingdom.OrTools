@@ -42,44 +42,47 @@ namespace Kingdom.OrTools.ConstraintSolver
         }
 
         /// <summary>
-        /// Makes a <paramref name="solver"/> variable ranging over the values <paramref name="vmin"/>,
-        /// <paramref name="vmax"/>, and the step <paramref name="vstep"/>. Returns the <see cref="IntVar"/>
-        /// after it has been made.
+        /// Returns the <see cref="long"/> Values Ranging from <paramref name="min"/>
+        /// to <paramref name="max"/> incrementing by <paramref name="step"/>.
         /// </summary>
-        /// <param name="solver"></param>
-        /// <param name="vmin"></param>
-        /// <param name="vmax"></param>
-        /// <param name="vstep"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="step"></param>
         /// <returns></returns>
-        public static IntVar MakeIntVar(this Solver solver, long vmin, long vmax, long vstep)
+        private static IEnumerable<long> GetValues(long min, long max, long step)
         {
-            var values = new CpInt64Vector();
-
-            for (var v = vmin; v <= vmax; v += vstep)
-                values.Add(v);
-
-            return solver.MakeIntVar(values);
+            for (var x = min; x < max + 1; x += step)
+            {
+                yield return x;
+            }
         }
 
         /// <summary>
-        /// Makes a solver named variable ranging over the values <paramref name="vmin"/>,
-        /// <paramref name="vmax"/>, and the step <paramref name="vstep"/>. Returns the
+        /// Makes a <paramref name="solver"/> variable ranging over the values <paramref name="min"/>,
+        /// <paramref name="max"/>, and the step <paramref name="step"/>. Returns the <see cref="IntVar"/>
+        /// after it has been made.
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="step"></param>
+        /// <returns></returns>
+        /// <see cref="GetValues"/>
+        public static IntVar MakeIntVar(this Solver solver, long min, long max, long step)
+            => solver.MakeIntVar(GetValues(min, max, step).ToArray());
+
+        /// <summary>
+        /// Makes a solver named variable ranging over the values <paramref name="min"/>,
+        /// <paramref name="max"/>, and the step <paramref name="step"/>. Returns the
         /// <see cref="IntVar"/> after it has been made.
         /// </summary>
         /// <param name="solver"></param>
-        /// <param name="vmin"></param>
-        /// <param name="vmax"></param>
-        /// <param name="vstep"></param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="step"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static IntVar MakeIntVar(this Solver solver, long vmin, long vmax, long vstep, string name)
-        {
-            var values = new CpInt64Vector();
-
-            for (var v = vmin; v <= vmax; v += vstep)
-                values.Add(v);
-
-            return solver.MakeIntVar(values, name);
-        }
+        public static IntVar MakeIntVar(this Solver solver, long min, long max, long step, string name)
+            => solver.MakeIntVar(GetValues(min, max, step).ToArray(), name);
     }
 }
