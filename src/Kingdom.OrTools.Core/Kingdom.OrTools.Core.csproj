@@ -3,25 +3,23 @@
   <PropertyGroup>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Configurations>Debug;Release</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.18.1.6665</Version>
+    <AssemblyVersion>1.18.1.6665</AssemblyVersion>
+    <FileVersion>1.18.1.6665</FileVersion>
+    <PackageVersion>1.18.1.6665</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
     <Description>Provides the core problem solver abstraction for use with Google OR-tools Constraint Solver and Linear Solver wrappers.</Description>
-    <PackageTags>Google; Operations; Research; Tools; wrapper; disposable; CLR; object; host; problem; solver</PackageTags>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.17.1.4569</Version>
-    <AssemblyVersion>1.17.1.4569</AssemblyVersion>
-    <FileVersion>1.17.1.4569</FileVersion>
-    <PackageVersion>1.17.1.4569</PackageVersion>
+    <PackageTags>Google;Operations;Research;Tools;wrapper;disposable;CLR;object;host;problem;solver</PackageTags>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
     <DocumentationFile>bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.Core.xml</DocumentationFile>
   </PropertyGroup>
-
-  <ImportGroup>
-    <Import Project="..\Licensing.props" />
-  </ImportGroup>
 
 </Project>

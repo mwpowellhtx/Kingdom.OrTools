@@ -1,39 +1,41 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Configurations>Debug;Release</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>5.2.1.6666</Version>
+    <AssemblyVersion>5.2.1.6666</AssemblyVersion>
+    <FileVersion>5.2.1.6666</FileVersion>
+    <PackageVersion>5.2.1.6666</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
     <Description>Provides a convenient, easy to use wrapper for Constraint Satisfaction Programming based on the Google OR-tools.</Description>
-    <PackageTags>Google; Operations; Research; Tools; wrapper; dispose; disposable; CLR; object; host; constraint; satisfaction; problem; solver; CP; CSP; variable; variables; int; integer; bool; boolean; solution</PackageTags>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>5.1.1.4374</Version>
-    <AssemblyVersion>5.1.1.4374</AssemblyVersion>
-    <FileVersion>5.1.1.4374</FileVersion>
-    <PackageVersion>5.1.1.4374</PackageVersion>
+    <PackageTags>Google;Operations;Research;Tools;wrapper;dispose;disposable;CLR;object;host;constraint;satisfaction;problem;solver;CP;CSP;variable;variables;int;integer;bool;boolean;solution</PackageTags>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+  <ItemGroup>
+    <None Remove="Kingdom.OrTools.ConstraintSolver.Core.csproj.DotSettings" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
     <PlatformTarget>x64</PlatformTarget>
     <DocumentationFile>bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.ConstraintSolver.Core.xml</DocumentationFile>
   </PropertyGroup>
 
+  <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
-    <!-- ReSharper disable once UnknownProperty -->
     <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
-    <!-- ReSharper disable once UnknownProperty -->
     <PackageReference Include="Google.Protobuf" Version="$(GoogleProtobufVersion)" />
   </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
 
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.Core\Kingdom.OrTools.Core.csproj" />
   </ItemGroup>
-
-  <ImportGroup>
-    <Import Project="..\Licensing.props" />
-  </ImportGroup>
 
 </Project>
