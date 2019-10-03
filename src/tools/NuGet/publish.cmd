@@ -28,6 +28,8 @@ set all_projects=Kingdom.OrTools.Core
 set all_projects=%all_projects%%delim%Kingdom.OrTools.ConstraintSolver.Core
 set all_projects=%all_projects%%delim%Kingdom.OrTools.LinearSolver.Core
 set all_projects=%all_projects%%delim%Kingdom.OrTools.Sat.Core
+set all_projects=%all_projects%%delim%Kingdom.OrTools.Sat.Parameters.Core
+set all_projects=%all_projects%%delim%Kingdom.OrTools.Sat.Parameters
 rem Setup Constraint Solver
 set constraint_projects=Kingdom.OrTools.Core
 set constraint_projects=%constraint_projects%%delim%Kingdom.OrTools.ConstraintSolver.Core
@@ -36,22 +38,18 @@ set linear_projects=Kingdom.OrTools.Core
 set linear_projects=%linear_projects%%delim%Kingdom.OrTools.LinearSolver.Core
 rem Setup Sat Solver
 set sat_projects=Kingdom.OrTools.Core
-set sat_projects=%linear_projects%%delim%Kingdom.OrTools.Sat.Core
+set sat_projects=%sat_projects%%delim%Kingdom.OrTools.Sat.Core
+set sat_projects=%sat_projects%%delim%Kingdom.OrTools.Sat.Parameters.Core
+set sat_projects=%sat_projects%%delim%Kingdom.OrTools.Sat.Parameters
+rem Setup Sat Parameters
+set sat_params_projects=Kingdom.OrTools.Sat.Parameters.Core
+set sat_params_projects=%sat_params_projects%%delim%Kingdom.OrTools.Sat.Parameters
 rem Setup Solver Projects
 set solver_projects=Kingdom.OrTools.Core
 set solver_projects=%solver_projects%%delim%Kingdom.OrTools.ConstraintSolver.Core
 set solver_projects=%solver_projects%%delim%Kingdom.OrTools.LinearSolver.Core
 set solver_projects=%solver_projects%%delim%Kingdom.OrTools.Sat.Core
-rem Setup All Code Generation Projects
-set all_cg_projects=Kingdom.OrTools.Sat.CodeGeneration
-set all_cg_projects=%all_cg_projects%%delim%Kingdom.OrTools.Sat.CodeGeneration.Core
-set all_cg_projects=%all_cg_projects%%delim%Kingdom.OrTools.Sat.CodeGeneration.Attributes
-rem Setup Code Generation Attributes Projects
-set cg_attrib_projects=Kingdom.OrTools.Sat.CodeGeneration.Attributes
-rem Setup Code Generation Projects
-set cg_projects=Kingdom.OrTools.Sat.CodeGeneration
-set cg_projects=%cg_projects%%delim%Kingdom.OrTools.Sat.CodeGeneration.Core
-rem TODO: TBD: add the next internally published bits into the project(s) mix...
+rem We decided to let internally delivered packages rest in their respective build pipelines.
 
 :parse_args
 
@@ -90,7 +88,6 @@ if "%1" == "--nuget" (
 )
 
 :add_constraint_projects
-rem echo add_constraint_projects = %1
 if "%1" == "--constraint-solver" (
     if "%projects%" == "" (
         set projects=%constraint_projects%
@@ -110,7 +107,6 @@ if "%1" == "--constraint" (
 )
 
 :add_linear_projects
-rem echo add_linear_projects = %1
 if "%1" == "--linear-solver" (
     if "%projects%" == "" (
         set projects=%linear_projects%
@@ -130,7 +126,6 @@ if "%1" == "--linear" (
 )
 
 :add_solver_projects
-rem echo add_solver_projects = %1
 if "%1" == "--solvers" (
     if "%projects%" == "" (
         set projects=%solver_projects%
@@ -142,42 +137,33 @@ if "%1" == "--solvers" (
 
 :add_sat_projects
 if "%1" == "--sat" (
-    rem Prepare to publish All Projects.
-    set projects=%sat_projects%
+    if "%projects%" == "" (
+        set projects=%sat_projects%
+    ) else (
+        set projects=%projects%%delim%%sat_projects%
+    )
+    goto :next_arg
+)
+
+:add_sat_params_projects
+if "%1" == "--sat-params" (
+    if "%projects%" == "" (
+        set projects=%sat_params_projects%
+    ) else (
+        set projects=%projects%%delim%%sat_params_projects%
+    )
     goto :next_arg
 )
 
 :add_all_projects
 if "%1" == "--all" (
-    rem Prepare to publish All Projects.
     set projects=%all_projects%
     goto :next_arg
 )
 
-:add_all_cg_projects
-if "%1" == "--all-cg" (
-    rem Prepare to publish All Code Generation Projects.
-    set projects=%all_cg_projects%
-    goto :next_arg
-)
-
-:add_cg_attrib_projects
-if "%1" == "--cg-attrib" (
-    rem Prepare to publish Code Generation Attribute Projects.
-    set projects=%cg_attrib_projects%
-    goto :next_arg
-)
-
-:add_cg_projects
-if "%1" == "--cg" (
-    rem Prepare to publish Code Generation Projects.
-    set projects=%cg_projects%
-    goto :next_arg
-)
-
+rem Add a single Project to the Projects list.
 :add_project
 if "%1" == "--project" (
-    rem Add a Project to the Projects list.
     if "%projects%" == "" (
         set projects=%2
     ) else (
