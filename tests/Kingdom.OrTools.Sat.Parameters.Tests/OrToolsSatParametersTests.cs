@@ -229,6 +229,14 @@ namespace Kingdom.OrTools.Sat.Parameters
         {
             get
             {
+                // ReSharper disable once CommentTypo
+                /* In this we have built-in two de-facto smoke tests in the sense that these types
+                 * are sourced by our internal Parameters Code Generation. In other words, yes, we
+                 * need to perform the additional verification, but we have an immediate feedback
+                 * that code generation has indeed occurred and at least generated an enumeration
+                 * and a parameter, before having run any unit tests whatsoever. */
+
+                // Specifically, RestartAlgorithmsRepeatedParameter and RestartAlgorithm.
                 IEnumerable<object[]> GetAll()
                 {
                     bool IsParameterTypeEligible(Type type)
@@ -263,7 +271,10 @@ namespace Kingdom.OrTools.Sat.Parameters
                     foreach (var parameterType in ParameterTypes)
                     {
                         var types = GetCtorTypes(parameterType).ToArray();
-                        yield return GetRange<object>(parameterType, types, GetCtorArgs(parameterType).ToArray()).ToArray();
+                        yield return GetRange<object>(
+                            parameterType
+                            , types
+                            , GetCtorArgs(parameterType).ToArray()).ToArray();
                     }
                 }
 
