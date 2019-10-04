@@ -1,0 +1,74 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageType>DotNetCliTool</PackageType>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Version>1.2.0.23837</Version>
+    <AssemblyVersion>1.2.0.23837</AssemblyVersion>
+    <FileVersion>1.2.0.23837</FileVersion>
+    <PackageVersion>1.2.0.23837</PackageVersion>
+  </PropertyGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <PropertyGroup>
+    <AssemblyName>$(KingdomOrToolsSatCodeGenerationToolName)</AssemblyName>
+    <PackageId>$(KingdomOrToolsSatCodeGenerationToolName)</PackageId>
+    <Description>dotnet CLI tooling which facilitates OR-tools CP-SAT parameters code generation.</Description>
+    <PackageTags>dotnet;dot;net;CLI;command;line;interface;tool;tools;tooling;OR;Operational;Research;CP;Constraint;Programming;SAT;Satisfaction;parameter;parameters;CG;code;generation;version;output;directory</PackageTags>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="Kingdom.OrTools.Sat.CodeGeneration.Tool.csproj.DotSettings" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
+    <DocumentationFile>bin\$(Configuration)\netcoreapp2.1\dotnet-ortools-sat-cg.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CodeGenerationRoslynEngineServicesVersions>[1,2)</CodeGenerationRoslynEngineServicesVersions>
+    <CodeGenerationRoslynEngineServicesVersion>1.0</CodeGenerationRoslynEngineServicesVersion>
+    <CodeGenerationRoslynEngineRegistriesVersions>[1,2)</CodeGenerationRoslynEngineRegistriesVersions>
+    <CodeGenerationRoslynEngineRegistriesVersion>1.0</CodeGenerationRoslynEngineRegistriesVersion>
+    <NConsoleOptionsVersion>1.0.3</NConsoleOptionsVersion>
+    <NConsoleOptionsExtensionsVersion>1.4.7</NConsoleOptionsExtensionsVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Code.Generation.Roslyn.Engine.Services" Version="$(CodeGenerationRoslynEngineServicesVersions)" />
+    <PackageReference Include="Code.Generation.Roslyn.Engine.Registries" Version="$(CodeGenerationRoslynEngineRegistriesVersions)" />
+    <PackageReference Include="NConsole.Options" Version="$(NConsoleOptionsVersion)" />
+    <PackageReference Include="NConsole.Options.Extensions" Version="$(NConsoleOptionsExtensionsVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kingdom.OrTools.Sat.CodeGeneration.Core\Kingdom.OrTools.Sat.CodeGeneration.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Tells the dotnet cli to allow the tool being run even if the run-time version does not match the target version. -->
+    <Content Include="prefercliruntime" Pack="true" PackagePath="">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ImportGroup>
+    <Import Project="..\Sat.Parameters.CodeGeneration.props" />
+    <Import Project="..\Sat.Parameters.CodeGeneration.Fat.props" Condition="'$(Configuration)' == 'Release'" />
+  </ImportGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(MSBuildProjectName).Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+</Project>

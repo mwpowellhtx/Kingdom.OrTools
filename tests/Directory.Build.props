@@ -1,0 +1,17 @@
+<Project>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <PropertyGroup>
+    <ParentDirectoryBuildPropsPath Condition="'$(ParentDirectoryBuildPropsPath)' == ''">$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)..\'))</ParentDirectoryBuildPropsPath>
+  </PropertyGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <ImportGroup>
+    <Import Project="$(ParentDirectoryBuildPropsPath)" Condition="'$(ParentDirectoryBuildPropsPath)' != '' And Exists('$(ParentDirectoryBuildPropsPath)')" />
+  </ImportGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
+  </PropertyGroup>
+
+</Project>

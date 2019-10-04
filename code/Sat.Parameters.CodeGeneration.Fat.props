@@ -1,0 +1,104 @@
+<Project>
+
+  <!-- TODO: TBD: we may need to perform BumpAssemblyVersions versioning in this case, but for now, leaving it out. -->
+
+  <PropertyGroup>
+    <Antlr4RuntimeDependency>Antlr4.Runtime</Antlr4RuntimeDependency>
+    <KingdomProtobufAntlrDependency>Kingdom.Protobuf.Antlr</KingdomProtobufAntlrDependency>
+    <KingdomProtobufDescriptorsDependency>Kingdom.Protobuf.Descriptors</KingdomProtobufDescriptorsDependency>
+    <KingdomCollectionsBidirectionalsDependency>Kingdom.Collections.Bidirectionals</KingdomCollectionsBidirectionalsDependency>
+    <KingdomCollectionsVariantsDependency>Kingdom.Collections.Variants</KingdomCollectionsVariantsDependency>
+    <KingdomCombinatoricsCombinatorialsDependency>Kingdom.Combinatorics.Combinatorials</KingdomCombinatoricsCombinatorialsDependency>
+    <KingdomOrToolsSatCodeGenerationCoreDependency>Kingdom.OrTools.Sat.CodeGeneration.Core</KingdomOrToolsSatCodeGenerationCoreDependency>
+    <!-- TODO: TBD: we were considering this in terms of a CGR generators plugin approach. That
+     may yet work, but we think will depend on also moving forward into netcore3.0 territory,
+     which we are not quite there yet. -->
+    <!--<GoogleOrToolsDependency>Google.OrTools</GoogleOrToolsDependency>-->
+    <!--<GoogleOrToolsRuntimeDependency>Google.OrTools.runtime.win-x64</GoogleOrToolsRuntimeDependency>-->
+    <AdditionalAssetPackagePath>lib\netcoreapp2.1</AdditionalAssetPackagePath>
+    <!-- Was netstandard2.0 path when we were considering the proper CGR path, but failing that, we are now trying a `straight´ netcoreapp2.1 tool approach. -->
+    <!--<AdditionalAssetPackagePath>lib\netstandard2.0</AdditionalAssetPackagePath>-->
+    <AssetsDirectoryPath>Assets\</AssetsDirectoryPath>
+  </PropertyGroup>
+
+  <!-- TODO: TBD: this is a poor man's effort to ensure that dependencies are `resolved´ prior to invoking CG, ... -->
+  <!-- TODO: TBD: ... and/or packaging a `fat´ package for internal CG delivery during subsequent solution build configurations. -->
+  <Target Name="ResolveCodeGenerationAssemblyDependencies" BeforeTargets="GenerateNuspec">
+
+    <PropertyGroup>
+      <PackageDependencyDirectory>..\packages\</PackageDependencyDirectory>
+      <Antlr4RuntimeLibraryPath>lib\netstandard1.1\</Antlr4RuntimeLibraryPath>
+      <Antlr4RuntimeVersion>4.6.6</Antlr4RuntimeVersion>
+      <KingdomProtobufAntlrVersion>1.0.13.16833</KingdomProtobufAntlrVersion>
+      <KingdomProtobufDescriptorsVersion>1.0.11.16833</KingdomProtobufDescriptorsVersion>
+      <KingdomCollectionsBidirectionalsVersion>1.1.4.17959</KingdomCollectionsBidirectionalsVersion>
+      <KingdomCollectionsVariantsVersion>1.1.0.26740</KingdomCollectionsVariantsVersion>
+      <!-- TODO: TBD: this version will probably `work´ ... `1.2.7.27709´, but there is a more recent `1.2.7.29189´ ... -->
+      <KingdomCombinatoricsCombinatorialsVersion>1.2.7.27709</KingdomCombinatoricsCombinatorialsVersion>
+      <GoogleOrToolsVersion>7.3.7083</GoogleOrToolsVersion>
+      <KingdomProtobufLibraryPath>lib\netstandard2.0\</KingdomProtobufLibraryPath>
+      <KingdomCollectionsLibraryPath>lib\netstandard2.0\</KingdomCollectionsLibraryPath>
+      <KingdomCombinatoricsLibraryPath>lib\netstandard2.0\</KingdomCombinatoricsLibraryPath>
+      <GoogleOrToolsLibraryPath>ref\netstandard2.0\</GoogleOrToolsLibraryPath>
+      <GoogleOrToolsRuntimeLibraryPath>runtimes\win-x64\native\</GoogleOrToolsRuntimeLibraryPath>
+    </PropertyGroup>
+
+    <!-- ReSharper disable UnknownProperty -->
+    <ItemGroup>
+      <!-- TODO: TBD: also any PDB or XML files... -->
+      <!-- TODO: TBD: https://www.nuget.org/packages/Antlr4.Runtime/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(Antlr4RuntimeDependency)\$(Antlr4RuntimeVersion)\$(Antlr4RuntimeLibraryPath)$(Antlr4RuntimeDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Protobuf.Antlr/ -->
+      <!-- TODO: TBD: probably seeing `Property is not defined´ here, because we have a definition in Directory.Build.props already. -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomProtobufAntlrDependency)\$(KingdomProtobufAntlrVersion)\$(KingdomProtobufLibraryPath)$(KingdomProtobufAntlrDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Protobuf.Descriptors/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomProtobufDescriptorsDependency)\$(KingdomProtobufDescriptorsVersion)\$(KingdomProtobufLibraryPath)$(KingdomProtobufDescriptorsDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Collections.Bidirectionals/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomCollectionsBidirectionalsDependency)\$(KingdomCollectionsBidirectionalsVersion)\$(KingdomCollectionsLibraryPath)$(KingdomCollectionsBidirectionalsDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Collections.Variants/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomCollectionsVariantsDependency)\$(KingdomCollectionsVariantsVersion)\$(KingdomCollectionsLibraryPath)$(KingdomCollectionsVariantsDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Kingdom.Combinatorics.Combinatorials/ -->
+      <CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(KingdomCombinatoricsCombinatorialsDependency)\$(KingdomCombinatoricsCombinatorialsVersion)\$(KingdomCombinatoricsLibraryPath)$(KingdomCombinatoricsCombinatorialsDependency).*" />
+      <!-- TODO: TBD: https://www.nuget.org/packages/Google.OrTools/ -->
+      <!--<CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(GoogleOrToolsDependency)\$(GoogleOrToolsVersion)\$(GoogleOrToolsLibraryPath)$(GoogleOrToolsDependency).*" />-->
+      <!-- TODO: TBD: https://www.nuget.org/packages/Google.OrTools.Runtime.win-x64/ -->
+      <!--<CodeGenerationDependencyToResolve Include="$(PackageDependencyDirectory)$(GoogleOrToolsRuntimeDependency)\$(GoogleOrToolsVersion)\$(GoogleOrToolsRuntimeLibraryPath)$(GoogleOrToolsRuntimeDependency).*" />-->
+    </ItemGroup>
+
+    <Message Text="Output directory is `$(OutDir)´ ..." Importance="high" />
+    <Message Text="Resolving @(CodeGenerationDependencyToResolve->Count()) asset(s) to `$(AssetsDirectoryPath)´ directory..." Importance="high" />
+    <MakeDir Directories="$(AssetsDirectoryPath)" Condition="!Exists('$AssetsDirectoryPath')" />
+    <!-- ReSharper disable once UnknownItemGroup -->
+    <Copy SourceFiles="@(CodeGenerationDependencyToResolve)" DestinationFolder="$(AssetsDirectoryPath)" />
+  </Target>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <Folder Include="$(AssetsDirectoryPath)" />
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <!-- Expecting that the Assets will have already been Copied prior to the Packaging
+     steps, in fact, prior to Generating the `.nuspec´ NuGet Specification. -->
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(Antlr4RuntimeDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomProtobufAntlrDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomProtobufDescriptorsDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomCollectionsBidirectionalsDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomCollectionsVariantsDependency).*" />
+    <AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(KingdomCombinatoricsCombinatorialsDependency).*" />
+    <!--<AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(GoogleOrToolsDependency).*" />-->
+    <!--<AdditionalAssetsToPackage Include="$(AssetsDirectoryPath)$(GoogleOrToolsRuntimeDependency).*" />-->
+    <!-- This one may be discovered in the Output Directory... -->
+    <AdditionalAssetsToPackage Include="$(OutDir)$(KingdomOrToolsSatCodeGenerationCoreDependency).*" />
+    <!-- ReSharper disable once UnknownItemGroup -->
+    <None Include="@(AdditionalAssetsToPackage)">
+      <Pack>true</Pack>
+      <PackagePath>$(AdditionalAssetPackagePath)</PackagePath>
+    </None>
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+</Project>

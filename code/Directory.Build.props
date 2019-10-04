@@ -1,0 +1,35 @@
+<Project>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <PropertyGroup>
+    <ParentDirectoryBuildPropsPath Condition="'$(ParentDirectoryBuildPropsPath)' == ''">$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)..\'))</ParentDirectoryBuildPropsPath>
+  </PropertyGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <ImportGroup>
+    <Import Project="$(ParentDirectoryBuildPropsPath)" Condition="'$(ParentDirectoryBuildPropsPath)' != '' And Exists('$(ParentDirectoryBuildPropsPath)')" />
+  </ImportGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.Sat.CodeGeneration</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Defined for internal consistency with the Kingdom.OrTools.Sat.CodeGeneration targets. -->
+    <KingdomOrToolsSatCodeGenerationToolName>dotnet-ortools-sat-cg</KingdomOrToolsSatCodeGenerationToolName>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CodeGenerationRoslynVersions>[1.1,2)</CodeGenerationRoslynVersions>
+    <CodeGenerationRoslynVersion>1.1</CodeGenerationRoslynVersion>
+    <CodeGenerationRoslynEngineVersions>[1.1,2)</CodeGenerationRoslynEngineVersions>
+    <CodeGenerationRoslynEngineVersion>1.1</CodeGenerationRoslynEngineVersion>
+    <CodeGenerationRoslynAttributesVersions>[1.1,2)</CodeGenerationRoslynAttributesVersions>
+    <CodeGenerationRoslynAttributesVersion>1.1</CodeGenerationRoslynAttributesVersion>
+    <CodeGenerationRoslynBuildTimeVersions>[1.1,2)</CodeGenerationRoslynBuildTimeVersions>
+    <CodeGenerationRoslynBuildTimeVersion>1.1</CodeGenerationRoslynBuildTimeVersion>
+    <KingdomProtobufAntlrVersions>[1.0.13,2)</KingdomProtobufAntlrVersions>
+    <KingdomProtobufAntlrVersion>1.0.13.22961</KingdomProtobufAntlrVersion>
+  </PropertyGroup>
+
+</Project>

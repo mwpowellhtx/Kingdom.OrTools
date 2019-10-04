@@ -25,15 +25,6 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Google.OrTools">
       <HintPath>..\..\..\..\..\Spikes\Google\or-tools-mwpowellhtx-solver-constraints\bin\Google.OrTools.dll</HintPath>
@@ -57,10 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Google.OrTools">
-      <Version>7.0.6546</Version>
+      <Version>7.3.7083</Version>
     </PackageReference>
     <PackageReference Include="Google.Protobuf">
-      <Version>3.7.0</Version>
+      <Version>3.9.1</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.1</Version>

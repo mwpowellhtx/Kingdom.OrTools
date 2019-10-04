@@ -1,0 +1,7 @@
+<Project>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.Sat.CodeGeneration</RootNamespace>
+  </PropertyGroup>
+
+</Project>

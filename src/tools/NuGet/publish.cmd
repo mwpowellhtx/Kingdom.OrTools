@@ -28,6 +28,8 @@ set all_projects=Kingdom.OrTools.Core
 set all_projects=%all_projects%%delim%Kingdom.OrTools.ConstraintSolver.Core
 set all_projects=%all_projects%%delim%Kingdom.OrTools.LinearSolver.Core
 set all_projects=%all_projects%%delim%Kingdom.OrTools.Sat.Core
+set all_projects=%all_projects%%delim%Kingdom.OrTools.Sat.Parameters.Core
+set all_projects=%all_projects%%delim%Kingdom.OrTools.Sat.Parameters
 rem Setup Constraint Solver
 set constraint_projects=Kingdom.OrTools.Core
 set constraint_projects=%constraint_projects%%delim%Kingdom.OrTools.ConstraintSolver.Core
@@ -36,13 +38,18 @@ set linear_projects=Kingdom.OrTools.Core
 set linear_projects=%linear_projects%%delim%Kingdom.OrTools.LinearSolver.Core
 rem Setup Sat Solver
 set sat_projects=Kingdom.OrTools.Core
-set sat_projects=%linear_projects%%delim%Kingdom.OrTools.Sat.Core
+set sat_projects=%sat_projects%%delim%Kingdom.OrTools.Sat.Core
+set sat_projects=%sat_projects%%delim%Kingdom.OrTools.Sat.Parameters.Core
+set sat_projects=%sat_projects%%delim%Kingdom.OrTools.Sat.Parameters
+rem Setup Sat Parameters
+set sat_params_projects=Kingdom.OrTools.Sat.Parameters.Core
+set sat_params_projects=%sat_params_projects%%delim%Kingdom.OrTools.Sat.Parameters
 rem Setup Solver Projects
 set solver_projects=Kingdom.OrTools.Core
 set solver_projects=%solver_projects%%delim%Kingdom.OrTools.ConstraintSolver.Core
 set solver_projects=%solver_projects%%delim%Kingdom.OrTools.LinearSolver.Core
 set solver_projects=%solver_projects%%delim%Kingdom.OrTools.Sat.Core
-
+rem We decided to let internally delivered packages rest in their respective build pipelines.
 
 :parse_args
 
@@ -81,7 +88,6 @@ if "%1" == "--nuget" (
 )
 
 :add_constraint_projects
-rem echo add_constraint_projects = %1
 if "%1" == "--constraint-solver" (
     if "%projects%" == "" (
         set projects=%constraint_projects%
@@ -101,7 +107,6 @@ if "%1" == "--constraint" (
 )
 
 :add_linear_projects
-rem echo add_linear_projects = %1
 if "%1" == "--linear-solver" (
     if "%projects%" == "" (
         set projects=%linear_projects%
@@ -121,7 +126,6 @@ if "%1" == "--linear" (
 )
 
 :add_solver_projects
-rem echo add_solver_projects = %1
 if "%1" == "--solvers" (
     if "%projects%" == "" (
         set projects=%solver_projects%
@@ -133,21 +137,33 @@ if "%1" == "--solvers" (
 
 :add_sat_projects
 if "%1" == "--sat" (
-    rem Prepare to publish All Projects.
-    set projects=%sat_projects%
+    if "%projects%" == "" (
+        set projects=%sat_projects%
+    ) else (
+        set projects=%projects%%delim%%sat_projects%
+    )
+    goto :next_arg
+)
+
+:add_sat_params_projects
+if "%1" == "--sat-params" (
+    if "%projects%" == "" (
+        set projects=%sat_params_projects%
+    ) else (
+        set projects=%projects%%delim%%sat_params_projects%
+    )
     goto :next_arg
 )
 
 :add_all_projects
 if "%1" == "--all" (
-    rem Prepare to publish All Projects.
     set projects=%all_projects%
     goto :next_arg
 )
 
+rem Add a single Project to the Projects list.
 :add_project
 if "%1" == "--project" (
-    rem Add a Project to the Projects list.
     if "%projects%" == "" (
         set projects=%2
     ) else (
@@ -203,6 +219,8 @@ set nuget_push_opts=%nuget_push_opts% -Source %nuget_push_source%
 
 rem Do the main areas here.
 pushd ..\..
+
+rem echo projects = %projects%
 
 if not "%projects%" == "" (
     echo Processing '%config%' configuration for '%projects%' ...

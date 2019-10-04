@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Version>1.1.0.171</Version>
+    <AssemblyVersion>1.1.0.171</AssemblyVersion>
+    <FileVersion>1.1.0.171</FileVersion>
+    <Configurations>Debug</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Kingdom.OrTools.Sat.Parameters.Tests.csproj.DotSettings" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kingdom.OrTools.Sat.Parameters.Core\Kingdom.OrTools.Sat.Parameters.Core.csproj" />
+  </ItemGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <PackageReference Include="xunit" Version="$(XunitVersion)" />
+    <PackageReference Include="xunit.fluently.assert" Version="[1.3.1,2)" />
+    <PackageReference Include="xunit.fluently.assert.ioly" Version="[1.2,2]" />
+    <PackageReference Include="xunit.fluently.assert.exceptionally" Version="[1,2]" />
+    <PackageReference Include="xunit.fluently.theoretically" Version="[1,2]" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitVersion)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+</Project>

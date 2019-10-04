@@ -17,6 +17,22 @@ namespace Kingdom.OrTools
         where TSource : class
         where TConstraint : class
     {
+        /// <summary>
+        /// Returns the <see cref="IEnumerable{T}"/> corresponding to the
+        /// <paramref name="values"/>.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        protected static IEnumerable<T> GetRange<T>(params T[] values)
+        {
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var value in values)
+            {
+                yield return value;
+            }
+        }
+
         /// <inheritdoc />
         public virtual TSolver Solver { get; protected set; }
 

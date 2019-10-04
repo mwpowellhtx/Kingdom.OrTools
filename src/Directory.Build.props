@@ -1,45 +1,52 @@
 <Project>
 
+  <!-- ReSharper disable UnknownProperty -->
   <PropertyGroup>
-    <Authors>Michael W. Powell</Authors>
-    <Company>Kingdom Software</Company>
-    <Product>Kingdom.OrTools</Product>
-    <Copyright>Copyright (c) 2015-2019</Copyright>
+    <ParentDirectoryBuildPropsPath Condition="'$(ParentDirectoryBuildPropsPath)' == ''">$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)..\'))</ParentDirectoryBuildPropsPath>
   </PropertyGroup>
+  <!-- ReSharper restore UnknownProperty -->
 
-  <PropertyGroup>
-    <PackageProjectUrl>http://github.com/mwpowellhtx/Kingdom.OrTools</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/mwpowellhtx/Kingdom.OrTools/blob/master/LICENSE</PackageLicenseUrl>
-  </PropertyGroup>
+  <ImportGroup>
+    <Import Project="$(ParentDirectoryBuildPropsPath)" Condition="'$(ParentDirectoryBuildPropsPath)' != '' And Exists('$(ParentDirectoryBuildPropsPath)')" />
+  </ImportGroup>
 
   <PropertyGroup>
-    <RootNamespace>Kingdom.OrTools</RootNamespace>
-    <GoogleOrToolsVersion>7.0.6546</GoogleOrToolsVersion>
-    <GoogleProtobufVersion>3.7.0</GoogleProtobufVersion>
-    <CodeGenerationRoslynVersion>0.5.13</CodeGenerationRoslynVersion>
+    <MicrosoftCSharpVersion>4.6</MicrosoftCSharpVersion>
+    <!-- We can probably most likely track the Google version numbers according to their
+     Major.Minor only and not worry about the Build or Patch numbers themselves. Additionally,
+     except in places where we must adopt the Protobuf dependency directly, we could otherwise
+     leave that out as well, as this depedency tracks seamlessly with the OrTools, or its runtime
+     surrogate, dependencies. -->
+    <GoogleProtobufVersions>[3.9.1,4)</GoogleProtobufVersions>
+    <GoogleProtobufVersion>3.9.1</GoogleProtobufVersion>
+    <!-- Well, I thought we could get away with the Major.Minor here, but we kind of do need to
+    know the full version in order to know the precise path of the Protocol Buffer specification
+    files in which to embed. The danger here is that this is a Greater Than Or Equal To (>=),
+    right? So we may need to be more precise in our dependencies, but we will start here, and
+    cross future bridges should they arise when they arise. -->
+    <CodeGenerationRoslynVersions>[1.1,2)</CodeGenerationRoslynVersions>
+    <CodeGenerationRoslynVersion>1.1</CodeGenerationRoslynVersion>
+    <CodeGenerationRoslynEngineVersions>[1.1,2)</CodeGenerationRoslynEngineVersions>
+    <CodeGenerationRoslynEngineVersion>1.1</CodeGenerationRoslynEngineVersion>
+    <CodeGenerationRoslynAttributesVersions>[1.1,2)</CodeGenerationRoslynAttributesVersions>
+    <CodeGenerationRoslynAttributesVersion>1.1</CodeGenerationRoslynAttributesVersion>
+    <CodeGenerationRoslynBuildTimeVersions>[1.1,2)</CodeGenerationRoslynBuildTimeVersions>
+    <CodeGenerationRoslynBuildTimeVersion>1.1</CodeGenerationRoslynBuildTimeVersion>
+    <KingdomProtobufAntlrVersions>[1.0.13,2)</KingdomProtobufAntlrVersions>
+    <KingdomProtobufAntlrVersion>1.0.13.22961</KingdomProtobufAntlrVersion>
+    <!-- TODO: TBD: will leave these in but commented out for the time being... -->
+    <!--<KingdomOrToolsSatCodeGenerationAttributesVersion>1.0.0.16554</KingdomOrToolsSatCodeGenerationAttributesVersion>-->
+    <!--<KingdomOrToolsSatCodeGenerationAttributesVersion>1.0.0.16554</KingdomOrToolsSatCodeGenerationAttributesVersion>-->
+    <!--<KingdomOrToolsSatCodeGenerationVersions>1.1-*</KingdomOrToolsSatCodeGenerationVersions>-->
+    <!--<KingdomOrToolsSatCodeGenerationVersion>1.1.0.22764</KingdomOrToolsSatCodeGenerationVersion>-->
+    <!-- TODO: TBD: eventually we would like to leverage a proper CGR notwithstanding runtime dependency resolution snafus... -->
+    <!-- TODO: TBD: however we think that this depends on System.Runtime.Loader, which is a work in progress, and which also requires that we land in more mature versions of netcore ... -->
+    <!-- TODO: TBD: in the meantime a fit for purpose CLI tooling is the best possible approach we can take... -->
+    <KingdomOrToolsSatCodeGenerationCoreVersions>[1.2,2)</KingdomOrToolsSatCodeGenerationCoreVersions>
+    <KingdomOrToolsSatCodeGenerationCoreVersion>1.2.0.15930</KingdomOrToolsSatCodeGenerationCoreVersion>
+    <!-- True, this is the dependency. We just want the latest stable, always. -->
+    <KingdomOrToolsSatCodeGenerationBuildTimeDependency>Kingdom.OrTools.Sat.CodeGeneration.BuildTime</KingdomOrToolsSatCodeGenerationBuildTimeDependency>
+    <KingdomOrToolsSatCodeGenerationBuildTimeVersion>1.0</KingdomOrToolsSatCodeGenerationBuildTimeVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="BumpAssemblyVersions" Version="1.2.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="Exists('..\packages\BumpAssemblyVersions\1.2.0\build\BumpAssemblyVersions.targets')">
-    <BumpVersionSpec Include="Version" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
-    <BumpVersionSpec Include="AssemblyVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
-    <BumpVersionSpec Include="FileVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
-    <BumpVersionSpec Include="PackageVersion" PatchProviderTemplate="Increment" BuildProviderTemplate="SecondsSinceMidnight" Condition="'$(Configuration)' == 'Release'" />
-
-    <BumpVersionSpec Include="Version" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
-    <BumpVersionSpec Include="AssemblyVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
-    <BumpVersionSpec Include="FileVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
-    <BumpVersionSpec Include="PackageVersion" BuildProviderTemplate="Increment" Condition="'$(Configuration)' == 'Debug'" />
-  </ItemGroup>
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="if exist &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot; del /f &quot;$(ProjectDir)bin\$(Configuration)\*.nupkg&quot;" />
-  </Target>
 
 </Project>

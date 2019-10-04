@@ -2,20 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.0.0.8461</Version>
-    <AssemblyVersion>1.0.0.8461</AssemblyVersion>
-    <FileVersion>1.0.0.8461</FileVersion>
+    <Version>1.1.0.8473</Version>
+    <AssemblyVersion>1.1.0.8473</AssemblyVersion>
+    <FileVersion>1.1.0.8473</FileVersion>
+    <Configurations>Debug</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PlatformTarget>x64</PlatformTarget>
     <RootNamespace>Kingdom.OrTools.Samples.Sudoku</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <!-- ReSharper disable once UnknownProperty -->
-    <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
-  </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Interfaces\ISudokuPuzzle.*.cs">
@@ -25,6 +24,12 @@
       <DependentUpon>SudokuPuzzle.cs</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">

@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{69E26DAA-1CF2-414E-8CE4-0A7F89AC1032}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{483F903C-E5FE-41ED-A7DE-38E88A66C761}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		NuGet.Config = NuGet.Config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{37E95BAE-49D3-4D5E-8FC9-1F1D4AE6274B}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.Config = NuGet.Config
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.Parameters.Tests", "Kingdom.OrTools.Sat.Parameters.Tests\Kingdom.OrTools.Sat.Parameters.Tests.csproj", "{45BE5455-72F8-41F7-B201-F1BF9C559CE8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".parent", ".parent", "{F07BFE7E-A186-41E0-99E1-0B5BCB0B3113}"
+	ProjectSection(SolutionItems) = preProject
+		..\Directory.Build.props = ..\Directory.Build.props
+		..\Licensing.props = ..\Licensing.props
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{45BE5455-72F8-41F7-B201-F1BF9C559CE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45BE5455-72F8-41F7-B201-F1BF9C559CE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45BE5455-72F8-41F7-B201-F1BF9C559CE8}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{45BE5455-72F8-41F7-B201-F1BF9C559CE8} = {69E26DAA-1CF2-414E-8CE4-0A7F89AC1032}
+		{F07BFE7E-A186-41E0-99E1-0B5BCB0B3113} = {483F903C-E5FE-41ED-A7DE-38E88A66C761}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {25D2C0BE-492C-4D5E-A981-D7DA364D8C17}
+	EndGlobalSection
+EndGlobal

@@ -3,35 +3,41 @@
   <PropertyGroup>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.3.1.28147</Version>
+    <AssemblyVersion>1.3.1.28147</AssemblyVersion>
+    <FileVersion>1.3.1.28147</FileVersion>
+    <PackageVersion>1.3.1.28147</PackageVersion>
   </PropertyGroup>
 
   <PropertyGroup>
     <Description>Provides a convenient, easy to use wrapper for Linear Programming based on the Google OR-tools.</Description>
-    <PackageTags>Google; Operations; Research; Tools; wrapper; dispose; disposable; CLR; object; host; linear; satisfaction; problem; solver; LP; LSP; variable; variables; int; integer; bool; boolean; solution</PackageTags>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.2.1.4368</Version>
-    <AssemblyVersion>1.2.1.4368</AssemblyVersion>
-    <FileVersion>1.2.1.4368</FileVersion>
-    <PackageVersion>1.2.1.4368</PackageVersion>
+    <PackageTags>Google;Operations;Research;Tools;wrapper;dispose;disposable;CLR;object;host;linear;satisfaction;problem;solver;LP;LSP;variable;variables;int;integer;bool;boolean;solution</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Kingdom.OrTools.LinearSolver.Core.csproj.DotSettings" />
+  </ItemGroup>
 
   <PropertyGroup>
     <RootNamespace>Kingdom.OrTools.LinearSolver</RootNamespace>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
     <PlatformTarget>x64</PlatformTarget>
     <DocumentationFile>bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.LinearSolver.Core.xml</DocumentationFile>
   </PropertyGroup>
 
+  <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <!-- ReSharper disable once UnknownProperty -->
+    <PackageReference Include="Microsoft.CSharp" Version="$(MicrosoftCSharpVersion)" />
     <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
-    <!-- ReSharper disable once UnknownProperty -->
     <PackageReference Include="Google.Protobuf" Version="$(GoogleProtobufVersion)" />
   </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
 
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.Core\Kingdom.OrTools.Core.csproj" />

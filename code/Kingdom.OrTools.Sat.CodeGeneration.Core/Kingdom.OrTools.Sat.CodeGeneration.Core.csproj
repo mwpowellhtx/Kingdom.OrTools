@@ -1,0 +1,122 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>Functions as the bridge between the ANTLR based Protocol Buffer parser informing the Google.OrTools CP-SAT Parameter Code Generator.</Description>
+    <PackageTags>kingdom;operational;research;tools;OR;CP;constraint;programming;SAT;satisfaction;code;generation;Roslyn;CG;CGR;core</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.2.0.23835</Version>
+    <AssemblyVersion>1.2.0.23835</AssemblyVersion>
+    <FileVersion>1.2.0.23835</FileVersion>
+    <PackageVersion>1.2.0.23835</PackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+    <DocumentationFile>bin\$(Configuration)\netstandard2.0\Kingdom.OrTools.Sat.CodeGeneration.Core.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Kingdom.OrTools.Sat.CodeGeneration.Core.csproj.DotSettings" />
+    <None Remove=".gitignore" />
+  </ItemGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <PackageReference Include="Kingdom.Protobuf.Antlr" Version="$(KingdomProtobufAntlrVersions)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="$(MicrosoftCodeAnalysisCSharpVersions)" />
+    <!-- We need the Private Asset only, and we cannot reference the x64 bit Assembly for Image compatibility
+     reasons. We will utilize the Protocol Buffer content in the package during the build. -->
+    <PackageReference Include="$(GoogleOrToolsDependency)" Version="$(GoogleOrToolsVersions)" PrivateAssets="all" />
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <!-- This can now depend upon the Embedded Protocol Buffer Content derived from
+     the NuGet Package sources. This happened circa Google.OrTools version 7.3.7083.
+     https://www.nuget.org/packages/Google.OrTools/7.3.7083
+     Package the .proto files with the NuGet package / https://github.com/google/or-tools/issues/1190
+     It is probably fine to leave the Package Dependency on a Greater Than Or Equal To (>=) track.
+     As long as the Parameters do not change, then it is fine. Should they change at all, then we
+     need to rebuild and redeploy this package, which is fine. Otherwise the migration path should
+     be transparent. -->
+    <!-- TODO: TBD: part of the longer term approach, taking this intermediate tact...
+     longer range, we determine the actual path of the run-time and the API surface area...
+     ...and from there, we infer where the Protocol Buffer files actually are in terms of the delivered package.
+     meanwhile, keeping an embedded Resource that is at least informed at build time, which is perhaps all we need.
+     longer range it would potentially be better to track with the live package updates...
+     and even consider building a parameters package dynamically on the fly based on that package...
+     especially so that we are not rebuilding with every Google.OrTools package release...
+     this at least gets our foot through the door and we can consider more sophisticated longer range approaches... -->
+    <EmbeddedResource Include="..\packages\$(GoogleOrToolsDependency)\$(GoogleOrToolsVersion)\content\sat\sat_parameters.proto" Link="Resources\sat_parameters.proto" />
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
+  <Target Name="CleanGoogleOrToolsConstants" AfterTargets="Clean" BeforeTargets="GenerateGoogleOrToolsConstants">
+    <PropertyGroup>
+      <GoogleOrToolsConstantsFileName>GoogleOrToolsConstants.cs</GoogleOrToolsConstantsFileName>
+      <GoogleOrToolsConstantsPath>$(ProjectDir)$(GoogleOrToolsConstantsFileName)</GoogleOrToolsConstantsPath>
+    </PropertyGroup>
+    <Delete Files="$(GoogleOrToolsConstantsPath)" Condition="Exists('$(GoogleOrToolsConstantsPath)')" ContinueOnError="true" />
+  </Target>
+
+  <!-- Not sure exactly why this one was resisting being written. -->
+  <Target Name="GenerateGoogleOrToolsConstants" BeforeTargets="BeforeBuild" DependsOnTargets="CleanGoogleOrToolsConstants">
+    <PropertyGroup>
+      <!-- This one is a bit nuts, we go the long way round the encoded generated source
+       code here. Particularly to arrive at language level encoded quotation marks. -->
+      <GoogleOrToolsConstantsCode>// ======================================================================================
+// === CAUTION: THIS IS GENERATED CODE. MODIFICATIONS WILL BE LOST BETWEEN BUILDS. ======
+// ======================================================================================
+
+namespace Kingdom.OrTools.Sat.CodeGeneration
+{
+    /// &lt;summary&gt;
+    /// Constants that are relayed during the build process indicating Google.OrTools Package paths.
+    /// &lt;/summary&gt;
+    internal static class GoogleOrToolsConstants
+    {
+        // ReSharper disable once CommentTypo
+        /// &lt;summary&gt;
+        /// &amp;quot%3B$(SolutionDir)\packages\google.ortools&amp;quot%3B
+        /// &lt;/summary&gt;
+        internal const string PackagePath = @"$(SolutionDir)packages\google.ortools"%3B
+    }
+}
+</GoogleOrToolsConstantsCode>
+      <GoogleOrToolsConstantsFileName>GoogleOrToolsConstants.cs</GoogleOrToolsConstantsFileName>
+      <GoogleOrToolsConstantsPath>$(ProjectDir)$(GoogleOrToolsConstantsFileName)</GoogleOrToolsConstantsPath>
+    </PropertyGroup>
+    <Message Text="Writing generated file `$(GoogleOrToolsConstantsPath)´ ..." Importance="high" />
+    <WriteLinesToFile File="$(GoogleOrToolsConstantsPath)" Lines="$(GoogleOrToolsConstantsCode)" Overwrite="true" ContinueOnError="true" Condition="!Exists('$(GoogleOrToolsConstantsPath)')" />
+    <ItemGroup>
+      <Compile Include="$(GoogleOrToolsConstantsPath)" />
+      <FilesWrites Include="$(GoogleOrToolsConstantsPath)" />
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Kingdom.OrTools.Sat.CodeGeneration</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Kingdom.OrTools.Sat.CodeGeneration.Tests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Kingdom.OrTools.Sat.CodeGeneration.Tool.Tests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(KingdomOrToolsSatCodeGenerationToolName)</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ImportGroup>
+    <Import Project="..\Sat.Parameters.CodeGeneration.props" />
+  </ImportGroup>
+
+</Project>
