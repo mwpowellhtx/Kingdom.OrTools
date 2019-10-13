@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -12,26 +12,20 @@
     <RootNamespace>Kingdom.OrTools.ConstraintSolver.Samples</RootNamespace>
   </PropertyGroup>
 
+  <ImportGroup>
+    <Import Project="..\..\Dotnet.Unit.Testing.props" />
+  </ImportGroup>
+
+  <!-- ReSharper disable UnknownProperty -->
+  <ItemGroup>
+    <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
+  </ItemGroup>
+  <!-- ReSharper restore UnknownProperty -->
+
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.ConstraintSolver.Core\Kingdom.OrTools.ConstraintSolver.Core.csproj" />
     <ProjectReference Include="..\Kingdom.OrTools.Csp.Problems\Kingdom.OrTools.Csp.Problems.csproj" />
     <ProjectReference Include="..\Kingdom.OrTools.Samples.Sudoku\Kingdom.OrTools.Samples.Sudoku.csproj" />
   </ItemGroup>
-
-  <!-- ReSharper disable UnknownProperty -->
-  <ItemGroup>
-    <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" />
-    <PackageReference Include="xunit" Version="$(XunitVersion)" />
-    <PackageReference Include="xunit.analyzers" Version="$(XunitAnalyzersVersion)" />
-    <PackageReference Include="xunit.runner.console" Version="$(XunitVersion)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitVersion)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  <!-- ReSharper restore UnknownProperty -->
 
 </Project>
