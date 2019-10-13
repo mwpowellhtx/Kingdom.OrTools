@@ -10,7 +10,7 @@
     <NoWarn>$(NoWarn);NU1603</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
+  <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
     <WarningLevel>2</WarningLevel>
   </PropertyGroup>
 
@@ -30,16 +30,16 @@
      except in places where we must adopt the Protobuf dependency directly, we could otherwise
      leave that out as well, as this depedency tracks seamlessly with the OrTools, or its runtime
      surrogate, dependencies. -->
-    <GoogleProtobufVersions>[3.9.1,4)</GoogleProtobufVersions>
-    <GoogleProtobufVersion>3.9.1</GoogleProtobufVersion>
+    <GoogleProtobufVersions>[3.10,4)</GoogleProtobufVersions>
+    <GoogleProtobufVersion>3.10.0</GoogleProtobufVersion>
     <!-- Well, I thought we could get away with the Major.Minor here, but we kind of do need to
     know the full version in order to know the precise path of the Protocol Buffer specification
     files in which to embed. The danger here is that this is a Greater Than Or Equal To (>=),
     right? So we may need to be more precise in our dependencies, but we will start here, and
     cross future bridges should they arise when they arise. -->
     <GoogleOrToolsDependency>Google.OrTools</GoogleOrToolsDependency>
-    <GoogleOrToolsVersions>[7.3,8)</GoogleOrToolsVersions>
-    <GoogleOrToolsVersion>7.3.7083</GoogleOrToolsVersion>
+    <GoogleOrToolsVersions>[7.4,8)</GoogleOrToolsVersions>
+    <GoogleOrToolsVersion>7.4.7247</GoogleOrToolsVersion>
   </PropertyGroup>
 
   <PropertyGroup>
