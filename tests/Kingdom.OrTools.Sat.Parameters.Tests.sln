@@ -20,7 +20,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.Paramet
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".parent", ".parent", "{F07BFE7E-A186-41E0-99E1-0B5BCB0B3113}"
 	ProjectSection(SolutionItems) = preProject
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
 		..\Directory.Build.props = ..\Directory.Build.props
+		..\global.json = ..\global.json
 		..\Licensing.props = ..\Licensing.props
 	EndProjectSection
 EndProject
