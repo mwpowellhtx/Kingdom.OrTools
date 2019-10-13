@@ -74,10 +74,11 @@ namespace Kingdom.OrTools.Sat.Parameters
             {
                 IEnumerable<object[]> GetAll()
                 {
-                    // 116: IParameter
+                    // See ParameterCriteria for detailed delta observations.
+                    // 126: IParameter
                     // 2: IRepeatedParameter
 
-                    yield return GetRange<object>(typeof(IParameter), 116).ToArray();
+                    yield return GetRange<object>(typeof(IParameter), 126).ToArray();
                     yield return GetRange<object>(typeof(IRepeatedParameter), 2).ToArray();
                 }
 
@@ -114,16 +115,23 @@ namespace Kingdom.OrTools.Sat.Parameters
                         yield return expectedCount;
                     }
 
-                    // 53: Parameter<bool>
-                    // 24: Parameter<int>
-                    // 22: Parameter<double>
-                    // 6: Parameter<long>
-                    // 114: total
+                    // Awaiting an up to date commit merge:
+                    // https://github.com/google/or-tools/blob/stable/ortools/sat/sat_parameters.proto
+                    // https://github.com/google/or-tools/commits/stable/ortools/sat/sat_parameters.proto
+                    // Next Tag delta 149 from 139, which jives with the +10 overall Parameters.
+                    // Pending a more official delta report once they've committed and/or merged their code.
+                    // 7.4 release / https://groups.google.com/forum/#!topic/or-tools-discuss/3O45yhSF4Uk
 
-                    yield return GetOne<bool>(53).ToArray();
-                    yield return GetOne<int>(24).ToArray();
-                    yield return GetOne<double>(22).ToArray();
-                    yield return GetOne<long>(6).ToArray();
+                    // 58: Parameter<bool>
+                    // 26: Parameter<int>
+                    // 24: Parameter<double>
+                    // 7: Parameter<long>
+                    // 124: total
+
+                    yield return GetOne<bool>(58).ToArray();
+                    yield return GetOne<int>(26).ToArray();
+                    yield return GetOne<double>(24).ToArray();
+                    yield return GetOne<long>(7).ToArray();
 
                     IEnumerable<object> GetOneEnum<TParameter>(int expectedCount, Type baseParameterType)
                         where TParameter : IParameter
