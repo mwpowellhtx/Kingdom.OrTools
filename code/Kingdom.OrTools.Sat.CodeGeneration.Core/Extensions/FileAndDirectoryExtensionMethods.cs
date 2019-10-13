@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace Kingdom.OrTools.Sat.CodeGeneration
 {
     using static Path;
-    using static String;
+    using static StringComparison;
 
     internal static class FileAndDirectoryExtensionMethods
     {
@@ -24,40 +23,61 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
         /// <returns></returns>
         public static string GetContentDirectoryPath(this Assembly assembly)
         {
-            var path = assembly.Location;
-
-            // TODO: TBD: with this approach, would likely never see the GetDirectoryInfo() alternative.
-            DirectoryInfo GetFileInfoDirectory() => File.Exists(path) ? new FileInfo(path).Directory : null;
-            DirectoryInfo GetDirectoryInfo() => Directory.Exists(path) ? new DirectoryInfo(path) : null;
-
-            bool TryGetDirectoryInfo(out DirectoryInfo di) => (di = GetFileInfoDirectory() ?? GetDirectoryInfo()) != null;
-
-            if (!TryGetDirectoryInfo(out var directory))
-            {
-                throw new ArgumentException($"`{nameof(path)}´ was not a valid file or directory.");
-            }
-
-            /* Expecting a NuGet Package Reference in a path something like these:
+            /* We had been expecting a NuGet Package Reference in a path something like these
+             * since at least version 7.1:
              *  `packages\google.ortools.runtime.win-x64\7.1.6720\runtimes\win-x64\lib\netstandard2.0\Google.OrTools.dll´
              *  `packages\google.ortools\version\content\sat\sat_parameters.proto´ */
 
-            //  std        lib     rt      rts     ver     pkg     pkgs
-            if (directory?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent == null)
-            {
-                throw new ArgumentException($"Unexpected `{nameof(path)}´ unable to resolve Content directory.");
-            }
+            /* We are not sure what changed in recent weeks, but now the path for
+             * `typeof(Google.OrTool.Sat.CpModel).Assembly.Location´ resolves to
+             * `packages\google.ortools\7.4.7247\lib\netstandard2.0\Google.OrTools.dll´,
+             * which is originally what we might have expected. However, why the sudden change?
+             * More importantly, should we account for potentially either use case being the case? */
 
-            const char dot = '.';
+            /* Investigating what might have changed, as necessary, starting in the Google.OrTools forums.
+             * https://groups.google.com/forum/#!topic/or-tools-discuss/3O45yhSF4Uk / 7.4 release
+             * If that leads me to Microsoft forums, so be it, if necessary. Would like to make a
+             * more informed decision how better to handle this issue other than my own empirical
+             * observations. However, at the same time, how big a decision does this need to be. */
 
-            // Which we know should be the first two elements from the package name itself, literally, i.e. `google.ortools.runtime.signature´.
-            var greatGrandParentDirectoryName = directory.Parent.Parent.Parent.Parent.Parent.Name;
+            /* In prior versions, we predicated our assumptions based on a firm runtime path.
+             * However, this assumption appears to have broken in the latest build? So...
+             * what assumptions can we depend upon? */
 
-            var googlePath = Join($"{dot}", greatGrandParentDirectoryName.Split(dot).Take(2).ToArray());
+            var path = assembly.Location;
 
+            /* Ferret out an appropriate Parent Directory this way instead of relying
+             * on any consistent Directory Parent depths. */
+
+            // ReSharper disable once StringLiteralTypo
+            const string googleOrTools = "google.ortools";
             const string content = nameof(content);
 
-            return Combine(directory.Parent.Parent.Parent.Parent.Parent.Parent.FullName
-                , googlePath, assembly.GetName().Version.ToString(3), content);
+            DirectoryInfo GetPackagesRootDirectory(DirectoryInfo given)
+            {
+                var found = given;
+
+                for (;
+                    // ReSharper disable once MergeSequentialChecks
+                    !(found == null || found.Parent == null)
+                    && !found.Name.StartsWith(googleOrTools, InvariantCultureIgnoreCase);
+                    found = found.Parent)
+                {
+                    // Do nothing, let the loop control sort it out for us.
+                }
+
+                return found?.Parent;
+            }
+
+            var packageDirectory = GetPackagesRootDirectory(new FileInfo(path).Directory);
+
+            var resultPath = Combine(packageDirectory.FullName
+                , googleOrTools
+                , assembly.GetName().Version.ToString(3)
+                , content
+            );
+
+            return resultPath.ToLower();
         }
 
         /// <summary>
