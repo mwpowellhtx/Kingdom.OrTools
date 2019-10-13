@@ -53,6 +53,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".parent", ".parent", "{FFF9
 		..\.gitattributes = ..\.gitattributes
 		..\.gitignore = ..\.gitignore
 		..\Directory.Build.props = ..\Directory.Build.props
+		..\Dotnet.Unit.Testing.props = ..\Dotnet.Unit.Testing.props
+		..\Dotnet.Unit.Testing.Slim.props = ..\Dotnet.Unit.Testing.Slim.props
 		..\global.json = ..\global.json
 		..\Licensing.props = ..\Licensing.props
 	EndProjectSection
