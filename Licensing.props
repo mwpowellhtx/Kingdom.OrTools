@@ -38,7 +38,12 @@
   <!-- ReSharper restore UnknownProperty -->
 
   <!-- ReSharper disable UnknownProperty -->
+  <Target Name="NotifyExistingLicenseFile" BeforeTargets="BeforeBuild" Condition="Exists('$(_LicenseFilePath)')">
+    <Message Text="License file `$(_LicenseFilePath)´ already exists, bypassing copy operation." Importance="high" />
+  </Target>
+
   <Target Name="CopyLicenseFileForPackagingPurposes" BeforeTargets="BeforeBuild" Condition="!Exists('$(_LicenseFilePath)')">
+    <Message Text="Copying license file `$(_DesiredFilePath)´ to `$(_LicenseFilePath)´." Importance="high" />
     <Copy SourceFiles="$(_DesiredFilePath)" DestinationFiles="$(_LicenseFilePath)" />
   </Target>
   <!-- ReSharper restore UnknownProperty -->
