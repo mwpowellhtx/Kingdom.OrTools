@@ -7,10 +7,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>5.2.2.16194</Version>
-    <AssemblyVersion>5.2.2.16194</AssemblyVersion>
-    <FileVersion>5.2.2.16194</FileVersion>
-    <PackageVersion>5.2.2.16194</PackageVersion>
+    <Version>5.2.2.16195</Version>
+    <AssemblyVersion>5.2.2.16195</AssemblyVersion>
+    <FileVersion>5.2.2.16195</FileVersion>
+    <PackageVersion>5.2.2.16195</PackageVersion>
     <!--<ReleaseVersionStrategy>patch</ReleaseVersionStrategy>-->
   </PropertyGroup>
 
