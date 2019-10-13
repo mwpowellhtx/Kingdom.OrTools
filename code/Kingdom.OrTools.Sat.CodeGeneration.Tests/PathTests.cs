@@ -45,7 +45,11 @@ namespace Kingdom.OrTools.Sat.CodeGeneration
         [Fact]
         public void Verify_Package_Reference_Paths()
         {
-            var actualDirectoryFullName = typeof(Google.OrTools.Sat.CpSolver).Assembly.GetContentDirectoryPath().AssertNotNull();
+            var type = typeof(Google.OrTools.Sat.CpSolver);
+
+            var assembly = type.Assembly;
+
+            var actualDirectoryFullName = assembly.GetContentDirectoryPath().AssertNotNull();
 
             var actualProtoPath = Combine(actualDirectoryFullName, "sat", "sat_parameters.proto").AssertFileExists();
 
