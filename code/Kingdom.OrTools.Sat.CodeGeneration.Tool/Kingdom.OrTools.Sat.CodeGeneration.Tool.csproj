@@ -7,10 +7,11 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.2.0.23837</Version>
-    <AssemblyVersion>1.2.0.23837</AssemblyVersion>
-    <FileVersion>1.2.0.23837</FileVersion>
-    <PackageVersion>1.2.0.23837</PackageVersion>
+    <Version>1.2.1.14422</Version>
+    <AssemblyVersion>1.2.1.14422</AssemblyVersion>
+    <FileVersion>1.2.1.14422</FileVersion>
+    <PackageVersion>1.2.1.14422</PackageVersion>
+    <!--<ReleaseVersionStrategy>patch</ReleaseVersionStrategy>-->
   </PropertyGroup>
 
   <!-- ReSharper disable UnknownProperty -->

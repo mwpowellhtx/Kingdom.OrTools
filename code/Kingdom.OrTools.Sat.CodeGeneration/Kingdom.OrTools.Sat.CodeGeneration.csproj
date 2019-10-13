@@ -22,6 +22,7 @@
     <AssemblyVersion>1.1.0.22764</AssemblyVersion>
     <FileVersion>1.1.0.22764</FileVersion>
     <PackageVersion>1.1.0.22764</PackageVersion>
+    <!--<ReleaseVersionStrategy>patch</ReleaseVersionStrategy>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)'=='AnyCPU'">
