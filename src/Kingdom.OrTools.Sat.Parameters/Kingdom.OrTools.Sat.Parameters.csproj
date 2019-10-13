@@ -16,7 +16,7 @@
 
   <PropertyGroup>
     <Description>Provides the basis for a first class experience specifying SAT-CP solver parameters.</Description>
-    <PackageTags>Google;Operations;Research;Tools;SAT;CP;CSP;constraint;satisfaction;problem;solver;parameter;parameters;Variant;IVariant</PackageTags>
+    <PackageTags>Google; Operations; Research; Tools; SAT; CP; CSP; constraint; satisfaction; problem; solver; parameter; parameters; Variant; IVariant</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Platform)' == 'AnyCPU'">
@@ -32,6 +32,19 @@
     <RootNamespace>Kingdom.OrTools.Sat.Parameters</RootNamespace>
   </PropertyGroup>
 
+  <Target Name="DeleteCodeGenerationDependenciesBeforeRestore" BeforeTargets="Clean" Condition="false">
+    <PropertyGroup>
+      <PackagesRootDirectory>..\packages\</PackagesRootDirectory>
+    </PropertyGroup>
+    <ItemGroup>
+      <PackagesToClean Include="$(PackagesRootDirectory).tools" />
+      <PackagesToClean Include="$(PackagesRootDirectory)dotnet-ortools-sat-cg" />
+      <PackagesToClean Include="$(PackagesRootDirectory)kingdom.ortools.sat.codegeneration.buildtime" />
+      <PackagesToClean Include="$(PackagesRootDirectory)kingdom.ortools.sat.codegeneration.core" />
+    </ItemGroup>
+    <RemoveDir Directories="@(PackagesToClean)" ContinueOnError="true" />
+  </Target>
+
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.Sat.Parameters.Core\Kingdom.OrTools.Sat.Parameters.Core.csproj" />
   </ItemGroup>
@@ -39,7 +52,7 @@
   <!-- ReSharper disable UnknownProperty -->
   <ItemGroup>
     <PackageReference Include="Google.OrTools" Version="$(GoogleOrToolsVersion)" PrivateAssets="all" />
-    <PackageReference Include="$(KingdomOrToolsSatCodeGenerationBuildTimeDependency)" Version="$(KingdomOrToolsSatCodeGenerationBuildTimeVersion)">
+    <PackageReference Include="$(KingdomOrToolsSatCodeGenerationBuildTimeDependency)" Version="$(KingdomOrToolsSatCodeGenerationVersion)">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
