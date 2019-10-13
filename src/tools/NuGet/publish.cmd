@@ -3,19 +3,19 @@
 setlocal
 
 rem We do not publish the API key as part of the script itself.
-if "%my_nuget_api_key%"=="" (
+if "%my_nuget_api_key%" equ "" (
     echo You are prohibited from making these sorts of changes.
     goto :end
 )
 
 rem Default list delimiter is Comma (,).
 :redefine_delim
-if "%delim%" == "" (
+if "%delim%" equ "" (
     set delim=,
 )
 rem Redefine the delimiter when a Dot (.) is discovered.
 rem Anticipates potentially accepting Delimiter as a command line arg.
-if "%delim%" == "." (
+if "%delim%" equ "." (
     set delim=
     goto :redefine_delim
 )
@@ -54,42 +54,42 @@ rem We decided to let internally delivered packages rest in their respective bui
 :parse_args
 
 rem Done parsing the args.
-if "%1" == "" (
+if "%1" equ "" (
     goto :end_args
 )
 
 :set_dry_run
-if "%1" == "--dry" (
+if "%1" equ "--dry" (
     set dry=true
     goto :next_arg
 )
-if "%1" == "--dry-run" (
+if "%1" equ "--dry-run" (
     set dry=true
     goto :next_arg
 )
 
 :set_config
-if "%1" == "--config" (
+if "%1" equ "--config" (
     set config=%2
     shift
     goto :next_arg
 )
 
 :set_publish_local
-if "%1" == "--local" (
+if "%1" equ "--local" (
     set function=local
     goto :next_arg
 )
 
 :set_publish_nuget
-if "%1" == "--nuget" (
+if "%1" equ "--nuget" (
     set function=nuget
     goto :next_arg
 )
 
 :add_constraint_projects
-if "%1" == "--constraint-solver" (
-    if "%projects%" == "" (
+if "%1" equ "--constraint-solver" (
+    if "%projects%" equ "" (
         set projects=%constraint_projects%
     ) else (
         set projects=%projects%%delim%%constraint_projects%
@@ -97,8 +97,8 @@ if "%1" == "--constraint-solver" (
 	goto :next_arg
 )
 
-if "%1" == "--constraint" (
-    if "%projects%" == "" (
+if "%1" equ "--constraint" (
+    if "%projects%" equ "" (
         set projects=%constraint_projects%
     ) else (
         set projects=%projects%%delim%%constraint_projects%
@@ -107,8 +107,8 @@ if "%1" == "--constraint" (
 )
 
 :add_linear_projects
-if "%1" == "--linear-solver" (
-    if "%projects%" == "" (
+if "%1" equ "--linear-solver" (
+    if "%projects%" equ "" (
         set projects=%linear_projects%
     ) else (
         set projects=%projects%%delim%%linear_projects%
@@ -116,8 +116,8 @@ if "%1" == "--linear-solver" (
 	goto :next_arg
 )
 
-if "%1" == "--linear" (
-    if "%projects%" == "" (
+if "%1" equ "--linear" (
+    if "%projects%" equ "" (
         set projects=%linear_projects%
     ) else (
         set projects=%projects%%delim%%linear_projects%
@@ -126,8 +126,8 @@ if "%1" == "--linear" (
 )
 
 :add_solver_projects
-if "%1" == "--solvers" (
-    if "%projects%" == "" (
+if "%1" equ "--solvers" (
+    if "%projects%" equ "" (
         set projects=%solver_projects%
     ) else (
         set projects=%projects%%delim%%solver_projects%
@@ -136,8 +136,8 @@ if "%1" == "--solvers" (
 )
 
 :add_sat_projects
-if "%1" == "--sat" (
-    if "%projects%" == "" (
+if "%1" equ "--sat" (
+    if "%projects%" equ "" (
         set projects=%sat_projects%
     ) else (
         set projects=%projects%%delim%%sat_projects%
@@ -146,8 +146,8 @@ if "%1" == "--sat" (
 )
 
 :add_sat_params_projects
-if "%1" == "--sat-params" (
-    if "%projects%" == "" (
+if "%1" equ "--sat-params" (
+    if "%projects%" equ "" (
         set projects=%sat_params_projects%
     ) else (
         set projects=%projects%%delim%%sat_params_projects%
@@ -156,15 +156,15 @@ if "%1" == "--sat-params" (
 )
 
 :add_all_projects
-if "%1" == "--all" (
+if "%1" equ "--all" (
     set projects=%all_projects%
     goto :next_arg
 )
 
 rem Add a single Project to the Projects list.
 :add_project
-if "%1" == "--project" (
-    if "%projects%" == "" (
+if "%1" equ "--project" (
+    if "%projects%" equ "" (
         set projects=%2
     ) else (
         set projects=%projects%%delim%%2
@@ -184,19 +184,19 @@ goto :parse_args
 :verify_args
 
 :verify_function
-if "%function%" == "" (
+if "%function%" equ "" (
     set function=local
 )
 
 :verify_projects
-if "%projects%" == "" (
+if "%projects%" equ "" (
     rem In which case, there is nothing else to do.
     echo Nothing to process.
     goto :end
 )
 
 :verify_config
-if "%config%" == "" (
+if "%config%" equ "" (
     rem Assumes Release Configuration when not otherwise specified.
     set config=Release
 )
@@ -222,14 +222,14 @@ pushd ..\..
 
 rem echo projects = %projects%
 
-if not "%projects%" == "" (
+if not "%projects%" equ "" (
     echo Processing '%config%' configuration for '%projects%' ...
 )
 :next_project
-if not "%projects%" == "" (
+if not "%projects%" equ "" (
     for /f "tokens=1* delims=%delim%" %%p in ("%projects%") do (
-        if "%function%" == "nuget" call :publish_nuget %%p
-        if "%function%" == "local" call :publish_local %%p
+        if "%function%" equ "nuget" call :publish_nuget %%p
+        if "%function%" equ "local" call :publish_local %%p
         set projects=%%q
         goto :next_project
     )
@@ -241,7 +241,7 @@ goto :end
 
 :publish_local
 for %%f in ("%1\bin\%config%\%1.*.nupkg") do (
-    if "%dry%" == "true" (
+    if "%dry%" equ "true" (
         echo Dry run: %xcopy_exe% %%f %xcopy_dest_dir% %xcopy_opts%
     ) else (
         echo Running: %xcopy_exe% %%f %xcopy_dest_dir% %xcopy_opts%
@@ -252,7 +252,7 @@ exit /b
 
 :publish_nuget
 for %%f in ("%1\bin\%config%\%1.*.nupkg") do (
-    if "%dry%" == "true" (
+    if "%dry%" equ "true" (
         echo Dry run: %nuget_exe% push "%%f"%nuget_push_opts%
     ) else (
         echo Running: %nuget_exe% push "%%f"%nuget_push_opts%
