@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -16,23 +16,13 @@
     <RootNamespace>Kingdom.OrTools.LinearSolver.Samples.Feasibility</RootNamespace>
   </PropertyGroup>
 
+  <ImportGroup>
+    <Import Project="..\..\Dotnet.Unit.Testing.props" />
+  </ImportGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Kingdom.OrTools.LinearSolver.Core\Kingdom.OrTools.LinearSolver.Core.csproj" />
     <ProjectReference Include="..\Kingdom.OrTools.LinearSolver.Samples.Feasibility\Kingdom.OrTools.LinearSolver.Samples.Feasibility.csproj" />
   </ItemGroup>
-
-  <!-- ReSharper disable UnknownProperty -->
-  <ItemGroup>
-    <PackageReference Include="xunit" Version="$(XunitVersion)" />
-    <PackageReference Include="xunit.runner.console" Version="$(XunitVersion)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitVersion)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  <!-- ReSharper restore UnknownProperty -->
 
 </Project>

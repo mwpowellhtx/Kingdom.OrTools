@@ -24,18 +24,8 @@
     <ProjectReference Include="..\Kingdom.OrTools.Sat.Parameters.Core\Kingdom.OrTools.Sat.Parameters.Core.csproj" />
   </ItemGroup>
 
-  <!-- ReSharper disable UnknownProperty -->
-  <ItemGroup>
-    <PackageReference Include="xunit" Version="$(XunitVersion)" />
-    <PackageReference Include="xunit.fluently.assert" Version="[1.3.1,2)" />
-    <PackageReference Include="xunit.fluently.assert.ioly" Version="[1.2,2]" />
-    <PackageReference Include="xunit.fluently.assert.exceptionally" Version="[1,2]" />
-    <PackageReference Include="xunit.fluently.theoretically" Version="[1,2]" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="$(XunitVersion)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  <!-- ReSharper restore UnknownProperty -->
+  <ImportGroup>
+    <Import Project="..\..\Dotnet.Unit.Testing.props" />
+  </ImportGroup>
 
 </Project>

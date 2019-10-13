@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -12,11 +12,9 @@
     <EmbeddedResource Include="Sudokus.xml" />
   </ItemGroup>
 
-  <!-- ReSharper disable UnknownProperty -->
-  <ItemGroup>
-    <PackageReference Include="xunit" Version="$(XunitVersion)" />
-  </ItemGroup>
-  <!-- ReSharper restore UnknownProperty -->
+  <ImportGroup>
+    <Import Project="..\..\Dotnet.Unit.Testing.Slim.props" />
+  </ImportGroup>
 
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
