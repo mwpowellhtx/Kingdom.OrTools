@@ -1,5 +1,9 @@
 <Project ToolsVersion="15.0">
 
+  <PropertyGroup>
+    <!--<PackageLicenseUrl>https://github.com/mwpowellhtx/Kingdom.OrTools/blob/master/LICENSE</PackageLicenseUrl>-->
+  </PropertyGroup>
+
   <!-- This is a kluge workaround to a failure on Microsoft's part to properly execute on the licensing migration path.
    This does package the LICENSE file, but it also leaves a `deprecateLicenseUrl´ artifact in the package `nuspec´ file. -->
 
