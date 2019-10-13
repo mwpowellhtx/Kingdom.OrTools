@@ -122,6 +122,26 @@ namespace Kingdom.OrTools.Sat.Parameters
                     // Pending a more official delta report once they've committed and/or merged their code.
                     // 7.4 release / https://groups.google.com/forum/#!topic/or-tools-discuss/3O45yhSF4Uk
 
+                    /* Ideally, if I understand the OrTools maintenance plan, we ought to expect
+                     * changes to be merged into the stable branch. Short of that, it seems that
+                     * our only other recourse is to examine the master branch. I am fairly
+                     * certain that there are commits in master that are unaccounted for in
+                     * the stable branch, number one. Number two, additionally, there appear
+                     * to be some Types being traded, Boolean to Long, for instance. Otherwise,
+                     * I believe the precise counts herein are accurate and are obviously aligned
+                     * correctly with the v7.4 release.
+                     * https://github.com/google/or-tools/commits/master/ortools/sat/sat_parameters.proto
+                     * https://github.com/google/or-tools/commit/09655b81ea6b565c59ae1229e554d9ff5d4dd8e1#diff-52e7b6b4f4029662d5a727d9aaec0513
+                     * https://github.com/google/or-tools/commit/dbc4c9e673ddd08b9cfe659016c045e149c0445c#diff-52e7b6b4f4029662d5a727d9aaec0513
+                     * https://github.com/google/or-tools/commit/a6dd04cc18e95ce8fa91b315248e1d428ed4ceb7#diff-52e7b6b4f4029662d5a727d9aaec0513
+                     * https://github.com/google/or-tools/commit/b435a301ccda5c467113019bcc070a4a8ab6aa4e#diff-52e7b6b4f4029662d5a727d9aaec0513
+                     * https://github.com/google/or-tools/commit/fff236d8005574e34b61ae92440df3a638873753#diff-52e7b6b4f4029662d5a727d9aaec0513
+                     * https://github.com/google/or-tools/commit/7f5f7b471aa0b7028e2faf9a96d6a31c44f1f0e5#diff-52e7b6b4f4029662d5a727d9aaec0513
+                     * https://github.com/google/or-tools/commit/5fb3bd04553303d8c79825b3a67a8c1bdc82b996#diff-52e7b6b4f4029662d5a727d9aaec0513
+                     * https://github.com/google/or-tools/commit/d0081e54093d74a1962346f2dcaa8705e7b6c57a#diff-52e7b6b4f4029662d5a727d9aaec0513
+                     * https://github.com/google/or-tools/commit/f899479015898c0a38feb8af9c6073ae6b777d1d#diff-52e7b6b4f4029662d5a727d9aaec0513
+                     */
+
                     // 58: Parameter<bool>
                     // 26: Parameter<int>
                     // 24: Parameter<double>
