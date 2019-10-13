@@ -53,9 +53,6 @@
   <PropertyGroup>
     <ValidationVersions>[2.4.22,3)</ValidationVersions>
     <ValidationVersion>2.4.22</ValidationVersion>
-    <XunitVersions>[2.4.1,3)</XunitVersions>
-    <XunitVersion>2.4.1</XunitVersion>
-    <XunitAnalyzersVersion>0.10.0</XunitAnalyzersVersion>
   </PropertyGroup>
 
   <ImportGroup>
