@@ -16,7 +16,6 @@
 
   <PropertyGroup>
     <PackageProjectUrl>http://github.com/mwpowellhtx/Kingdom.OrTools</PackageProjectUrl>
-    <!--<PackageLicenseUrl>https://github.com/mwpowellhtx/Kingdom.OrTools/blob/master/LICENSE</PackageLicenseUrl>-->
   </PropertyGroup>
 
   <PropertyGroup>
