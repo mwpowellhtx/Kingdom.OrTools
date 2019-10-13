@@ -12,13 +12,6 @@
 
   <PropertyGroup>
     <MicrosoftCSharpVersion>4.6</MicrosoftCSharpVersion>
-    <!-- We can probably most likely track the Google version numbers according to their
-     Major.Minor only and not worry about the Build or Patch numbers themselves. Additionally,
-     except in places where we must adopt the Protobuf dependency directly, we could otherwise
-     leave that out as well, as this depedency tracks seamlessly with the OrTools, or its runtime
-     surrogate, dependencies. -->
-    <GoogleProtobufVersions>[3.9.1,4)</GoogleProtobufVersions>
-    <GoogleProtobufVersion>3.9.1</GoogleProtobufVersion>
     <!-- Well, I thought we could get away with the Major.Minor here, but we kind of do need to
     know the full version in order to know the precise path of the Protocol Buffer specification
     files in which to embed. The danger here is that this is a Greater Than Or Equal To (>=),
@@ -34,19 +27,10 @@
     <CodeGenerationRoslynBuildTimeVersion>1.1</CodeGenerationRoslynBuildTimeVersion>
     <KingdomProtobufAntlrVersions>[1.0.13,2)</KingdomProtobufAntlrVersions>
     <KingdomProtobufAntlrVersion>1.0.13.22961</KingdomProtobufAntlrVersion>
-    <!-- TODO: TBD: will leave these in but commented out for the time being... -->
-    <!--<KingdomOrToolsSatCodeGenerationAttributesVersion>1.0.0.16554</KingdomOrToolsSatCodeGenerationAttributesVersion>-->
-    <!--<KingdomOrToolsSatCodeGenerationAttributesVersion>1.0.0.16554</KingdomOrToolsSatCodeGenerationAttributesVersion>-->
-    <!--<KingdomOrToolsSatCodeGenerationVersions>1.1-*</KingdomOrToolsSatCodeGenerationVersions>-->
-    <!--<KingdomOrToolsSatCodeGenerationVersion>1.1.0.22764</KingdomOrToolsSatCodeGenerationVersion>-->
-    <!-- TODO: TBD: eventually we would like to leverage a proper CGR notwithstanding runtime dependency resolution snafus... -->
-    <!-- TODO: TBD: however we think that this depends on System.Runtime.Loader, which is a work in progress, and which also requires that we land in more mature versions of netcore ... -->
-    <!-- TODO: TBD: in the meantime a fit for purpose CLI tooling is the best possible approach we can take... -->
-    <KingdomOrToolsSatCodeGenerationCoreVersions>[1.2,2)</KingdomOrToolsSatCodeGenerationCoreVersions>
-    <KingdomOrToolsSatCodeGenerationCoreVersion>1.2.0.15930</KingdomOrToolsSatCodeGenerationCoreVersion>
     <!-- True, this is the dependency. We just want the latest stable, always. -->
     <KingdomOrToolsSatCodeGenerationBuildTimeDependency>Kingdom.OrTools.Sat.CodeGeneration.BuildTime</KingdomOrToolsSatCodeGenerationBuildTimeDependency>
-    <KingdomOrToolsSatCodeGenerationBuildTimeVersion>1.0</KingdomOrToolsSatCodeGenerationBuildTimeVersion>
+    <!-- Do not chase the version numbers here. Just use the latest stable version whatever it happens to be. -->
+    <KingdomOrToolsSatCodeGenerationVersion>*</KingdomOrToolsSatCodeGenerationVersion>
   </PropertyGroup>
 
 </Project>
