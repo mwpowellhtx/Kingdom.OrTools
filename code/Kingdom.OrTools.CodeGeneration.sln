@@ -39,7 +39,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kingdom.OrTools.Sat.CodeGen
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".parent", ".parent", "{8ADE8A25-3BAC-41E9-89AB-C8BAB2B7B48D}"
 	ProjectSection(SolutionItems) = preProject
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
 		..\Directory.Build.props = ..\Directory.Build.props
+		..\global.json = ..\global.json
 		..\Licensing.props = ..\Licensing.props
 	EndProjectSection
 EndProject
